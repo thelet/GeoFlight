@@ -223,14 +223,14 @@ Mask lamp blobs, meaning the connected components of clipped pixels dilated by ~
 | Cost | Practicality | Wall-clock and peak VRAM. |
 
 **Ablation ladder** (one capture, ideally repeated on a second flight):
-- A0: uniform 2 fps (baseline).
-- A1: + fixed masks (airframe, image circle, blend band).
-- A2: + IMU angular-rate gate.
-- A3: + parallax spacing (vary 3/5/8 frames per metre).
-- A4: + sharpest-in-window, whole frame (Laplacian vs Tenengrad vs NIQE vs CLIP-IQA, as a side test of §1.1).
-- A5: A4 but **per-lens / per-sector** masking instead of whole-frame dropping.
-- A6: + dynamic and specular masks.
-- A7 (3DGS only): hard set vs dense set + SLS loss vs dense set + WildGaussians-style uncertainty, each with and without bilateral grid.
+- F0: uniform 2 fps (baseline).
+- F1: + fixed masks (airframe, image circle, blend band).
+- F2: + IMU angular-rate gate.
+- F3: + parallax spacing (vary 3/5/8 frames per metre).
+- F4: + sharpest-in-window, whole frame (Laplacian vs Tenengrad vs NIQE vs CLIP-IQA, as a side test of §1.1).
+- F5: F4 but **per-lens / per-sector** masking instead of whole-frame dropping.
+- F6: + dynamic and specular masks.
+- F7 (3DGS only): hard set vs dense set + SLS loss vs dense set + WildGaussians-style uncertainty, each with and without bilateral grid.
 
 Each step is kept only if it does not worsen the held-out marker error and registration rate beyond noise (bootstrap 95% CI over marker pairs). PSNR decides only among steps that are neutral on geometry.
 
@@ -244,7 +244,7 @@ Each step is kept only if it does not worsen the held-out marker error and regis
 | 1 | Laplacian variance / Tenengrad / FFT energy [Pertuz2013] | Focus measure | **Keep** (merged into S1) |
 | 2 | Gradient energy, best-in-window [Guo2026PocketGS] | Focus + window | **Keep** (S1) |
 | 3 | SIEDS [Sieberth2016] | Photogrammetric blur | Drop: needs a dataset-relative calibration and has no advantage over windowed S1. Kept as an example |
-| 4 | BRISQUE / NIQE [Mittal2012, Mittal2013] | NR-IQA (NSS) | Drop: predicts human opinion and is confounded by noise and compression. Only a side test in A4 |
+| 4 | BRISQUE / NIQE [Mittal2012, Mittal2013] | NR-IQA (NSS) | Drop: predicts human opinion and is confounded by noise and compression. Only a side test in ablation arm F4 |
 | 5 | MUSIQ / CLIP-IQA [Ke2021, Wang2023CLIPIQA] | Learned NR-IQA | Drop: aesthetic and perceptual target, GPU cost, non-commercial toolbox licence. Side test only |
 | 6 | Matchability / verified-match count [Hartmann2014] | Task-based | **Keep** (S3) |
 | 7 | IMU angular-rate gate (OSV quaternions) [A1] | Motion | **Keep** (S2) |
@@ -324,12 +324,12 @@ Weights: Fit ×3, Evidence ×2, Implementability ×2, Accuracy/quality impact ×
 | S5 Grounded-SAM-2 masks | 3 | 4 | 4 | 3 | 4 | **38** | F: an empty lot has few movers, though speculars are common · E: strong segmentation benchmarks · I: Apache-2.0, crops needed · A: prevents some false matches and floaters · M: mature models |
 | S8 Bilateral grid | 4 | 3 | 5 | 2 | 4 | **38** | F: flicker and WB pulses are likely · E: SIGGRAPH 2024 · I: a flag in gsplat · A: visual only · M: maintained in gsplat |
 | S4 Per-sector IMU blur + partial frames | 5 | 1 | 3 | 4 | 2 | **37** | F: exactly matches up/down-lens physics · E: none published · I: masks plus rig config, needs a depth prior · A: keeps floor/ceiling markers in turns · M: unproven |
-| S7 WildGaussians | 4 | 4 | 3 | 2 | 3 | **37** | F: appearance plus transients both apply · E: NeurIPS with ablations · I: MIT, own codebase, pinhole · A: visual only · M: research code |
+| S7 WildGaussians | 4 | 4 | 3 | 2 | 3 | **35** | F: appearance plus transients both apply · E: NeurIPS with ablations · I: MIT, own codebase, pinhole · A: visual only · M: research code |
 | S6 SpotLessSplats | 3 | 4 | 4 | 2 | 3 | **34** | F: transients rare here · E: clear ablations · I: gsplat fork, Apache-2.0 · A: visual only · M: research fork |
 
 ### 8.4 Picks
-- **Primary: S2 + S1 combined, with the mandatory fixed masks.** Run the IMU gate first, then parallax spacing, then the sharpest frame per window scored per lens. This is cheap, explainable, and aimed at the dominant failure modes (yaw blur, hovering, RS). *What would change my mind:* if the A2–A4 ablations show no gain in marker error or registration over budget-matched uniform sampling, simplify to uniform sampling plus masks.
-- **Runner-up: S3 (matchability score)** in place of S1 as the within-window criterion. It will beat S1 if noise and banding fool gradient energy, which the A4 side test will show.
+- **Primary: S2 + S1 combined, with the mandatory fixed masks.** Run the IMU gate first, then parallax spacing, then the sharpest frame per window scored per lens. This is cheap, explainable, and aimed at the dominant failure modes (yaw blur, hovering, RS). *What would change my mind:* if the F2–F4 ablations show no gain in marker error or registration over budget-matched uniform sampling, simplify to uniform sampling plus masks.
+- **Runner-up: S3 (matchability score)** in place of S1 as the within-window criterion. It will beat S1 if noise and banding fool gradient energy, which the F4 side test will show.
 - **High-upside experimental: S4 per-sector selection with partial rig frames.** If it raises the registration rate through turns and keeps more marker observations, it is both a pipeline win and a publishable contribution (§9).
 - **For 3DGS:** use the dense set + bilateral grid + SLS-style robust loss (warm-up, capped masking). Choose WildGaussians if appearance variation turns out larger than expected.
 
@@ -356,7 +356,7 @@ Weights: Fit ×3, Evidence ×2, Implementability ×2, Accuracy/quality impact ×
 ## 10. Research gaps
 
 1. **Per-region quality for 360° and rig SfM (main gap).** No method found that scores quality per fisheye sector, cubemap face or virtual view and keeps partial frames. The proposal is to predict a blur map on the sphere from IMU ω (plus v/d later), fuse it with relative image sharpness, and emit per-sector masks and partial rig frames. Evaluate on registration through turns and on marker observations retained. A natural extension is a BAD-Gaussians-style exposure trajectory driven by the IMU, so blurred sectors become *soft* constraints in 3DGS rather than holes.
-2. **IQA vs SfM success.** No study found that correlates NR-IQA (BRISQUE, NIQE, MUSIQ, CLIP-IQA) with registration or accuracy. The A4 side test in §7 would produce exactly that evidence for compressed, noisy fisheye video.
+2. **IQA vs SfM success.** No study found that correlates NR-IQA (BRISQUE, NIQE, MUSIQ, CLIP-IQA) with registration or accuracy. The F4 side test in §7 would produce exactly that evidence for compressed, noisy fisheye video.
 3. **Frames per metre for 360° SfM and 3DGS indoors.** Practice uses ad-hoc 1–3 fps [Chen2024Drone360, LichtFeld360]. No principled study ties spacing to range and texture.
 4. **Robust 3DGS losses on fisheye and wide-FOV input.** The published robust methods are pinhole. GOFish [Tu2026GOFish] shows wide-FOV 3DGS is maturing, but does not handle distractors.
 5. **Filtering under repetition.** How selection density affects false-loop rates in repetitive scenes is unstudied. Too sparse a selection pushes the mapper toward retrieval-based loops.
@@ -371,7 +371,7 @@ Weights: Fit ×3, Evidence ×2, Implementability ×2, Accuracy/quality impact ×
 3. **Selection timeline.** The flight timeline with ω(t), sharpness and frames-per-metre tracks. Kept and dropped frames are colour-coded by reason (IMU, hover, blur, link-keep).
 4. **Frames-per-metre calculator.** Inputs are speed, fps, range and target triangulation angle. Outputs are spacing, keep ratio, and observations per point.
 5. **Mask compositor.** Layer toggles (fixed airframe, dynamic, specular, bad sectors) over one fisheye frame, showing the % of pixels each layer removes.
-6. **Ablation explorer.** Arms A0–A7 against the metrics (marker error, registration, PSNR), with budget-matched baselines overlaid.
+6. **Ablation explorer.** Arms F0–F7 against the metrics (marker error, registration, PSNR), with budget-matched baselines overlaid.
 
 ---
 
