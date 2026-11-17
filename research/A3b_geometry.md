@@ -195,3 +195,340 @@ Pixel stretch in a pinhole view grows as 1/cos²α off-axis (×2 at 45°, ×3 at
 3. **Pillar-grid spacing from structural drawings:** a good *check*, if drawings exist.
 4. **Phone LiDAR scan:** useful as a *local completeness/shape* reference in a few bays, not for scale over 50 m, because its tracking drifts [assessment; UNVERIFIED for specific devices].
 5. **Inter-lens baseline b:** useless for scale (§1.4).
+
+---
+
+## 4. Dense geometry
+
+### 4.1 The problem surfaces
+
+- **Textureless planes** (floors, ceilings, painted walls): photo-consistency is flat. PatchMatch leaves holes or noise, and neural methods hallucinate smoothly.
+- **Thin structures** (sprinkler pipes, cable trays, railings): they need high resolution and many views; surface-Gaussian and SDF methods tend to erase them.
+- **Reflective cars and wet floors:** view-dependent appearance creates false depth. Mask the cars (A3a covers segmentation) and treat car surfaces as out of scope for accuracy.
+
+### 4.2 Methods and example works
+
+| Method | Idea | Reported accuracy (dataset, metric) | Memory/compute | Code / licence |
+|---|---|---|---|---|
+| **COLMAP PatchMatch → fusion** | Per-view depth/normal PatchMatch with geometric consistency; needs pinhole K [SRC] | Context: the classical baseline on ETH3D/TnT [UNVERIFIED numbers] | GPU; scales by view count, controllable via `max_image_size` | BSD [SRC] |
+| **OpenMVS** (DensifyPointCloud → ReconstructMesh → RefineMesh → TextureMesh) | PatchMatch-style densification, Delaunay/graph-cut mesh, photometric mesh refinement | No paper numbers verified [UNVERIFIED] | CPU+GPU; resolution levels control memory | **AGPL-3.0**, active (2026-11-06) [OPENED repo] |
+| **2DGS** [2DGS] (Huang et al., SIGGRAPH 2024) | Gaussian surfels with ray-splat intersection, depth distortion and normal consistency | DTU mean CD 0.80 mm; TnT F1 0.32 (as tabulated in PGSR) [OPENED] | ~0.3–0.6 h per scene; single GPU | Gaussian-Splatting licence (**non-commercial**) [OPENED repo] |
+| **GOF** [GOF] (Yu, Sattler, Geiger, SIGGRAPH Asia 2024) | Opacity field from Gaussians, marching tetrahedra; decoupled appearance | DTU 0.74 mm; TnT F1 0.46 [OPENED via PGSR table] | ~2 h; tetrahedra heavy on large scenes | Non-commercial; last commit 2024-11 [OPENED repo] |
+| **PGSR** [PGSR] (Chen et al., TVCG 2024) | Flattened Gaussians → plane distance + normal; **unbiased depth**; single- and multi-view geometric consistency; **exposure compensation** | DTU **0.52 mm**; TnT F1 **0.52** (Neuralangelo 0.50 at > 128 h, PGSR ~0.75 h); Meetingroom 0.33 [OPENED] | ~0.5–0.75 h per scene | Research/non-profit only; last commit 2024-12 [OPENED repo] |
+| **RaDe-GS** [RaDeGS] (Zhang et al., 2024) | Rasterised depth/normal for Gaussians | Not re-checked [UNVERIFIED] | Similar to 3DGS | Non-commercial [OPENED repo] |
+| **DN-Splatter** [DNSplatter] (Turkulainen et al., WACV 2025) | 3DGS + monocular/sensor **depth and normal priors**, mesh extraction | On MuSHRoom and ScanNet++ meshes, it beats Splatfacto/2DGS/SuGaR and is competitive with SDF methods [OPENED; exact table values not extracted] | Trained on a 4090 (24 GB); nerfstudio | **Apache-2.0** [OPENED repo] |
+| **Neural SDF + mono cues** (MonoSDF [MonoSDF], NeurIPS 2022; DebSDF in IM360; Neuralangelo [Neuralangelo], CVPR 2023) | SDF volume rendering with Omnidata depth/normal cues | IM360 trains DebSDF on **cubemap faces**, because OmniSDF on ERP "failed to converge" on large indoor scenes [OPENED] | Neuralangelo > 128 GPU-h per TnT scene [OPENED via 2DGS/PGSR] | Varied |
+| **Planar primitives** ([PlanarSplatting], 2024; venue [UNVERIFIED]) | Optimise 3D planes directly | Not verified | Fast (title claims 3 min) | Not checked |
+
+**Indoor caveats:**
+- DTU/TnT are object or outdoor scale. The only indoor-real numbers I verified are qualitative (DN-Splatter on ScanNet++ and MuSHRoom).
+- [Barazzetti2018] reports ±2.5 mm mean discrepancy for a dense cloud from a consumer 360° camera against laser scanning on a wall, in a ~10 m room [OPENED]. That indicates what MVS from 360° imagery can deliver when the poses are good.
+
+### 4.3 Recommendation for dense
+
+1. **Metric baseline:** COLMAP `image_undistorter` (virtual views are already pinhole), then OpenMVS DensifyPointCloud (resolution-level 1 at ~2100 px). Feed the marker 3D points and BA tie points as anchors. Then ReconstructMesh and RefineMesh.
+2. **Surface variant:** PGSR on the same poses (fixed; no pose refinement), images at 1000–1400 px to fit 16 GB, exposure compensation on. Process in **spatial chunks** (bays or aisles) with overlap, at a few hundred views per chunk [assessment].
+3. **Hole-filling only:** monocular depth/normal priors (Depth Anything V2 [DAv2], MoGe [MoGe]), scale-aligned per view to MVS depth, and DN-Splatter-style normal supervision on **floor/ceiling** masks.
+4. **Planar regularisation** in the dense stage only, with a per-plane fit tolerance. Never across the whole floor, which has drainage falls.
+5. **Choose per region** by checkpoint and planarity residuals (§5). Report where each surface came from.
+6. Thin structures: keep the OpenMVS dense cloud for them (meshes from 2DGS/PGSR erode thin pipes [assessment]). Cars: masked out of the accuracy evaluation.
+
+---
+
+## 5. Accuracy evaluation and realistic expectations
+
+### 5.1 Protocol (what "proven" means here)
+
+1. **Checkpoint distances (primary):** use the held-out marker-to-marker distances (≥ 30% of all, including ≥ 3 lines > 20 m and ideally one > 50 m). Report:
+   - mean signed error (bias, i.e. scale);
+   - RMSE;
+   - max;
+   - **error as % of distance**, plotted against distance (drift shows as growth);
+   - per-area breakdown.
+   Pass criteria (project targets): RMSE ≤ 2–3 cm for lines < 10 m, and |error| ≤ 1% for every line > 20 m.
+2. **Checkpoint coordinates** if a total station is available: 3D RMSE per axis.
+3. **Leave-one-sortie-out / split-half:** reconstruct two flights independently, align with Sim(3) on half the markers, and compare the other half. This measures repeatability, as the repeatability test in [Perfetti2024] did [ABS].
+4. **Floor planarity:** RANSAC-fit planes per bay. Report the RMS residual and max deviation. Compare against a hand level or laser line if available. Expect real falls of ~1–2% [UNVERIFIED typical].
+5. **Pillar-grid regularity:** fit pillar axes (cylinders or boxes). Report spacing residuals against drawings, or against the median spacing. Report verticality using the gravity vector.
+6. **Loop-closure gap:** before closing loops (sequential-only model), measure the 3D gap at the revisit, in metres and as % of loop length. After closing, re-measure the marker residuals around the loop.
+7. **Completeness:** % of floor area and of pillar faces with surface within 5 cm of the reference, if a reference scan exists (phone LiDAR in sample bays, or a TLS scan of one zone). Use cloud-to-cloud/M3C2 distances, as [Janiszewski2022] and [GomezLopez2025] did.
+8. **Self-consistency (diagnostic only):** reprojection error, track length, registered fraction. These are **not** accuracy, because a folded map can have low reprojection error (shared context).
+
+### 5.2 Published 360°-camera accuracy (reported results)
+
+| Study | Camera / data | Scene | Control | Reported accuracy |
+|---|---|---|---|---|
+| [Barazzetti2018] ISPRS Archives XLII-2 | Xiaomi Mi Sphere 360 (~24 MP stills), Metashape/Pix4D spherical model | Room 10.9×6×3.7 m, **poor light, poor texture** | 6 GCP, 11 checkpoints, Leica TS30 | Checkpoint RMSE **4.6–7.2 mm** per axis (≈1:2000); dense vs. laser ±2.5–5 mm [OPENED] |
+| [Janiszewski2022] Remote Sensing 14(21) | 360° stills, 27 stations | 10 m rock tunnel | Laser scan reference | **4.6 mm** distance error vs. reference scan [ABS] |
+| [Rezaei2024] Sensors 24(11) | Low-cost spherical camera, fisheye images, Metashape | Underpass | GCPs | GCP ≈ 1 mm; mean cloud distance to laser **0.05 m** [ABS] |
+| [Perfetti2024] Remote Sensing 16(23) | Insta360 Pro2, MG1, ANT3D fisheye rig | Narrow spiral staircase | Full vs. partial control | **1 cm** with appropriate control; **5–10 cm drift** partially unconstrained [ABS] |
+| [GomezLopez2025] ISPRS Archives XLVIII-M-9 | Kandao Obsidian Go **video** (6 fisheyes, 1728², 30 fps), Metashape | Tomb interior, dark, 142 m², ~30 m long | 4 GCPs at start only; CPs at end | ~2 cm in lit nave; **> 10 cm max CP residual** with drift at the far end; M2M mean 2.4 cm, SD 7.7 cm [OPENED] |
+| [RIGOR] arXiv 2026 | 360° video, feed-forward (DA3) | Construction sites | None (scale-adjusted ICP) | Chamfer **0.132 m**, ATE 2.31 m [OPENED] |
+
+**Reading the table:**
+- Stills plus a total station plus a small room give **mm**.
+- **Video** plus darkness plus control at one end gives **cm locally and ~10 cm at 30 m**.
+- Feed-forward gives **dm**.
+
+Our case is closer to the video row, but it has better control (distributed markers) and a calibrated raw rig.
+
+### 5.3 Expected accuracy for this project (my assessment, assumes §7 pipeline and A1 capture protocol)
+
+| Quantity | With distributed markers (cluster every ≤ 10–15 m, scale bars in BA) | Scale-only Sim(3), control at ends | Stitched-equirect variant | Basis |
+|---|---|---|---|---|
+| Local distance error, < 10 m | **0.5–1.5 cm RMSE** | 1–3 cm | 2–5 cm near walls | Triangulation σ ≈ Z²σ_θ/B ≈ 4 mm at Z = 5 m, B = 3 m [CALC]; Barazzetti/Perfetti |
+| Global distance error, 20–100 m | **0.03–0.2%** | 0.2–1% | 0.3–1.5% | Perfetti 5–10 cm drift unconstrained; GomezLopez ~0.3% over 30 m |
+| Floor planarity RMS (dense) | 0.5–1.5 cm (PGSR/planar), 1–3 cm (raw MVS) | same | +seam artefacts | Concrete + H.265; assessment |
+| Pillar faces / walls | 1–2 cm | 1–3 cm | **seam-band errors of cm** (A1: 7–40 px at 1–5 m) | A1 seam model |
+| Thin pipes | detected if ≥ ~3 px wide: ≥ ~1 cm at 2 m | — | — | ~1.9 mm/px at 2 m (A1) |
+| Failure risk | Folded map unless the §2.4 gates hold | Higher | Higher | ORBIT, GLOMAP limitations |
+
+---
+
+## 6. Method selection (protocol)
+
+### 6.1 Long list (23)
+
+| # | Candidate | Family |
+|---|---|---|
+| 1 | COLMAP 4.2 incremental + **raw-fisheye virtual-view rig** | Classic SfM, rig |
+| 2 | COLMAP 4.2 global mapper (GLOMAP) + gravity RA on the same rig | Global SfM |
+| 3 | COLMAP native `EQUIRECTANGULAR` on stitched equirect | Spherical SfM |
+| 4 | Per-lens "half-equirect" (each fisheye resampled to its own ERP) as a 2-camera spherical rig | Spherical SfM, rig |
+| 5 | `pycolmap.panorama` rig on stitched equirect (seam masked) | Perspective rig |
+| 6 | Raw fisheye in COLMAP `RAD_TAN_THIN_PRISM_FISHEYE`, cropped to θ < 85° | Fisheye SfM |
+| 7 | SphereSfM | Spherical SfM |
+| 8 | OpenMVG spherical | Spherical SfM |
+| 9 | IM360 | Spherical SfM + SDF |
+| 10 | stella_vslam (equirect) | SLAM |
+| 11 | RIGOR | Feed-forward + rig + Sim(3) graph |
+| 12 | MASt3R-SfM | Learned SfM |
+| 13 | VGGT / VGGT-Long / π³ / MapAnything / DA3 | Feed-forward |
+| 14 | MASt3R-SLAM | Learned SLAM |
+| 15 | Doppelgangers++ | Disambiguation |
+| 16 | LoMa / ALIKED+LightGlue / RoMa | Matchers (component) |
+| 17 | Metashape (spherical + fisheye + scale bars) | Commercial reference |
+| 18 | COLMAP PatchMatch + OpenMVS | Classic MVS |
+| 19 | PGSR | Surface Gaussians |
+| 20 | 2DGS / GOF / RaDe-GS | Surface Gaussians |
+| 21 | DN-Splatter (priors) | Prior-fused GS |
+| 22 | Neural SDF (MonoSDF/DebSDF/Neuralangelo) | Implicit |
+| 23 | PlanarSplatting / planar primitives | Planar |
+
+### 6.2 Screening (dropped, one line each)
+
+- **#6 cropped fisheye in COLMAP:** discards the θ > 85° band, which is the horizon and walls, and the same views are better served by #1.
+- **#8 OpenMVG spherical:** IM360 shows it registering 2–25 of 20–59 images on Matterport scenes [OPENED]. It is the weakest spherical baseline and adds nothing over COLMAP 4.1+.
+- **#7 SphereSfM:** superseded by native spherical support in COLMAP ≥ 4.1 (the same idea, maintained upstream); kept only as historical reference.
+- **#14 MASt3R-SLAM:** perspective input, NC licence (MASt3R weights), and a SLAM-grade target, not survey-grade.
+- **#13 feed-forward models as the metric solution:** no fisheye or pano support (VGGT), ~60–70 frames per 16 GB, and the best 360° derivative is at dm level. Kept only as a component in the experimental track.
+- **#17 Metashape:** commercial. It is the reference point surveyors use (Barazzetti, Rezaei, Gómez-López), worth a one-off comparison if a licence exists, but not core.
+- **#23 PlanarSplatting:** promising for floors, but it gives no geometry for thin or non-planar objects; kept as an idea inside the dense stage.
+- **#16 matchers** are components inside #1/#2, evaluated by A/B test (§2.3), not as stand-alone methods.
+- **#15 Doppelgangers++** is a component (loop filter), covered in §2.4.
+- **#20 GOF/RaDe-GS** are folded into one "2DGS-class" entry (similar licence and behaviour).
+
+### 6.3 Short-list deep dives
+
+**A. Raw-fisheye virtual-view rig + COLMAP 4.2 incremental (#1)**
+- **Core idea:** exact per-lens central projection, 10 pinhole views per frame, rig BA. Gravity priors, sequential + loop matching, learned features.
+- **Assumptions:**
+  - The two sensors expose simultaneously. Violated slightly by rolling shutter; sync is [UNVERIFIED].
+  - The DJI calibration is accurate. To be verified.
+  - b is known.
+- **Evidence:**
+  - Rig-constrained, IO+RO-estimated processing gave the best results in [Perfetti2024].
+  - ORBIT trusts rig-of-cube-faces SfM to make its 360° ground truth.
+  - COLMAP's own notes rank perspective rendering above native spherical for accuracy.
+  - Raw fisheye frames plus calibrated rig scale bars were used successfully for 360° video by [GomezLopez2025].
+- **Compute:** 10 views × ~1500 frames ≈ 15k images per 10-minute sortie at 2.5 fps keyframes. SIFT/ALIKED extraction on GPU; Caspar BA on GPU. Fits 16 GB.
+- **Code:** COLMAP BSD, very active (2026-11-10). We write the OSV decoder (OpenOSV Apache-2.0 as a start, per A1), the DJI-model remapper and the rig JSON.
+- **Failure modes:** a wrong b or rotation (seam errors return, at a smaller scale); textureless aisles; aliasing loops; rolling shutter during yaw.
+
+**B. COLMAP global mapper with gravity (#2)**
+- **Core idea:** rotation averaging (1-DoF with gravity), then global positioning, then BA.
+- **Reported results:** ETH3D SLAM +9 AUC@0.1 m vs. COLMAP, ~10× faster [OPENED].
+- **Assumptions violated:** rotation averaging needs a correct view graph; **symmetric structures break it**, as the authors note.
+- **Compute:** light.
+- **Code:** inside COLMAP.
+- **Use:** fast cross-check and initialisation, plus a 4.2 multi-component fallback.
+
+**C. Stitched equirect → perspective rig, seam masked (#5)**
+- **Core idea:** COLMAP `panorama_sfm` (12 views at 90°, pitches −35/0/+35) with horizon-row masks.
+- **Assumptions violated:** central projection near the seam. That is the reason for the mask, and the mask costs wall content (§1.2).
+- **Evidence:** the official example; ORBIT.
+- **Code:** in pycolmap; trivial to run.
+- **Use:** quickest baseline, and the fallback if the OSV decode slips.
+
+**D. Per-lens half-equirect spherical rig (#4)**
+- **Core idea:** resample each fisheye to its own ERP (horizon at the equator, its own centre) and treat the two ERPs as a 2-camera spherical rig.
+- **Strength:** keeps θ > 90° in native spherical math; only 2 images per frame.
+- **Weakness:** COLMAP's own accuracy caveat about native spherical; dense needs perspective anyway. Spherical rig BA is supported in 4.1+, but I found no published use [assessment].
+- **Use:** experimental speed path.
+
+**E. IM360 (#9)**
+- **Core idea:** spherical SfM with dense spherical matching (EDM), then cubemap DebSDF, then texture optimisation.
+- **Reported results:** 37/37 registered with AUC@10° 84.5 on a Matterport scene where cubemap baselines registered 16–22/37 [OPENED].
+- **Assumptions violated:** sparse stills, human-chosen pairs, stitched ERP. There is no metric accuracy evaluation.
+- **Code:** project page found; repository and licence not verified [UNVERIFIED].
+- **Use:** shows that dense matching rescues textureless indoor registration, which supports a RoMa fallback in our pipeline.
+
+**F. RIGOR (#11)**
+- **Core idea:** frozen DA3 on a 4-view virtual rig; rig repair; cyclic loop retrieval; Sim(3) graph.
+- **Reported results:** ATE 2.31 m, CD 0.132 m, F@25 cm 0.873 on HTO [OPENED].
+- **Assumptions:** gravity-aligned panoramas; it does not recover metric scale.
+- **Code:** Apache-2.0, active (2026-10-07). DA3 weights licence [UNVERIFIED].
+- **Use:** loop *verification* ideas (cyclic consensus) and a second-opinion trajectory.
+
+**G. MASt3R-SfM / VGGT family (#12–13)**
+- **Core idea:** learned pairwise or global pointmaps; retrieval from encoder tokens.
+- **Assumptions violated:** no fisheye/pano input; memory (VGGT 21 GB at 100 frames) [OPENED].
+- **Licences:** MASt3R CC BY-NC-SA 4.0; VGGT custom; π³ BSD-style; MapAnything Apache-2.0 [OPENED repos].
+- **Use:** diagnostics on failure segments only.
+
+**H. stella_vslam (#10)**
+- **Core idea:** ORB-feature SLAM on equirect with BoW loops.
+- **Assumptions violated:** stitched (seam) input; BoW loop detection is vulnerable to aliasing.
+- **Code:** BSD-2, active (2026-08-26).
+- **Use:** in-field QA and a pose prior; not survey-grade.
+
+**Dense short list:**
+- **OpenMVS:** AGPL-3.0, active. Proven classical accuracy where texture exists; holes on bare concrete.
+- **PGSR:** best published DTU/TnT geometry among the 3DGS-class methods tabulated; has multi-view consistency and exposure compensation. Research-only licence; last commit 2024-12.
+- **2DGS:** DTU 0.80 mm, TnT 0.32; non-commercial; active.
+- **DN-Splatter:** Apache-2.0; indoor priors; validated on ScanNet++/MuSHRoom; priors can bias.
+- **Neural SDF:** smooth, complete surfaces. Neuralangelo-class compute (> 128 GPU-h) is impractical; MonoSDF-class is feasible but slow and erodes thin pipes.
+
+### 6.4 Score table
+
+Weights: Fit ×3, Evidence ×2, Implementability ×2, Accuracy impact ×3, Maturity ×1. Maximum 55.
+
+**Poses and camera model**
+
+| Option | Fit | Evid. | Impl. | Acc. | Mat. | **Total** | One-line justification (Fit / Evid / Impl / Acc / Mat) |
+|---|---|---|---|---|---|---|---|
+| A. Raw-fisheye rig + COLMAP incr. | 5 | 4 | 4 | 5 | 4 | **50** | Keeps the horizon without seam error / rig processing best in Perfetti, used by ORBIT / needs our own OSV+remap code / removes the dominant systematic error / COLMAP mature, renderer new |
+| B. Global mapper + gravity (same rig) | 4 | 4 | 5 | 4 | 4 | **46** | Gravity priors fit, symmetric pillars risky / ECCV + ETH3D SLAM / built in / slightly below incremental in BA quality / integrated since 4.0, regression fixed in 4.2.1 |
+| D. Per-lens half-equirect spherical rig | 4 | 2 | 4 | 4 | 2 | **38** | Seam-free and full-band / no published use / supported model, simple / spherical "less accurate" per COLMAP / untested combination |
+| C. Stitched equirect → persp. rig, masked | 2 | 4 | 5 | 2 | 4 | **35** | Seam on horizon forces masking / official example, ORBIT / zero new code / loses long-range walls / mature |
+| E. IM360 | 3 | 3 | 2 | 3 | 2 | **30** | Indoor textureless 360° but stills + ERP / ICCV, registration only / code status unverified / no metric eval / research code |
+| H. stella_vslam | 3 | 2 | 4 | 2 | 4 | **30** | Equirect, real time, but seam and BoW aliasing / no survey-grade evaluation found / BSD-2, active / SLAM-grade / mature |
+| F. RIGOR | 3 | 3 | 3 | 1 | 2 | **28** | Designed for repetitive 360° video / HTO evaluation / Apache, DA3 dependency / dm-level CD, no metric scale / brand new |
+| G. MASt3R-SfM / VGGT family | 2 | 3 | 2 | 2 | 3 | **24** | No pano/fisheye, memory / strong perspective benchmarks / NC or custom licences, 16 GB limits / cm not demonstrated indoors / fast-moving field |
+
+**Dense**
+
+| Option | Fit | Evid. | Impl. | Acc. | Mat. | **Total** | One-line justification |
+|---|---|---|---|---|---|---|---|
+| COLMAP PatchMatch + OpenMVS | 3 | 4 | 4 | 4 | 5 | **42** | Holes on concrete / long track record (Barazzetti ±2.5 mm) / AGPL OK internally / metric where textured / mature |
+| PGSR | 4 | 4 | 3 | 4 | 3 | **41** | Planar + multi-view consistency + exposure compensation suit concrete / DTU 0.52, TnT 0.52 / research-only licence, chunking needed / best GS geometry / stale since 2024-12 |
+| DN-Splatter (priors) | 4 | 3 | 4 | 3 | 3 | **38** | Indoor priors fill textureless areas / ScanNet++, MuSHRoom / Apache, nerfstudio / priors bias metric surfaces / maintained to 2025 |
+| 2DGS-class (2DGS/GOF/RaDe-GS) | 3 | 4 | 3 | 3 | 4 | **36** | Weaker on textureless planes than PGSR / DTU 0.74–0.80 / non-commercial / mid / widely used |
+| Neural SDF + mono cues | 3 | 3 | 2 | 3 | 2 | **30** | Complete, smooth but erodes thin parts / IM360, MonoSDF / slow on 16 GB / mid / research |
+
+### 6.5 Pick
+
+- **Primary:** **A + B** (raw-fisheye virtual-view rig; incremental COLMAP with global as cross-check). Dense: **OpenMVS baseline + PGSR variant**, chosen per region by checkpoints.
+- **Runner-up:** **C** (DJI Studio 6K unstabilized equirect → `pycolmap.panorama` rig with a ±8° horizon mask). Same control and dense stages.
+- **Experimental (high upside):** **D + fisheye-coordinate refinement BA**. Native per-lens spherical rig for speed, then map all tracks to raw fisheye pixels and run a custom pyceres BA with the DJI KB-5 model (θ up to 105°), b, intrinsics, marker scale bars and a rolling-shutter term. Add RIGOR-style cyclic rig consensus for loop verification.
+- **What would change my mind:**
+  - (i) If the hover-board calibration shows the factory calibration plus remap residual above ~0.5 px and it cannot be fixed, intrinsics must be refined in BA, and the experimental track becomes primary.
+  - (ii) If C's checkpoint errors on a pilot equal A's within noise (e.g. markers and walls all > 5 m away), C wins on simplicity.
+  - (iii) If a feed-forward 360° model demonstrates < 2 cm checkpoint error on an indoor benchmark with metric GT, revisit G/F.
+
+---
+
+## 7. Recommended geometry pipeline (ordered)
+
+| Stage | Tool | Key settings / notes |
+|---|---|---|
+| 0. Calibration (once per unit/firmware) | Hover clip at boards (A1 §6); pyceres DJI-model or Double-Sphere fit; Kalibr-style rig fit | Verify factory intrinsics (< 0.5 px), estimate **b** and inter-lens R, build **airframe masks**, measure RS readout |
+| 1. Decode | OpenOSV-derived decoder (Apache-2.0) + ffmpeg | Two 3840² 10-bit streams + per-frame quaternions + exposure metadata; keep the 10-bit data through remap |
+| 2. Keyframe selection | Python | 2–3 fps (~0.15–0.2 m spacing at 0.4 m/s); reject IMU \|ω\| > 10°/s and Laplacian-variance outliers |
+| 3. Virtual views | `cv2.remap` with DJI KB-5+tangential | Per lens: axial + 4 oblique (θc ≈ 62°), 90° FOV, f ≈ 1047 px, 2094 px²; COLMAP masks for outside-circle and airframe; mild denoise optional (A/B test) |
+| 4. Database + rig | `feature_extractor --ImageReader.single_camera_per_folder 1`, `rig_configurator` | `PINHOLE` fixed intrinsics; rig JSON with known R and t = b for the down group; gravity `PosePrior` per frame from the fused quaternion |
+| 5. Features/matching | ALIKED+LightGlue (A/B vs SIFT and LoMa) | `SequentialMatching.overlap` 10–15, `expand_rig_images 1`, `loop_detection 1`, `loop_detection_min_index_distance` ≈ 1 min of frames |
+| 6. Loop gates | Custom (pycolmap) | Marker-ID gate, rig-consensus (≥ 3/10 views), gravity gate; drop rejected pairs from the DB |
+| 7. Mapping | `mapper` (Caspar BA) and `global_mapper` (`ra_use_gravity 1`, `multiple_models 1`) | `Mapper.ba_refine_sensor_from_rig 0`, `ba_refine_focal_length 0`; compare both; components merged only through shared marker IDs |
+| 8. Markers | AprilTag 36h11 on virtual views → corner tracks | Detections at 1.5–5 m slant range; triangulate; robust filtering by multi-view consistency |
+| 9. Control BA | pyceres on pycolmap reconstruction | Scale-bar residuals (70% of distances), Cauchy loss on reprojection; hold out 30%; Sim(3) to trilaterated marker frame |
+| 10. (Exp.) fisheye refinement | pyceres, DJI model on raw pixels | Refine intrinsics, b, RS term; accept only if checkpoint RMSE improves |
+| 11. Dense | `image_undistorter` → OpenMVS; PGSR on fixed poses | OpenMVS resolution-level 1; PGSR 1000–1400 px, chunked by aisle; car/person masks |
+| 12. Fusion + QA | Open3D/CloudCompare scripts | Per-region selection by checkpoint/planarity; §5 report auto-generated |
+
+---
+
+## 8. Interactive component suggestions (for the HTML)
+
+1. **Seam-parallax vs. distance plot.** Sliders for b (1–5 cm) and stitch distance d₀. Plot δ(d) = b·|1/d − 1/d₀| in degrees and in px at 6K/8K. Overlay the "±δ mask removes wall heights" curve (±d·tan δ around flight height) to show why masking fails beyond ~10 m.
+2. **Scale-error propagation calculator.** Inputs: number of scale bars, bar length, endpoint σ, and query distance D. Output: σ_s = √2σ_p/(L√N) and the error at D, side by side with typical drift (0.1–1%), to show that **drift, not scale**, dominates.
+3. **Loop-closure drift demo.** A 2D garage grid with identical pillars and a random-walk trajectory. Toggle between "sequential only", "loop closure", "false loop (aliased bay)" and "marker-ID gate on". Show the map folding and the checkpoint error bars.
+4. **Virtual-view layout explorer.** A 3D sphere showing the up/down lens image circles (θ ≤ 105°), the overlap band and the 10 pinhole frusta. A slider for FOV and θc shows coverage gaps and stretch (1/cos²α).
+5. **Triangulation precision widget.** σ_Z ≈ Z²σ_θ/B, with presets for "inter-lens b = 3 cm" vs "motion baseline 3 m", explaining why b cannot provide scale.
+6. **Accuracy-expectation table with toggles** (control density, stills vs. video, stitched vs. raw), linked to the published studies in §5.2.
+
+---
+
+## Handoff
+
+- **COLMAP (4.2.1, verified in source) has no perspective or fisheye model for θ ≥ 90°.** `OPENCV_FISHEYE`, `RAD_TAN_THIN_PRISM_FISHEYE` and `EUCM` all enforce w > 0. Only `EQUIRECTANGULAR` covers the full sphere, and PatchMatch MVS needs pinhole K. Raw 200° fisheyes therefore cannot go into COLMAP directly without losing the horizon band (the walls).
+- **Primary input representation:** raw fisheye → per lens 1 axial + 4 oblique (θc ≈ 62°) pinhole views (90°, f ≈ 1047 px, ~2094 px²). Use a **10-view COLMAP rig with two optical centres** (down group offset by the calibrated b). This is seam-free by construction and also feeds dense MVS and 3DGS directly. Fallback: DJI Studio 6K unstabilized equirect → `pycolmap.panorama` rig with a ±8° horizon mask.
+- DJI's KB-5 + tangential model equals COLMAP's `RAD_TAN_THIN_PRISM_FISHEYE` form (k₅ = s = 0) for θ < 90°. Use that for verification. The full lens needs our own bearing-vector code (pyceres) or Double Sphere.
+- **Poses:** COLMAP incremental + rig (Caspar BA), with the global mapper + `ra_use_gravity` as cross-check. Use sequential matching with loop detection and `loop_detection_min_index_distance`, and gravity `PosePrior` from the fused DJI quaternion (never the raw accelerometer). Use ALIKED+LightGlue, A/B tested against SIFT and LoMa.
+- **False-loop defences** (SfM side): temporal prior first; marker-ID gate; rig-consensus gate (inliers in ≥ 3 of 10 views); gravity gate; incremental-vs-global disagreement; checkpoint residuals. Reprojection error is not evidence.
+- **Control:** AprilTag 36h11, detected on pinhole views at 1.5–5 m. Laser/tape distances are adjusted as a trilateration network; 70% become **scale-bar residuals in a pyceres BA** and 30% are held out. A marker cluster every ≤ 10–15 m. Sim(3)-only alignment is insufficient (published 360° drift is 5–10 cm without distributed control).
+- **Dense:** OpenMVS (AGPL) as metric baseline plus PGSR (research-only licence) for textureless planes, on fixed poses, chunked for 16 GB. Mono depth/normal priors only for hole filling, never in evaluated regions. Mask cars and people.
+- **Expected accuracy (assessment):** 0.5–1.5 cm RMSE locally and 0.03–0.2% globally with distributed markers; 0.2–1% with control at the ends only. Published anchors: 4.6–7 mm (Barazzetti 2018, room), 1 cm (Perfetti 2024), 2 cm lit and > 10 cm drift (Gómez-López 2025, dark 360° video), 13 cm CD (RIGOR, feed-forward).
+- **Evaluation protocol:** held-out distance RMSE, max and % of distance vs. distance; split-sortie repeatability; floor planarity (expect real drainage falls); pillar-grid spacing; loop gap before and after closure; completeness against a sample reference scan.
+- **For A4/3DGS:** reuse the same pinhole virtual views and fixed metric poses; do not re-run SfM on stitched equirect. **For A3a:** filtering owns masks (airframe, cars, people) and frame selection; geometry consumes them.
+
+```json
+[
+  {"key": "COLMAPsrc", "title": "COLMAP source code (sensor/models/base.h, eucm.h, fisheye_radial.h, thin_prism.h, spherical.h; mvs/model.cc; image/undistortion.cc; geometry/pose_prior.h; controllers/option_manager.cc), commit 137f216", "authors": "COLMAP contributors (Schönberger et al.)", "venue": "GitHub repository", "year": 2026, "url": "https://github.com/colmap/colmap", "code": "https://github.com/colmap/colmap", "license": "BSD-3-Clause", "type": "repo", "verified": true},
+  {"key": "COLMAPChangelog", "title": "COLMAP Changelog (4.0.0 to 4.2.1)", "authors": "COLMAP contributors", "venue": "COLMAP docs / CHANGELOG", "year": 2026, "url": "https://github.com/colmap/colmap/blob/main/CHANGELOG.rst", "code": "https://github.com/colmap/colmap", "license": "BSD-3-Clause", "type": "docs", "verified": true},
+  {"key": "COLMAPRigs", "title": "COLMAP documentation: Rig Support (doc/rigs.rst) and Camera Models (doc/cameras.rst)", "authors": "COLMAP contributors", "venue": "COLMAP docs", "year": 2026, "url": "https://colmap.github.io/rigs.html", "code": "https://github.com/colmap/colmap", "license": "BSD-3-Clause", "type": "docs", "verified": true},
+  {"key": "COLMAPPanorama", "title": "pycolmap.panorama / panorama_sfm example (perspective virtual-view rig, EQUIRECTANGULAR conversion)", "authors": "COLMAP contributors", "venue": "GitHub repository", "year": 2026, "url": "https://github.com/colmap/colmap/blob/main/python/pycolmap/panorama.py", "code": "https://github.com/colmap/colmap", "license": "BSD-3-Clause", "type": "repo", "verified": true},
+  {"key": "IM360", "title": "IM360: Large-scale Indoor Mapping with 360 Cameras", "authors": "Dongki Jung, Jaehoon Choi, Yonghan Lee, Dinesh Manocha", "venue": "ICCV 2025", "year": 2025, "url": "https://arxiv.org/abs/2502.12545", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "RIGOR", "title": "RIGOR: Rig-Informed Geometry for Omnidirectional Reconstruction", "authors": "Tingjun Huang, Dmitry Rudshin, Mathieu Meyer, Pietro Bonazzi, Marc Pollefeys, Emilia Szymanska", "venue": "arXiv 2609.13504", "year": 2026, "url": "https://arxiv.org/abs/2609.13504", "code": "https://github.com/TangentH/RIGOR", "license": "Apache-2.0", "type": "paper", "verified": true},
+  {"key": "ORBIT", "title": "ORBIT++: Benchmarking SfM in the Wild with 360° Video", "authors": "Sara Sabour, Linyi Jin, Richard Tucker, Amir Hertz, Marcus Brubaker, Saurabh Saxena, Junhwa Hur, Andrea Tagliasacchi, Deqing Sun, David J. Fleet, Richard Szeliski, Noah Snavely", "venue": "CVPR 2026 (arXiv 2608.22039)", "year": 2026, "url": "https://arxiv.org/abs/2608.22039", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "SphereSfM", "title": "SphereSfM (README; paper: 3D reconstruction of spherical images based on incremental structure from motion, Jiang et al., Taylor & Francis 2024)", "authors": "San Jiang et al.", "venue": "GitHub repository; journal [UNVERIFIED]", "year": 2024, "url": "https://github.com/json87/SphereSfM", "code": "https://github.com/json87/SphereSfM", "license": "BSD (COLMAP-derived)", "type": "repo", "verified": true},
+  {"key": "OpenVSLAM", "title": "OpenVSLAM: A Versatile Visual SLAM Framework (stella_vslam fork)", "authors": "Shinya Sumikura, Mikiya Shibuya, Ken Sakurada", "venue": "arXiv 1910.01122 (ACM MM 2019 [UNVERIFIED])", "year": 2019, "url": "https://arxiv.org/abs/1910.01122", "code": "https://github.com/stella-cv/stella_vslam", "license": "BSD-2-Clause (fork)", "type": "paper", "verified": true},
+  {"key": "OpenMVG", "title": "OpenMVG repository", "authors": "Pierre Moulon et al.", "venue": "GitHub repository", "year": 2026, "url": "https://github.com/openMVG/openMVG", "code": "https://github.com/openMVG/openMVG", "license": "MPL-2.0", "type": "repo", "verified": true},
+  {"key": "GLOMAP", "title": "Global Structure-from-Motion Revisited", "authors": "Linfei Pan, Dániel Baráth, Marc Pollefeys, Johannes L. Schönberger", "venue": "ECCV 2024", "year": 2024, "url": "https://arxiv.org/abs/2407.20219", "code": "https://github.com/colmap/colmap", "license": "BSD-3-Clause", "type": "paper", "verified": true},
+  {"key": "GravityRA", "title": "Gravity-aligned Rotation Averaging with Circular Regression", "authors": "Linfei Pan, Marc Pollefeys, Dániel Baráth", "venue": "ECCV 2024", "year": 2024, "url": "https://arxiv.org/abs/2410.12763", "code": "https://github.com/colmap/glomap", "license": null, "type": "paper", "verified": true},
+  {"key": "MASt3R-SfM", "title": "MASt3R-SfM: a Fully-Integrated Solution for Unconstrained Structure-from-Motion", "authors": "Bardienus Duisterhof, Lojze Zust, Philippe Weinzaepfel, Vincent Leroy, Yohann Cabon, Jerome Revaud", "venue": "arXiv 2409.19152 (3DV 2025 [UNVERIFIED])", "year": 2024, "url": "https://arxiv.org/abs/2409.19152", "code": "https://github.com/naver/mast3r", "license": "CC BY-NC-SA 4.0", "type": "paper", "verified": true},
+  {"key": "VGGT", "title": "VGGT: Visual Geometry Grounded Transformer", "authors": "Jianyuan Wang, Minghao Chen, Nikita Karaev, Andrea Vedaldi, Christian Rupprecht, David Novotny", "venue": "CVPR 2025", "year": 2025, "url": "https://arxiv.org/abs/2503.11651", "code": "https://github.com/facebookresearch/vggt", "license": "VGGT License v1 (custom)", "type": "paper", "verified": true},
+  {"key": "Pi3", "title": "π³: Permutation-Equivariant Visual Geometry Learning", "authors": "Yifan Wang, Jianjun Zhou, Haoyi Zhu, Wenzheng Chang, Yang Zhou, Zizun Li, Junyi Chen, Jiangmiao Pang, Chunhua Shen, Tong He", "venue": "arXiv 2507.13347", "year": 2025, "url": "https://arxiv.org/abs/2507.13347", "code": "https://github.com/yyfz/Pi3", "license": "BSD-2-Clause-style", "type": "paper", "verified": true},
+  {"key": "MapAnything", "title": "MapAnything: Universal Feed-Forward Metric 3D Reconstruction", "authors": "Nikhil Keetha et al. (17 authors)", "venue": "3DV 2026", "year": 2025, "url": "https://arxiv.org/abs/2509.13414", "code": "https://github.com/facebookresearch/map-anything", "license": "Apache-2.0", "type": "paper", "verified": true},
+  {"key": "DA3", "title": "Depth Anything 3: Recovering the Visual Space from Any Views", "authors": "Haotong Lin, Sili Chen, Junhao Liew, Donny Y. Chen, Zhenyu Li, Guang Shi, Jiashi Feng, Bingyi Kang", "venue": "arXiv 2511.10647", "year": 2025, "url": "https://arxiv.org/abs/2511.10647", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "VGGTLong", "title": "VGGT-Long: Chunk it, Loop it, Align it -- Pushing VGGT's Limits on Kilometer-scale Long RGB Sequences", "authors": "Kai Deng, Zexin Ti, Jiawei Xu, Jian Yang, Jin Xie", "venue": "ICRA 2026", "year": 2025, "url": "https://arxiv.org/abs/2507.16443", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "MASt3R-SLAM", "title": "MASt3R-SLAM: Real-Time Dense SLAM with 3D Reconstruction Priors", "authors": "Riku Murai, Eric Dexheimer, Andrew J. Davison", "venue": "CVPR 2025", "year": 2025, "url": "https://arxiv.org/abs/2412.12392", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "Doppelgangers", "title": "Doppelgangers: Learning to Disambiguate Images of Similar Structures", "authors": "Ruojin Cai, Joseph Tung, Qianqian Wang, Hadar Averbuch-Elor, Bharath Hariharan, Noah Snavely", "venue": "ICCV 2023", "year": 2023, "url": "https://arxiv.org/abs/2309.02420", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "DoppelgangersPP", "title": "Doppelgangers++: Improved Visual Disambiguation with Geometric 3D Features", "authors": "Yuanbo Xiangli, Ruojin Cai, Hanyu Chen, Jeffrey Byrne, Noah Snavely", "venue": "arXiv 2412.05826 (venue [UNVERIFIED])", "year": 2024, "url": "https://arxiv.org/abs/2412.05826", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "LightGlue", "title": "LightGlue: Local Feature Matching at Light Speed", "authors": "Philipp Lindenberger, Paul-Edouard Sarlin, Marc Pollefeys", "venue": "ICCV 2023", "year": 2023, "url": "https://arxiv.org/abs/2306.13643", "code": "https://github.com/cvg/LightGlue", "license": "Apache-2.0", "type": "paper", "verified": true},
+  {"key": "ALIKED", "title": "ALIKED: A Lighter Keypoint and Descriptor Extraction Network via Deformable Transformation", "authors": "Xiaoming Zhao, Xingming Wu, Weihai Chen, Peter C. Y. Chen, Qingsong Xu, Zhengguo Li", "venue": "IEEE Transactions on Instrumentation & Measurement", "year": 2023, "url": "https://arxiv.org/abs/2304.03608", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "RoMa", "title": "RoMa: Robust Dense Feature Matching", "authors": "Johan Edstedt, Qiyu Sun, Georg Bökman, Mårten Wadenbäck, Michael Felsberg", "venue": "CVPR 2024", "year": 2024, "url": "https://arxiv.org/abs/2305.15404", "code": "https://github.com/Parskatt/RoMa", "license": "MIT", "type": "paper", "verified": true},
+  {"key": "LoMa", "title": "LoMa: Local Feature Matching Revisited", "authors": "David Nordström, Johan Edstedt, Georg Bökman, Jonathan Astermark, Anders Heyden, Viktor Larsson, Mårten Wadenbäck, Michael Felsberg, Fredrik Kahl", "venue": "arXiv 2604.04931", "year": 2026, "url": "https://arxiv.org/abs/2604.04931", "code": "https://github.com/davnords/LoMa", "license": "MIT", "type": "paper", "verified": true},
+  {"key": "RSBA", "title": "Revisiting Rolling Shutter Bundle Adjustment: Toward Accurate and Fast Solution", "authors": "Bangyan Liao, Delin Qu, Yifei Xue, Huiqing Zhang, Yizhen Lao", "venue": "CVPR 2023", "year": 2023, "url": "https://arxiv.org/abs/2209.08503", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "DoubleSphere", "title": "The Double Sphere Camera Model", "authors": "Vladyslav Usenko, Nikolaus Demmel, Daniel Cremers", "venue": "3DV 2018", "year": 2018, "url": "https://arxiv.org/abs/1807.08957", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "2DGS", "title": "2D Gaussian Splatting for Geometrically Accurate Radiance Fields", "authors": "Binbin Huang, Zehao Yu, Anpei Chen, Andreas Geiger, Shenghua Gao", "venue": "SIGGRAPH 2024", "year": 2024, "url": "https://arxiv.org/abs/2403.17888", "code": "https://github.com/hbb1/2d-gaussian-splatting", "license": "Gaussian-Splatting License (non-commercial)", "type": "paper", "verified": true},
+  {"key": "GOF", "title": "Gaussian Opacity Fields: Efficient Adaptive Surface Reconstruction in Unbounded Scenes", "authors": "Zehao Yu, Torsten Sattler, Andreas Geiger", "venue": "SIGGRAPH Asia 2024 (ACM TOG)", "year": 2024, "url": "https://arxiv.org/abs/2404.10772", "code": "https://github.com/autonomousvision/gaussian-opacity-fields", "license": "Gaussian-Splatting License (non-commercial)", "type": "paper", "verified": true},
+  {"key": "PGSR", "title": "PGSR: Planar-based Gaussian Splatting for Efficient and High-Fidelity Surface Reconstruction", "authors": "Danpeng Chen, Hai Li, Weicai Ye, Yifan Wang, Weijian Xie, Shangjin Zhai, Nan Wang, Haomin Liu, Hujun Bao, Guofeng Zhang", "venue": "IEEE TVCG 2024", "year": 2024, "url": "https://arxiv.org/abs/2406.06521", "code": "https://github.com/zju3dv/PGSR", "license": "Research/non-profit only", "type": "paper", "verified": true},
+  {"key": "RaDeGS", "title": "RaDe-GS: Rasterizing Depth in Gaussian Splatting", "authors": "Baowen Zhang, Chuan Fang, Rakesh Shrestha, Yixun Liang, Xiaoxiao Long, Ping Tan", "venue": "arXiv 2406.01467", "year": 2024, "url": "https://arxiv.org/abs/2406.01467", "code": "https://github.com/BaowenZ/RaDe-GS", "license": "Gaussian-Splatting License (non-commercial)", "type": "paper", "verified": true},
+  {"key": "DNSplatter", "title": "DN-Splatter: Depth and Normal Priors for Gaussian Splatting and Meshing", "authors": "Matias Turkulainen, Xuqian Ren, Iaroslav Melekhov, Otto Seiskari, Esa Rahtu, Juho Kannala", "venue": "WACV 2025", "year": 2025, "url": "https://arxiv.org/abs/2403.17822", "code": "https://github.com/maturk/dn-splatter", "license": "Apache-2.0", "type": "paper", "verified": true},
+  {"key": "MonoSDF", "title": "MonoSDF: Exploring Monocular Geometric Cues for Neural Implicit Surface Reconstruction", "authors": "Zehao Yu, Songyou Peng, Michael Niemeyer, Torsten Sattler, Andreas Geiger", "venue": "NeurIPS 2022", "year": 2022, "url": "https://arxiv.org/abs/2206.00665", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "Neuralangelo", "title": "Neuralangelo: High-Fidelity Neural Surface Reconstruction", "authors": "Zhaoshuo Li, Thomas Müller, Alex Evans, Russell H. Taylor, Mathias Unberath, Ming-Yu Liu, Chen-Hsuan Lin", "venue": "CVPR 2023", "year": 2023, "url": "https://arxiv.org/abs/2306.03092", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "PlanarSplatting", "title": "PlanarSplatting: Accurate Planar Surface Reconstruction in 3 Minutes", "authors": "Bin Tan, Rui Yu, Yujun Shen, Nan Xue", "venue": "arXiv 2412.03451 (venue [UNVERIFIED])", "year": 2024, "url": "https://arxiv.org/abs/2412.03451", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "OpenMVS", "title": "OpenMVS: open Multi-View Stereo reconstruction library", "authors": "cdcseacave (Dan Cernea) et al.", "venue": "GitHub repository", "year": 2026, "url": "https://github.com/cdcseacave/openMVS", "code": "https://github.com/cdcseacave/openMVS", "license": "AGPL-3.0", "type": "repo", "verified": true},
+  {"key": "DAv2", "title": "Depth Anything V2", "authors": "Lihe Yang, Bingyi Kang, Zilong Huang, Zhen Zhao, Xiaogang Xu, Jiashi Feng, Hengshuang Zhao", "venue": "NeurIPS 2024", "year": 2024, "url": "https://arxiv.org/abs/2406.09414", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "MoGe", "title": "MoGe: Unlocking Accurate Monocular Geometry Estimation for Open-Domain Images with Optimal Training Supervision", "authors": "Ruicheng Wang, Sicheng Xu, Cassie Dai, Jianfeng Xiang, Yu Deng, Xin Tong, Jiaolong Yang", "venue": "arXiv 2410.19115", "year": 2024, "url": "https://arxiv.org/abs/2410.19115", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "AprilTag", "title": "AprilTag 3 visual fiducial library", "authors": "AprilRobotics (Univ. of Michigan)", "venue": "GitHub repository", "year": 2026, "url": "https://github.com/AprilRobotics/apriltag", "code": "https://github.com/AprilRobotics/apriltag", "license": "BSD-2-Clause", "type": "repo", "verified": true},
+  {"key": "Barazzetti2018", "title": "Can we use low-cost 360 degree cameras to create accurate 3D models?", "authors": "L. Barazzetti, M. Previtali, F. Roncoroni", "venue": "Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci., XLII-2, 69-75", "year": 2018, "url": "https://doi.org/10.5194/isprs-archives-XLII-2-69-2018", "code": null, "license": "CC BY 4.0", "type": "paper", "verified": true},
+  {"key": "Janiszewski2022", "title": "Rapid Photogrammetry with a 360-Degree Camera for Tunnel Mapping", "authors": "M. Janiszewski, M. Torkan, L. Uotinen, M. Rinne", "venue": "Remote Sensing 14(21), 5494", "year": 2022, "url": "https://doi.org/10.3390/rs14215494", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "Rezaei2024", "title": "Quality Analysis of 3D Point Cloud Using Low-Cost Spherical Camera for Underpass Mapping", "authors": "Sina Rezaei, Angelina Maier, Hossein Arefi", "venue": "Sensors 24(11), 3534", "year": 2024, "url": "https://doi.org/10.3390/s24113534", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "Perfetti2024", "title": "Multi-Camera Rig and Spherical Camera Assessment for Indoor Surveys in Complex Spaces", "authors": "Luca Perfetti, Nazarena Bruno, Riccardo Roncella", "venue": "Remote Sensing 16(23), 4505", "year": 2024, "url": "https://doi.org/10.3390/rs16234505", "code": null, "license": "CC BY 4.0", "type": "paper", "verified": true},
+  {"key": "GomezLopez2025", "title": "Analysis of the Photogrammetry Use of Videos from 360-Degree Multicameras in Heritage-Related Scenes: Case of the Necropolis of Qubbet El-Hawa (Aswan, Egypt)", "authors": "José Miguel Gómez-López, José Luis Pérez-García, Antonio Tomás Mozas-Calvache, Diego Vico-García", "venue": "Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci., XLVIII-M-9-2025, 533", "year": 2025, "url": "https://doi.org/10.5194/isprs-archives-XLVIII-M-9-2025-533-2025", "code": null, "license": "CC BY 4.0", "type": "paper", "verified": true},
+  {"key": "Pamart2024", "title": "Optimization of 360-based photogrammetric pipeline for narrow and dark indoor surveys", "authors": "Anthony Pamart, Nicolas Maillard, Florent Comte, Laurent Bergerot", "venue": "Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci., XLVIII-2/W8-2024, 349", "year": 2024, "url": "https://isprs-archives.copernicus.org/articles/XLVIII-2-W8-2024/349/2024/", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "A1", "title": "A1: The DJI Avata 360 as a measurement instrument (project research file)", "authors": "GeoFlight agent A1", "venue": "internal", "year": 2026, "url": "research/A1_device.md", "code": null, "license": null, "type": "secondary", "verified": true}
+]
+```
