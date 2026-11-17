@@ -1,0 +1,3536 @@
+[
+ {
+  "key": "Kerbl2023",
+  "title": "3D Gaussian Splatting for Real-Time Radiance Field Rendering",
+  "authors": "Bernhard Kerbl, Georgios Kopanas, Thomas Leimkühler, George Drettakis",
+  "venue": "ACM Transactions on Graphics 42(4) (SIGGRAPH 2023)",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2308.04079",
+  "code": "https://github.com/graphdeco-inria/gaussian-splatting",
+  "license": "Inria/MPII Gaussian-Splatting License (non-commercial research and evaluation)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX, defaults and licence read from official README/LICENSE",
+  "alt_urls": [
+   "https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Kerbl2024Hier",
+  "title": "A Hierarchical 3D Gaussian Representation for Real-Time Rendering of Very Large Datasets",
+  "authors": "Bernhard Kerbl, Andreas Meuleman, Georgios Kopanas, Michael Wimmer, Alexandre Lanvin, George Drettakis",
+  "venue": "ACM Transactions on Graphics",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.12080",
+  "code": "https://github.com/graphdeco-inria/hierarchical-3d-gaussians",
+  "license": "Inria research/non-commercial",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README; licence not checked",
+  "alt_urls": [
+   "https://github.com/graphdeco-inria/hierarchical-3d-gaussians"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Zwicker2001",
+  "title": "EWA Volume Splatting",
+  "authors": "Matthias Zwicker, Hanspeter Pfister, Jeroen van Baar, Markus Gross",
+  "venue": "IEEE Visualization 2001",
+  "year": 2001,
+  "url": "https://www.merl.com/publications/TR2001-27",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "search-index confirmation only (multiple consistent records)",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Mildenhall2020",
+  "title": "NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis",
+  "authors": "Ben Mildenhall, Pratul P. Srinivasan, Matthew Tancik, Jonathan T. Barron, Ravi Ramamoorthi, Ren Ng",
+  "venue": "ECCV",
+  "year": 2020,
+  "url": "https://arxiv.org/abs/2003.08934",
+  "code": "https://github.com/bmild/nerf",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Tancik2020",
+  "title": "Fourier Features Let Networks Learn High Frequency Functions in Low Dimensional Domains",
+  "authors": "Matthew Tancik, Pratul P. Srinivasan, Ben Mildenhall, Sara Fridovich-Keil, Nithin Raghavan, Utkarsh Singhal, Ravi Ramamoorthi, Jonathan T. Barron, Ren Ng",
+  "venue": "NeurIPS",
+  "year": 2020,
+  "url": "https://arxiv.org/abs/2006.10739",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "arXiv abstract page/API opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Barron2022",
+  "title": "Mip-NeRF 360: Unbounded Anti-Aliased Neural Radiance Fields",
+  "authors": "Jonathan T. Barron, Ben Mildenhall, Dor Verbin, Pratul P. Srinivasan, Peter Hedman",
+  "venue": "CVPR",
+  "year": 2022,
+  "url": "https://arxiv.org/abs/2111.12077",
+  "code": "https://github.com/google-research/multinerf",
+  "license": "Apache-2.0 (multinerf LICENSE)",
+  "type": "paper",
+  "verified": true,
+  "note": "CVF open-access record opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Mueller2022",
+  "title": "Instant Neural Graphics Primitives with a Multiresolution Hash Encoding",
+  "authors": "Thomas Müller, Alex Evans, Christoph Schied, Alexander Keller",
+  "venue": "ACM Transactions on Graphics",
+  "year": 2022,
+  "url": "https://nvlabs.github.io/instant-ngp/",
+  "code": "https://github.com/NVlabs/instant-ngp",
+  "license": "NVIDIA Source Code License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Barron2023",
+  "title": "Zip-NeRF: Anti-Aliased Grid-Based Neural Radiance Fields",
+  "authors": "Jonathan T. Barron, Ben Mildenhall, Dor Verbin, Pratul P. Srinivasan, Peter Hedman",
+  "venue": "ICCV",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2304.06706",
+  "code": "https://github.com/jonbarron/camp_zipnerf",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "CVF open-access record opened",
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Wang2021NeuS",
+  "title": "NeuS: Learning Neural Implicit Surfaces by Volume Rendering for Multi-view Reconstruction",
+  "authors": "Peng Wang, Lingjie Liu, Yuan Liu, Christian Theobalt, Taku Komura, Wenping Wang",
+  "venue": "NeurIPS",
+  "year": 2021,
+  "url": "https://arxiv.org/abs/2106.10689",
+  "code": "https://github.com/Totoro97/NeuS",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "authors from arXiv/README; NeurIPS 2021 venue via Semantic Scholar",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Yariv2021",
+  "title": "Volume Rendering of Neural Implicit Surfaces",
+  "authors": "Lior Yariv, Jiatao Gu, Yoni Kasten, Yaron Lipman",
+  "venue": "NeurIPS",
+  "year": 2021,
+  "url": "https://arxiv.org/abs/2106.12052",
+  "code": "https://github.com/lioryariv/volsdf",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Li2023",
+  "title": "Neuralangelo: High-Fidelity Neural Surface Reconstruction",
+  "authors": "Zhaoshuo Li, Thomas Müller, Alex Evans, Russell H. Taylor, Mathias Unberath, Ming-Yu Liu, Chen-Hsuan Lin",
+  "venue": "CVPR",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2306.03092",
+  "code": "https://github.com/NVlabs/neuralangelo",
+  "license": "NVIDIA Source Code License for Neuralangelo (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and licence header from official repo",
+  "alt_urls": [
+   "https://research.nvidia.com/labs/dir/neuralangelo/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "Wang2024DUSt3R",
+  "title": "DUSt3R: Geometric 3D Vision Made Easy",
+  "authors": "Shuzhe Wang, Vincent Leroy, Yohann Cabon, Boris Chidlovskii, Jerome Revaud",
+  "venue": "CVPR",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2312.14132",
+  "code": "https://github.com/naver/dust3r",
+  "license": "CC BY-NC-SA 4.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and licence from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Leroy2024",
+  "title": "Grounding Image Matching in 3D with MASt3R",
+  "authors": "Vincent Leroy, Yohann Cabon, Jerome Revaud",
+  "venue": "ECCV",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.09756",
+  "code": "https://github.com/naver/mast3r",
+  "license": "CC BY-NC-SA 4.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Duisterhof2025",
+  "title": "MASt3R-SfM: a Fully-Integrated Solution for Unconstrained Structure-from-Motion",
+  "authors": "Bardienus Pieter Duisterhof, Lojze Zust, Philippe Weinzaepfel, Vincent Leroy, Yohann Cabon, Jerome Revaud",
+  "venue": "International Conference on 3D Vision (3DV)",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2409.19152",
+  "code": "https://github.com/naver/mast3r",
+  "license": "CC BY-NC-SA 4.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from MASt3R README",
+  "alt_urls": [
+   "https://github.com/naver/mast3r"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "Wang2025VGGT",
+  "title": "VGGT: Visual Geometry Grounded Transformer",
+  "authors": "Jianyuan Wang, Minghao Chen, Nikita Karaev, Andrea Vedaldi, Christian Rupprecht, David Novotny",
+  "venue": "CVPR",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2503.11651",
+  "code": "https://github.com/facebookresearch/vggt",
+  "license": "Custom licence permitting commercial use (excl. military) since July 2025; only VGGT-1B-Commercial checkpoint is commercial, original checkpoint non-commercial",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and licence notes from official README",
+  "alt_urls": [
+   "https://github.com/facebookresearch/vggt"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "Wang2025Pi3",
+  "title": "π³: Permutation-Equivariant Visual Geometry Learning",
+  "authors": "Yifan Wang, Jianjun Zhou, Haoyi Zhu, Wenzheng Chang, Yang Zhou, Zizun Li, Junyi Chen, Jiangmiao Pang, Chunhua Shen, Tong He",
+  "venue": "arXiv:2507.13347",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2507.13347",
+  "code": "https://github.com/yyfz/Pi3",
+  "license": "BSD-2-Clause-style",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README",
+  "alt_urls": [
+   "https://github.com/yyfz/Pi3"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "Keetha2026",
+  "title": "MapAnything: Universal Feed-Forward Metric 3D Reconstruction",
+  "authors": "Nikhil Keetha, Norman Müller, Johannes Schönberger, Lorenzo Porzi, Yuchen Zhang, Tobias Fischer, Arno Knapitsch, Duncan Zauss, Ethan Weber, Nelson Antunes, Jonathon Luiten, Manuel Lopez-Antequera, Samuel Rota Bulò, Christian Richardt, Deva Ramanan, Sebastian Scherer, Peter Kontschieder",
+  "venue": "International Conference on 3D Vision (3DV)",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2509.13414",
+  "code": "https://github.com/facebookresearch/map-anything",
+  "license": "Apache-2.0 model variant available (facebook/map-anything-apache); default model licence not checked",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README",
+  "alt_urls": [
+   "https://github.com/facebookresearch/map-anything"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "DeTone2018",
+  "title": "SuperPoint: Self-Supervised Interest Point Detection and Description",
+  "authors": "Daniel DeTone, Tomasz Malisiewicz, Andrew Rabinovich",
+  "venue": "CVPR Deep Learning for Visual SLAM Workshop",
+  "year": 2018,
+  "url": "https://arxiv.org/abs/1712.07629",
+  "code": "https://github.com/magicleap/SuperPointPretrainedNetwork",
+  "license": "Magic Leap licence (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Sarlin2020",
+  "title": "SuperGlue: Learning Feature Matching with Graph Neural Networks",
+  "authors": "Paul-Edouard Sarlin, Daniel DeTone, Tomasz Malisiewicz, Andrew Rabinovich",
+  "venue": "CVPR",
+  "year": 2020,
+  "url": "https://arxiv.org/abs/1911.11763",
+  "code": "https://github.com/magicleap/SuperGluePretrainedNetwork",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from hloc README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Sarlin2019",
+  "title": "From Coarse to Fine: Robust Hierarchical Localization at Large Scale",
+  "authors": "Paul-Edouard Sarlin, Cesar Cadena, Roland Siegwart, Marcin Dymczyk",
+  "venue": "CVPR",
+  "year": 2019,
+  "url": "https://arxiv.org/abs/1812.03506",
+  "code": "https://github.com/cvg/Hierarchical-Localization",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "arXiv API: authors, 'Camera-ready for CVPR 2019'",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Lindenberger2023",
+  "title": "LightGlue: Local Feature Matching at Light Speed",
+  "authors": "Philipp Lindenberger, Paul-Edouard Sarlin, Marc Pollefeys",
+  "venue": "ICCV",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2306.13643",
+  "code": "https://github.com/cvg/LightGlue",
+  "license": "Apache-2.0 (SuperPoint weights under separate restrictive licence)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and licence from official README",
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "Sun2021",
+  "title": "LoFTR: Detector-Free Local Feature Matching with Transformers",
+  "authors": "Jiaming Sun, Zehong Shen, Yuang Wang, Hujun Bao, Xiaowei Zhou",
+  "venue": "CVPR",
+  "year": 2021,
+  "url": "https://arxiv.org/abs/2104.00680",
+  "code": "https://github.com/zju3dv/LoFTR",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and licence from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Edstedt2024",
+  "title": "RoMa: Robust Dense Feature Matching",
+  "authors": "Johan Edstedt, Qiyu Sun, Georg Bökman, Mårten Wadenbäck, Michael Felsberg",
+  "venue": "CVPR",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2305.15404",
+  "code": "https://github.com/Parskatt/RoMa",
+  "license": "MIT (DINOv2 Apache-2.0)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and licence from official README",
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "Lowe2004",
+  "title": "Distinctive Image Features from Scale-Invariant Keypoints",
+  "authors": "David G. Lowe",
+  "venue": "International Journal of Computer Vision 60(2)",
+  "year": 2004,
+  "url": "https://doi.org/10.1023/B:VISI.0000029664.99615.94",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "verified via Semantic Scholar metadata (DOI lookup); publisher page not opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Rublee2011",
+  "title": "ORB: An efficient alternative to SIFT or SURF",
+  "authors": "Ethan Rublee, Vincent Rabaud, Kurt Konolige, Gary Bradski",
+  "venue": "ICCV",
+  "year": 2011,
+  "url": "https://doi.org/10.1109/ICCV.2011.6126544",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "verified via Semantic Scholar metadata (DOI lookup); publisher page not opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Nister2006",
+  "title": "Scalable Recognition with a Vocabulary Tree",
+  "authors": "David Nistér, Henrik Stewénius",
+  "venue": "CVPR",
+  "year": 2006,
+  "url": "https://doi.org/10.1109/CVPR.2006.264",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "verified via Semantic Scholar metadata (DOI lookup); publisher page not opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Nister2004",
+  "title": "An Efficient Solution to the Five-Point Relative Pose Problem",
+  "authors": "David Nistér",
+  "venue": "IEEE TPAMI 26(6)",
+  "year": 2004,
+  "url": "https://doi.org/10.1109/TPAMI.2004.17",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "verified via Semantic Scholar metadata (DOI lookup); publisher page not opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Fischler1981",
+  "title": "Random Sample Consensus: A Paradigm for Model Fitting with Applications to Image Analysis and Automated Cartography",
+  "authors": "Martin A. Fischler, Robert C. Bolles",
+  "venue": "Communications of the ACM 24(6)",
+  "year": 1981,
+  "url": "https://doi.org/10.1145/358669.358692",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "verified via Semantic Scholar metadata (DOI lookup); publisher page not opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Lepetit2009",
+  "title": "EPnP: An Accurate O(n) Solution to the PnP Problem",
+  "authors": "Vincent Lepetit, Francesc Moreno-Noguer, Pascal Fua",
+  "venue": "International Journal of Computer Vision 81(2)",
+  "year": 2009,
+  "url": "https://doi.org/10.1007/s11263-008-0152-6",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "note": "from domain knowledge; page not opened (network restricted)",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Triggs2000",
+  "title": "Bundle Adjustment — A Modern Synthesis",
+  "authors": "Bill Triggs, Philip F. McLauchlan, Richard I. Hartley, Andrew W. Fitzgibbon",
+  "venue": "Vision Algorithms: Theory and Practice (ICCV 1999 workshop), LNCS 1883, pp. 298–372",
+  "year": 2000,
+  "url": "https://hal.inria.fr/inria-00548290",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "search-index confirmation; workshop 1999, LNCS volume dated 2000",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Snavely2006",
+  "title": "Photo Tourism: Exploring Photo Collections in 3D",
+  "authors": "Noah Snavely, Steven M. Seitz, Richard Szeliski",
+  "venue": "ACM SIGGRAPH (ACM TOG 25(3))",
+  "year": 2006,
+  "url": "https://doi.org/10.1145/1141911.1141964",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "note": "from domain knowledge; page not opened (network restricted)",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Wu2013",
+  "title": "Towards Linear-Time Incremental Structure from Motion",
+  "authors": "Changchang Wu",
+  "venue": "International Conference on 3D Vision (3DV)",
+  "year": 2013,
+  "url": "https://doi.org/10.1109/3DV.2013.25",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "verified via Semantic Scholar metadata (DOI lookup); publisher page not opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Schoenberger2016SfM",
+  "title": "Structure-from-Motion Revisited",
+  "authors": "Johannes Lutz Schönberger, Jan-Michael Frahm",
+  "venue": "CVPR",
+  "year": 2016,
+  "url": "https://colmap.github.io/",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD (new BSD)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and licence from COLMAP README/LICENSE",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Schoenberger2016MVS",
+  "title": "Pixelwise View Selection for Unstructured Multi-View Stereo",
+  "authors": "Johannes Lutz Schönberger, Enliang Zheng, Marc Pollefeys, Jan-Michael Frahm",
+  "venue": "ECCV",
+  "year": 2016,
+  "url": "https://colmap.github.io/",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD (new BSD)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from COLMAP README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Pan2024",
+  "title": "Global Structure-from-Motion Revisited",
+  "authors": "Linfei Pan, Daniel Barath, Marc Pollefeys, Johannes Lutz Schönberger",
+  "venue": "ECCV",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2407.20219",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from GLOMAP and COLMAP READMEs; GLOMAP merged into COLMAP 4.0",
+  "alt_urls": [
+   "https://github.com/colmap/glomap"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "COLMAP-changelog",
+  "title": "COLMAP CHANGELOG (releases 4.0.0–4.2.1)",
+  "authors": "COLMAP developers",
+  "venue": "Official release notes",
+  "year": 2026,
+  "url": "https://github.com/colmap/colmap/blob/main/CHANGELOG.rst",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD",
+  "type": "docs",
+  "verified": true,
+  "note": "opened directly; 4.1.0 spherical-model note, Caspar BA, EUCM, advancing-front meshing; 4.0.0 GLOMAP; 4.2.0 multi-component, LoMa",
+  "cited_by": [
+   "A2",
+   "A3b",
+   "A4"
+  ]
+ },
+ {
+  "key": "COLMAP-rigs",
+  "title": "COLMAP documentation: Rigs — Reconstruction from 360° spherical images",
+  "authors": "COLMAP developers",
+  "venue": "Official documentation (doc/rigs.rst)",
+  "year": 2026,
+  "url": "https://colmap.github.io/rigs.html",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD",
+  "type": "docs",
+  "verified": true,
+  "note": "opened via repository source",
+  "cited_by": [
+   "A2",
+   "A3b",
+   "A3a",
+   "A4"
+  ]
+ },
+ {
+  "key": "COLMAP-cameras",
+  "title": "COLMAP documentation: Camera Models",
+  "authors": "COLMAP developers",
+  "venue": "Official documentation (doc/cameras.rst)",
+  "year": 2026,
+  "url": "https://colmap.github.io/cameras.html",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD",
+  "type": "docs",
+  "verified": true,
+  "note": "opened via repository source",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Campos2021",
+  "title": "ORB-SLAM3: An Accurate Open-Source Library for Visual, Visual-Inertial and Multi-Map SLAM",
+  "authors": "Carlos Campos, Richard Elvira, Juan J. Gómez Rodríguez, José M. M. Montiel, Juan D. Tardós",
+  "venue": "IEEE Transactions on Robotics 37(6), 1874–1890",
+  "year": 2021,
+  "url": "https://github.com/UZ-SLAMLab/ORB_SLAM3",
+  "code": "https://github.com/UZ-SLAMLab/ORB_SLAM3",
+  "license": "GPL-3.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo (README BibTeX abbreviates third author as Gómez, Juan J.)",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Curless1996",
+  "title": "A Volumetric Method for Building Complex Models from Range Images",
+  "authors": "Brian Curless, Marc Levoy",
+  "venue": "ACM SIGGRAPH",
+  "year": 1996,
+  "url": "https://doi.org/10.1145/237170.237269",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "verified via Semantic Scholar metadata (DOI lookup); publisher page not opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Kazhdan2013",
+  "title": "Screened Poisson Surface Reconstruction",
+  "authors": "Michael Kazhdan, Hugues Hoppe",
+  "venue": "ACM Transactions on Graphics 32(3)",
+  "year": 2013,
+  "url": "https://doi.org/10.1145/2487228.2487237",
+  "code": "https://github.com/mkazhdan/PoissonRecon",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "verified via Semantic Scholar metadata (DOI lookup); publisher page not opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Griwodz2021",
+  "title": "AliceVision Meshroom: An open-source 3D reconstruction pipeline",
+  "authors": "Carsten Griwodz, Simone Gasparini, Lilian Calvet, Pierre Gurdjos, Fabien Castan, Benoit Maujean, Gregoire De Lillo, Yann Lanthony",
+  "venue": "Proceedings of the 12th ACM Multimedia Systems Conference (MMSys '21)",
+  "year": 2021,
+  "url": "https://github.com/alicevision/Meshroom",
+  "code": "https://github.com/alicevision/Meshroom",
+  "license": "MPL-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and licence from official repo",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "OpenMVS",
+  "title": "OpenMVS: open Multi-View Stereo reconstruction library",
+  "authors": "cdcseacave and contributors",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/cdcseacave/openMVS",
+  "code": "https://github.com/cdcseacave/openMVS",
+  "license": "AGPL-3.0",
+  "type": "repo",
+  "verified": true,
+  "note": "LICENSE read directly",
+  "cited_by": [
+   "A2",
+   "A3b",
+   "A4"
+  ]
+ },
+ {
+  "key": "ODM",
+  "title": "ODM - A command line toolkit to generate maps, point clouds, 3D models and DEMs from drone, balloon or kite images",
+  "authors": "OpenDroneMap Authors",
+  "venue": "GitHub repository",
+  "year": 2020,
+  "url": "https://github.com/OpenDroneMap/ODM",
+  "code": "https://github.com/OpenDroneMap/ODM",
+  "license": "AGPL-3.0",
+  "type": "repo",
+  "verified": true,
+  "note": "citation and LICENSE from official repo",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Knapitsch2017",
+  "title": "Tanks and Temples: Benchmarking Large-Scale Scene Reconstruction",
+  "authors": "Arno Knapitsch, Jaesik Park, Qian-Yi Zhou, Vladlen Koltun",
+  "venue": "ACM Transactions on Graphics 36(4)",
+  "year": 2017,
+  "url": "https://www.tanksandtemples.org/",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "search-index confirmation only",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Sturm2012",
+  "title": "A Benchmark for the Evaluation of RGB-D SLAM Systems",
+  "authors": "Jürgen Sturm, Nikolas Engelhard, Felix Endres, Wolfram Burgard, Daniel Cremers",
+  "venue": "IEEE/RSJ IROS",
+  "year": 2012,
+  "url": "https://cvg.cit.tum.de/data/datasets/rgbd-dataset",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "search-index confirmation only",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Yu2024Mip",
+  "title": "Mip-Splatting: Alias-free 3D Gaussian Splatting",
+  "authors": "Zehao Yu, Anpei Chen, Binbin Huang, Torsten Sattler, Andreas Geiger",
+  "venue": "CVPR",
+  "year": 2024,
+  "url": "https://niujinshuchong.github.io/mip-splatting/",
+  "code": "https://github.com/autonomousvision/mip-splatting",
+  "license": "Inria/MPII Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Guedon2024",
+  "title": "SuGaR: Surface-Aligned Gaussian Splatting for Efficient 3D Mesh Reconstruction and High-Quality Mesh Rendering",
+  "authors": "Antoine Guédon, Vincent Lepetit",
+  "venue": "CVPR",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2311.12775",
+  "code": "https://github.com/Anttwo/SuGaR",
+  "license": "Inria/MPII Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo",
+  "alt_urls": [
+   "https://anttwo.github.io/sugar/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Huang2024",
+  "title": "2D Gaussian Splatting for Geometrically Accurate Radiance Fields",
+  "authors": "Binbin Huang, Zehao Yu, Anpei Chen, Andreas Geiger, Shenghua Gao",
+  "venue": "SIGGRAPH 2024 Conference Papers",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2403.17888",
+  "code": "https://github.com/hbb1/2d-gaussian-splatting",
+  "license": "Inria/MPII Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo",
+  "alt_urls": [
+   "https://surfsplatting.github.io/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b",
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "Yu2024GOF",
+  "title": "Gaussian Opacity Fields: Efficient Adaptive Surface Reconstruction in Unbounded Scenes",
+  "authors": "Zehao Yu, Torsten Sattler, Andreas Geiger",
+  "venue": "ACM Transactions on Graphics",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2404.10772",
+  "code": "https://github.com/autonomousvision/gaussian-opacity-fields",
+  "license": "Inria/MPII Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo (arXiv title variant: '...Efficient High-quality Compact Surface Reconstruction...')",
+  "alt_urls": [
+   "https://niujinshuchong.github.io/gaussian-opacity-fields/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "Chen2024PGSR",
+  "title": "PGSR: Planar-based Gaussian Splatting for Efficient and High-Fidelity Surface Reconstruction",
+  "authors": "Danpeng Chen, Hai Li, Weicai Ye, Yifan Wang, Weijian Xie, Shangjin Zhai, Nan Wang, Haomin Liu, Hujun Bao, Guofeng Zhang",
+  "venue": "arXiv:2406.06521 (README BibTeX)",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.06521",
+  "code": "https://github.com/zju3dv/PGSR",
+  "license": "Custom ZJU licence: educational, research and non-profit use only",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE.md from official repo; arXiv metadata confirmed",
+  "alt_urls": [
+   "https://zju3dv.github.io/pgsr/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b",
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "Zhang2024RaDe",
+  "title": "RaDe-GS: Rasterizing Depth in Gaussian Splatting",
+  "authors": "Baowen Zhang, Chuan Fang, Rakesh Shrestha, Yixun Liang, Xiaoxiao Long, Ping Tan",
+  "venue": "ACM Transactions on Graphics (accepted, per README); arXiv 2024",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.01467",
+  "code": "https://github.com/BaowenZ/RaDe-GS",
+  "license": "Inria/MPII Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "authors and TOG acceptance from official README",
+  "alt_urls": [
+   "https://baowenz.github.io/radegs/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3b"
+  ]
+ },
+ {
+  "key": "Wang2024BilaRF",
+  "title": "Bilateral Guided Radiance Field Processing",
+  "authors": "Yuehao Wang, Chaoyi Wang, Bingchen Gong, Tianfan Xue",
+  "venue": "ACM Transactions on Graphics 43(4) (SIGGRAPH 2024)",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.00448",
+  "code": "https://github.com/yuehaowang/bilarf",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "search-index confirmation only",
+  "alt_urls": [
+   "https://bilarfpro.github.io/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3a",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Kulhanek2024",
+  "title": "WildGaussians: 3D Gaussian Splatting in the Wild",
+  "authors": "Jonas Kulhanek, Songyou Peng, Zuzana Kukelova, Marc Pollefeys, Torsten Sattler",
+  "venue": "NeurIPS",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2407.08447",
+  "code": "https://github.com/jkulhanek/wild-gaussians",
+  "license": "MIT for repo code, but README asks users to follow the 3DGS and Mip-Splatting licences for the renderer (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README",
+  "alt_urls": [
+   "https://wild-gaussians.github.io/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3a",
+   "A3c"
+  ]
+ },
+ {
+  "key": "MoenneLoccoz2024",
+  "title": "3D Gaussian Ray Tracing: Fast Tracing of Particle Scenes",
+  "authors": "Nicolas Moenne-Loccoz, Ashkan Mirzaei, Or Perel, Riccardo de Lutio, Janick Martinez Esturo, Gavriel State, Sanja Fidler, Nicholas Sharp, Zan Gojcic",
+  "venue": "ACM Transactions on Graphics (SIGGRAPH Asia 2024)",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2407.07090",
+  "code": "https://github.com/nv-tlabs/3dgrut",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo",
+  "alt_urls": [
+   "https://github.com/nv-tlabs/3dgrut"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Wu2025_3DGUT",
+  "title": "3DGUT: Enabling Distorted Cameras and Secondary Rays in Gaussian Splatting",
+  "authors": "Qi Wu, Janick Martinez Esturo, Ashkan Mirzaei, Nicolas Moenne-Loccoz, Zan Gojcic",
+  "venue": "CVPR",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2412.12507",
+  "code": "https://github.com/nv-tlabs/3dgrut",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo",
+  "alt_urls": [
+   "https://research.nvidia.com/labs/toronto-ai/3DGUT/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "Seiskari2024",
+  "title": "Gaussian Splatting on the Move: Blur and Rolling Shutter Compensation for Natural Camera Motion",
+  "authors": "Otto Seiskari, Jerry Ylilammi, Valtteri Kaatrasalo, Pekka Rantalankila, Matias Turkulainen, Juho Kannala, Esa Rahtu, Arno Solin",
+  "venue": "ECCV",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2403.13327",
+  "code": "https://github.com/SpectacularAI/3dgs-deblur",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "authors from arXiv API; ECCV 2024 from search index; code per arXiv comment",
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Li2025OmniGS",
+  "title": "OmniGS: Fast Radiance Field Reconstruction using Omnidirectional Gaussian Splatting",
+  "authors": "Longwei Li, Huajian Huang, Sai-Kit Yeung, Hui Cheng",
+  "venue": "WACV",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2404.03202",
+  "code": "https://github.com/LiquorLeaf/OmniGS",
+  "license": "GPL-3.0",
+  "type": "paper",
+  "verified": true,
+  "note": "authors and venue from official README",
+  "alt_urls": [
+   "https://liquorleaf.github.io/research/OmniGS/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Lee2024ODGS",
+  "title": "ODGS: 3D Scene Reconstruction from Omnidirectional Images with 3D Gaussian Splatting",
+  "authors": "Suyoung Lee, Jaeyoung Chung, Jaeyoo Huh, Kyoung Mu Lee",
+  "venue": "NeurIPS",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2410.20686",
+  "code": "https://github.com/esw0116/ODGS",
+  "license": "MIT (README badge)",
+  "type": "paper",
+  "verified": true,
+  "note": "authors and venue from official README",
+  "alt_urls": [
+   "https://robot0321.github.io/odgs/index.html"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Ye2025gsplat",
+  "title": "gsplat: An open-source library for Gaussian splatting",
+  "authors": "Vickie Ye, Ruilong Li, Justin Kerr, Matias Turkulainen, Brent Yi, Zhuoyang Pan, Otto Seiskari, Jianbo Ye, Jeffrey Hu, Matthew Tancik, Angjoo Kanazawa",
+  "venue": "Journal of Machine Learning Research",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2409.06765",
+  "code": "https://github.com/nerfstudio-project/gsplat",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "note": "BibTeX, news items and LICENSE from official repo",
+  "alt_urls": [
+   "https://docs.gsplat.studio/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Tancik2023",
+  "title": "Nerfstudio: A Modular Framework for Neural Radiance Field Development",
+  "authors": "Matthew Tancik, Ethan Weber, Evonne Ng, Ruilong Li, Brent Yi, Justin Kerr, Terrance Wang, Alexander Kristoffersen, Jake Austin, Kamyar Salahi, Abhik Ahuja, David McAllister, Angjoo Kanazawa",
+  "venue": "ACM SIGGRAPH 2023 Conference Proceedings",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2302.04264",
+  "code": "https://github.com/nerfstudio-project/nerfstudio",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and LICENSE from official repo",
+  "alt_urls": [
+   "https://docs.nerf.studio/"
+  ],
+  "cited_by": [
+   "A2",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Chen2024Survey",
+  "title": "A Survey on 3D Gaussian Splatting",
+  "authors": "Guikun Chen, Wenguan Wang",
+  "venue": "ACM Computing Surveys (accepted, per arXiv comment); arXiv:2401.03890",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2401.03890",
+  "code": "https://github.com/guikunchen/Awesome3DGS",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "arXiv abstract page opened",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Tewari2022",
+  "title": "Advances in Neural Rendering",
+  "authors": "Ayush Tewari, Justus Thies, Ben Mildenhall, Pratul Srinivasan, Edgar Tretschk, Yifan Wang, Christoph Lassner, Vincent Sitzmann, Ricardo Martin-Brualla, Stephen Lombardi, Tomas Simon, Christian Theobalt, Matthias Niessner, Jonathan T. Barron, Gordon Wetzstein, Michael Zollhoefer, Vladislav Golyanik",
+  "venue": "Computer Graphics Forum 41(2) (Eurographics 2022 STAR)",
+  "year": 2022,
+  "url": "https://arxiv.org/abs/2111.05849",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "arXiv abstract page opened (STAR at Eurographics 2022); CGF 41(2) from search index",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Chang2017",
+  "title": "Matterport3D: Learning from RGB-D Data in Indoor Environments",
+  "authors": "Angel Chang, Angela Dai, Thomas Funkhouser, Maciej Halber, Matthias Niessner, Manolis Savva, Shuran Song, Andy Zeng, Yinda Zhang",
+  "venue": "International Conference on 3D Vision (3DV)",
+  "year": 2017,
+  "url": "https://niessner.github.io/Matterport/",
+  "code": "https://github.com/niessner/Matterport",
+  "license": "Dataset terms of use (signed agreement required)",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX and access terms from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Armeni2017",
+  "title": "Joint 2D-3D-Semantic Data for Indoor Scene Understanding",
+  "authors": "Iro Armeni, Sasha Sax, Amir R. Zamir, Silvio Savarese",
+  "venue": "arXiv:1702.01105",
+  "year": 2017,
+  "url": "https://github.com/alexsax/2D-3D-Semantics",
+  "code": "https://github.com/alexsax/2D-3D-Semantics",
+  "license": "Dataset licence agreement required",
+  "type": "paper",
+  "verified": true,
+  "note": "BibTeX from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Huang2024_360Loc",
+  "title": "360Loc: A Dataset and Benchmark for Omnidirectional Visual Localization with Cross-device Queries",
+  "authors": "Huajian Huang, Changkun Liu, Yipeng Zhu, Hui Cheng, Tristan Braud, Sai-Kit Yeung",
+  "venue": "CVPR",
+  "year": 2024,
+  "url": "https://huajianup.github.io/research/360Loc/",
+  "code": "https://github.com/HuajianUP/360Loc",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "authors and venue from official README",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Jung2025IM360",
+  "title": "IM360: Large-scale Indoor Mapping with 360 Cameras",
+  "authors": "Dongki Jung, Jaehoon Choi, Yonghan Lee, Dinesh Manocha",
+  "venue": "ICCV",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2502.12545",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "CVF open-access record and arXiv page opened; earlier arXiv v2 title differed; project page jdk9405.github.io/IM360",
+  "cited_by": [
+   "A2",
+   "A3b",
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "RIGOR2026",
+  "title": "RIGOR: Rig-Informed Geometry for Omnidirectional Reconstruction",
+  "authors": "Tingjun Huang, Dmitry Rudshin, Mathieu Meyer, Pietro Bonazzi, Marc Pollefeys, Emilia Szymanska",
+  "venue": "arXiv:2609.13504",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2609.13504",
+  "code": "https://github.com/TangentH/RIGOR",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "note": "arXiv API metadata and abstract read; code licence not checked",
+  "cited_by": [
+   "A2",
+   "A3b",
+   "A3a",
+   "A4"
+  ]
+ },
+ {
+  "key": "ORBIT2026",
+  "title": "ORBIT: Benchmarking SfM in the Wild with 360° Video (arXiv version: ORBIT++)",
+  "authors": "Sara Sabour, Linyi Jin, Richard Tucker, Amir Hertz, Marcus Brubaker, Saurabh Saxena, Junhwa Hur, Andrea Tagliasacchi, Deqing Sun, David J. Fleet, Richard Szeliski, Noah Snavely",
+  "venue": "CVPR",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2608.22039",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "note": "arXiv page opened (comment: a revision was accepted at CVPR 2026); project page orbit-sfm.github.io",
+  "cited_by": [
+   "A2",
+   "A3b",
+   "A4"
+  ]
+ },
+ {
+  "key": "HZ2004",
+  "title": "Multiple View Geometry in Computer Vision, 2nd edition",
+  "authors": "Richard Hartley, Andrew Zisserman",
+  "venue": "Cambridge University Press",
+  "year": 2004,
+  "url": "https://www.robots.ox.ac.uk/~vgg/hzbook/",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": false,
+  "note": "canonical textbook; page not opened (network restricted)",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Szeliski2022",
+  "title": "Computer Vision: Algorithms and Applications, 2nd edition",
+  "authors": "Richard Szeliski",
+  "venue": "Springer (Texts in Computer Science)",
+  "year": 2022,
+  "url": "https://szeliski.org/Book/",
+  "code": null,
+  "license": "Free PDF for personal use from author's site",
+  "type": "official",
+  "verified": true,
+  "note": "search-index confirmation only",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "Stachniss-Photo",
+  "title": "Photogrammetry I & II (lecture course and YouTube recordings)",
+  "authors": "Cyrill Stachniss (University of Bonn)",
+  "venue": "Course page",
+  "year": 2021,
+  "url": "https://www.ipb.uni-bonn.de/photogrammetry-i-ii/",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": true,
+  "note": "search-index confirmation only; slides by email request",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "TUM-MVG",
+  "title": "Computer Vision II: Multiple View Geometry (IN2228)",
+  "authors": "Daniel Cremers (TUM)",
+  "venue": "Course page",
+  "year": 2025,
+  "url": "https://cvg.cit.tum.de/teaching/online/mvg",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": true,
+  "note": "search-index confirmation only; older recordings on YouTube",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "CMU16385",
+  "title": "16-385 Computer Vision",
+  "authors": "Ioannis Gkioulekas (Spring 2018–2020 offerings) and others",
+  "venue": "Carnegie Mellon University course page",
+  "year": 2020,
+  "url": "https://www.cs.cmu.edu/~16385/",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": true,
+  "note": "search-index confirmation only",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "CMU16825",
+  "title": "16-825 Learning for 3D Vision",
+  "authors": "Shubham Tulsiani",
+  "venue": "Carnegie Mellon University course page",
+  "year": 2025,
+  "url": "https://learning3d.github.io/",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": true,
+  "note": "search-index confirmation only",
+  "cited_by": [
+   "A2"
+  ]
+ },
+ {
+  "key": "OpenOSV",
+  "title": "OpenOSV: open-source DJI Osmo 360 (.OSV) workflow (importer, stitcher, reframe)",
+  "authors": "Kemerd",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/Kemerd/OpenOSV",
+  "code": "https://github.com/Kemerd/OpenOSV",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "OpenOSV_PR3",
+  "title": "DJI Avata 360: clips stitch (its own field numbering), colour fitted to DJI's Avata 360 LUT, lens-up levelling (PR #3)",
+  "authors": "Kemerd; test data by debsahu",
+  "venue": "GitHub pull request",
+  "year": 2026,
+  "url": "https://github.com/Kemerd/OpenOSV/pull/3",
+  "code": "https://github.com/Kemerd/OpenOSV",
+  "license": "Apache-2.0",
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "OSVConverterFormat",
+  "title": "dji-osv-converter docs: osv-format.md (reverse-engineered OSV format reference)",
+  "authors": "zindello",
+  "venue": "GitHub repository docs",
+  "year": 2026,
+  "url": "https://github.com/zindello/dji-osv-converter/blob/main/docs/osv-format.md",
+  "code": "https://github.com/zindello/dji-osv-converter",
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "OSVConverterNotes",
+  "title": "dji-osv-converter docs: osv-format-notes.md (tracks, calibration block, DJI f-theta lens model, stitch parameters)",
+  "authors": "zindello",
+  "venue": "GitHub repository docs",
+  "year": 2026,
+  "url": "https://github.com/zindello/dji-osv-converter/blob/main/docs/osv-format-notes.md",
+  "code": "https://github.com/zindello/dji-osv-converter",
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "OSVConverterLevelling",
+  "title": "dji-osv-converter docs: levelling.md (RockSteady / horizon levelling math, RS correction disabled)",
+  "authors": "zindello",
+  "venue": "GitHub repository docs",
+  "year": 2026,
+  "url": "https://github.com/zindello/dji-osv-converter/blob/main/docs/levelling.md",
+  "code": "https://github.com/zindello/dji-osv-converter",
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "OSVConverterConstants",
+  "title": "dji-osv-converter docs: constants.md (SEAM_OVERLAP_RATIO 0.038, RS_SIGMA 15)",
+  "authors": "zindello",
+  "venue": "GitHub repository docs",
+  "year": 2026,
+  "url": "https://github.com/zindello/dji-osv-converter/blob/main/docs/constants.md",
+  "code": "https://github.com/zindello/dji-osv-converter",
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "ExifToolDJI",
+  "title": "Image::ExifTool::DJI (DJI.pm) protobuf tag definitions",
+  "authors": "Phil Harvey",
+  "venue": "ExifTool source (GitHub mirror)",
+  "year": 2026,
+  "url": "https://raw.githubusercontent.com/exiftool/exiftool/master/lib/Image/ExifTool/DJI.pm",
+  "code": "https://github.com/exiftool/exiftool",
+  "license": "Perl (Artistic/GPL) [UNVERIFIED]",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "GyroflowReleases",
+  "title": "Gyroflow releases (v1.7.0: Osmo 360 and Avata 360 motion data only)",
+  "authors": "Gyroflow contributors (AdrianEddy et al.)",
+  "venue": "GitHub releases",
+  "year": 2026,
+  "url": "https://github.com/gyroflow/gyroflow/releases",
+  "code": "https://github.com/gyroflow/gyroflow",
+  "license": "GPL-3.0 [UNVERIFIED]",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "Gyroflow1164",
+  "title": "Support Osmo 360 as two fisheye lens cameras (issue #1164)",
+  "authors": "nagelp",
+  "venue": "GitHub issue",
+  "year": 2026,
+  "url": "https://github.com/gyroflow/gyroflow/issues/1164",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "TelemetryParser",
+  "title": "telemetry-parser README (supported cameras; DJI flight logs TODO)",
+  "authors": "AdrianEddy",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/AdrianEddy/telemetry-parser",
+  "code": "https://github.com/AdrianEddy/telemetry-parser",
+  "license": null,
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "OrbisReframe34",
+  "title": "Avata 360 (issue #34): OSV/LRF/SRT, DJI lens model vs MEI",
+  "authors": "Schabo/orbis-reframe contributors",
+  "venue": "GitHub issue",
+  "year": 2026,
+  "url": "https://github.com/Schabo/orbis-reframe/issues/34",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "AFP209",
+  "title": "360 mode for DJI Osmo 360, Avata 360 and Insta360 Antigravity A1 (issue #209)",
+  "authors": "anton-belkin/ActionFootagePlayer contributors",
+  "venue": "GitHub issue",
+  "year": 2026,
+  "url": "https://github.com/anton-belkin/ActionFootagePlayer/issues/209",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "COLMAPSpherical",
+  "title": "COLMAP sensor/models/spherical.h (EQUIRECTANGULAR model)",
+  "authors": "COLMAP contributors",
+  "venue": "GitHub source",
+  "year": 2026,
+  "url": "https://github.com/colmap/colmap/blob/main/src/colmap/sensor/models/spherical.h",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD-3-Clause [UNVERIFIED]",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "COLMAPFisheye",
+  "title": "COLMAP sensor/models/fisheye.h and models.h (SIMPLE_FISHEYE, FISHEYE; eucm family)",
+  "authors": "COLMAP contributors",
+  "venue": "GitHub source",
+  "year": 2026,
+  "url": "https://github.com/colmap/colmap/blob/main/src/colmap/sensor/models/fisheye.h",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD-3-Clause [UNVERIFIED]",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "DJISpecs",
+  "title": "DJI Avata 360 - Specs",
+  "authors": "DJI",
+  "venue": "dji.com (UK regional page; US page returns 404)",
+  "year": 2026,
+  "url": "https://www.dji.com/uk/avata-360/specs",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "DJIFAQ",
+  "title": "DJI Avata 360 - FAQ",
+  "authors": "DJI",
+  "venue": "dji.com (UK regional page)",
+  "year": 2026,
+  "url": "https://www.dji.com/uk/avata-360/faq",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "DJIManual",
+  "title": "DJI Avata 360 User Manual v1.0 (2026.03)",
+  "authors": "DJI",
+  "venue": "dl.djicdn.com",
+  "year": 2026,
+  "url": "https://dl.djicdn.com/downloads/DJI_Avata_360/DJI_Avata_360_User_Manual_en.pdf",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "DJISupport",
+  "title": "Support for DJI Avata 360 (FAQ/specs)",
+  "authors": "DJI",
+  "venue": "dji.com",
+  "year": 2026,
+  "url": "https://www.dji.com/uk/support/product/avata-360",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "DJIManualJune",
+  "title": "DJI Avata 360 User Manual (2026-06-23 revision) and Release Notes (2026-11-13)",
+  "authors": "DJI",
+  "venue": "terra-1-g.djicdn.com (linked from dji.com downloads; host blocked in this sandbox)",
+  "year": 2026,
+  "url": "https://www.dji.com/uk/downloads/products/avata-360",
+  "code": null,
+  "license": null,
+  "type": "official",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "ExifToolDJITags",
+  "title": "ExifTool Tag Names: DJI Tags (DJI Protobuf Tags), ExifTool 13.64",
+  "authors": "Phil Harvey",
+  "venue": "exiftool.org",
+  "year": 2026,
+  "url": "https://exiftool.org/TagNames/DJI.html",
+  "code": "https://github.com/exiftool/exiftool",
+  "license": null,
+  "type": "docs",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "GyroflowV170",
+  "title": "Gyroflow v1.7.0: what's new (Osmo 360 and Avata 360 motion data only; Avata 360 aperture and focal length)",
+  "authors": "Gyroflow contributors",
+  "venue": "gyroflow.xyz",
+  "year": 2026,
+  "url": "https://gyroflow.xyz/download",
+  "code": "https://github.com/gyroflow/gyroflow",
+  "license": null,
+  "type": "docs",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "GyroflowReadme",
+  "title": "Gyroflow README (supported gyro sources)",
+  "authors": "Gyroflow contributors",
+  "venue": "GitHub",
+  "year": 2026,
+  "url": "https://raw.githubusercontent.com/gyroflow/gyroflow/master/README.md",
+  "code": "https://github.com/gyroflow/gyroflow",
+  "license": null,
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "CineDLunaUltra",
+  "title": "Insta360 Luna Ultra Lab Test: rolling shutter, dynamic range and exposure latitude",
+  "authors": "CineD",
+  "venue": "cined.com",
+  "year": 2026,
+  "url": "https://www.cined.com/insta360-luna-ultra-lab-test-rolling-shutter-dynamic-range-and-exposure-latitude/",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "Insta360Stitching",
+  "title": "Insta360 X3 FAQ: stitching / minimum safety distance",
+  "authors": "Insta360",
+  "venue": "onlinemanual.insta360.com",
+  "year": 2025,
+  "url": "https://onlinemanual.insta360.com/x3/en-us/faq/specs/stitching",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "Engadget2026",
+  "title": "DJI Avata 360 drone review: 360 video hits new highs",
+  "authors": "Engadget",
+  "venue": "Engadget",
+  "year": 2026,
+  "url": "https://www.engadget.com/cameras/dji-avata-360-drone-review-360-video-hits-new-highs-120014666.html",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "DCW2026",
+  "title": "DJI Avata 360 review: 8K, FPV, and 360°",
+  "authors": "Digital Camera World",
+  "venue": "digitalcameraworld.com",
+  "year": 2026,
+  "url": "https://www.digitalcameraworld.com/drones/dji-avata-360-review",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "Heliguy2026",
+  "title": "How to edit DJI Avata 360 panoramic videos on a computer",
+  "authors": "heliguy",
+  "venue": "heliguy.com",
+  "year": 2026,
+  "url": "https://www.heliguy.com/blogs/posts/edit-dji-avata-360-panoramic-video-computer/",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "CineD2026",
+  "title": "DJI Avata 360 Drone Introduced - 8K60 360 Video and O4+ Transmission",
+  "authors": "CineD",
+  "venue": "cined.com",
+  "year": 2026,
+  "url": "https://www.cined.com/dji-avata-360-drone-introduced-8k60-360-video-and-o4-transmission/",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "Kannala2006",
+  "title": "A Generic Camera Model and Calibration Method for Conventional, Wide-Angle, and Fish-Eye Lenses",
+  "authors": "Juho Kannala, Sami S. Brandt",
+  "venue": "IEEE TPAMI",
+  "year": 2006,
+  "url": "https://doi.org/10.1109/TPAMI.2006.153",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "Mei2007",
+  "title": "Single View Point Omnidirectional Camera Calibration from Planar Grids",
+  "authors": "Christopher Mei, Patrick Rives",
+  "venue": "ICRA",
+  "year": 2007,
+  "url": "https://doi.org/10.1109/ROBOT.2007.364084",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "Khomenko2016",
+  "title": "An Enhanced Unified Camera Model",
+  "authors": "Bogdan Khomenko, Patrick Rives et al. [UNVERIFIED author list]",
+  "venue": "IEEE Robotics and Automation Letters",
+  "year": 2016,
+  "url": null,
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A1"
+  ]
+ },
+ {
+  "key": "Usenko2018",
+  "title": "The Double Sphere Camera Model",
+  "authors": "Vladyslav Usenko, Nikolaus Demmel, Daniel Cremers",
+  "venue": "3DV",
+  "year": 2018,
+  "url": "https://arxiv.org/abs/1807.08957",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A1",
+   "A3b"
+  ]
+ },
+ {
+  "key": "COLMAPsrc",
+  "title": "COLMAP source code (sensor/models/base.h, eucm.h, fisheye_radial.h, thin_prism.h, spherical.h; mvs/model.cc; image/undistortion.cc; geometry/pose_prior.h; controllers/option_manager.cc), commit 137f216",
+  "authors": "COLMAP contributors (Schönberger et al.)",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/colmap/colmap",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD-3-Clause",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "COLMAPPanorama",
+  "title": "pycolmap.panorama / panorama_sfm example (perspective virtual-view rig, EQUIRECTANGULAR conversion)",
+  "authors": "COLMAP contributors",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/colmap/colmap/blob/main/python/pycolmap/panorama.py",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD-3-Clause",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "SphereSfM",
+  "title": "SphereSfM (README; paper: 3D reconstruction of spherical images based on incremental structure from motion, Jiang et al., Taylor & Francis 2024)",
+  "authors": "San Jiang et al.",
+  "venue": "GitHub repository; journal [UNVERIFIED]",
+  "year": 2024,
+  "url": "https://github.com/json87/SphereSfM",
+  "code": "https://github.com/json87/SphereSfM",
+  "license": "BSD (COLMAP-derived)",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "OpenVSLAM",
+  "title": "OpenVSLAM: A Versatile Visual SLAM Framework (stella_vslam fork)",
+  "authors": "Shinya Sumikura, Mikiya Shibuya, Ken Sakurada",
+  "venue": "arXiv 1910.01122 (ACM MM 2019 [UNVERIFIED])",
+  "year": 2019,
+  "url": "https://arxiv.org/abs/1910.01122",
+  "code": "https://github.com/stella-cv/stella_vslam",
+  "license": "BSD-2-Clause (fork)",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "OpenMVG",
+  "title": "OpenMVG repository",
+  "authors": "Pierre Moulon et al.",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/openMVG/openMVG",
+  "code": "https://github.com/openMVG/openMVG",
+  "license": "MPL-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "GravityRA",
+  "title": "Gravity-aligned Rotation Averaging with Circular Regression",
+  "authors": "Linfei Pan, Marc Pollefeys, Dániel Baráth",
+  "venue": "ECCV 2024",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2410.12763",
+  "code": "https://github.com/colmap/glomap",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "DA3",
+  "title": "Depth Anything 3: Recovering the Visual Space from Any Views",
+  "authors": "Haotong Lin, Sili Chen, Junhao Liew, Donny Y. Chen, Zhenyu Li, Guang Shi, Jiashi Feng, Bingyi Kang",
+  "venue": "arXiv 2511.10647",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2511.10647",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "VGGTLong",
+  "title": "VGGT-Long: Chunk it, Loop it, Align it -- Pushing VGGT's Limits on Kilometer-scale Long RGB Sequences",
+  "authors": "Kai Deng, Zexin Ti, Jiawei Xu, Jian Yang, Jin Xie",
+  "venue": "ICRA 2026",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2507.16443",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "MASt3R-SLAM",
+  "title": "MASt3R-SLAM: Real-Time Dense SLAM with 3D Reconstruction Priors",
+  "authors": "Riku Murai, Eric Dexheimer, Andrew J. Davison",
+  "venue": "CVPR 2025",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2412.12392",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "Doppelgangers",
+  "title": "Doppelgangers: Learning to Disambiguate Images of Similar Structures",
+  "authors": "Ruojin Cai, Joseph Tung, Qianqian Wang, Hadar Averbuch-Elor, Bharath Hariharan, Noah Snavely",
+  "venue": "ICCV 2023",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2309.02420",
+  "code": "https://github.com/RuojinCai/doppelgangers",
+  "license": "MIT",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b",
+   "A3a",
+   "A4"
+  ]
+ },
+ {
+  "key": "DoppelgangersPP",
+  "title": "Doppelgangers++: Improved Visual Disambiguation with Geometric 3D Features",
+  "authors": "Yuanbo Xiangli, Ruojin Cai, Hanyu Chen, Jeffrey Byrne, Noah Snavely",
+  "venue": "arXiv 2412.05826 (venue [UNVERIFIED])",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2412.05826",
+  "code": "https://github.com/doppelgangers25/doppelgangers-plusplus",
+  "license": "CC BY-NC-SA 4.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b",
+   "A3a"
+  ]
+ },
+ {
+  "key": "ALIKED",
+  "title": "ALIKED: A Lighter Keypoint and Descriptor Extraction Network via Deformable Transformation",
+  "authors": "Xiaoming Zhao, Xingming Wu, Weihai Chen, Peter C. Y. Chen, Qingsong Xu, Zhengguo Li",
+  "venue": "IEEE Transactions on Instrumentation & Measurement",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2304.03608",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "LoMa",
+  "title": "LoMa: Local Feature Matching Revisited",
+  "authors": "David Nordström, Johan Edstedt, Georg Bökman, Jonathan Astermark, Anders Heyden, Viktor Larsson, Mårten Wadenbäck, Michael Felsberg, Fredrik Kahl",
+  "venue": "arXiv 2604.04931",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2604.04931",
+  "code": "https://github.com/davnords/LoMa",
+  "license": "MIT",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "RSBA",
+  "title": "Revisiting Rolling Shutter Bundle Adjustment: Toward Accurate and Fast Solution",
+  "authors": "Bangyan Liao, Delin Qu, Yifei Xue, Huiqing Zhang, Yizhen Lao",
+  "venue": "CVPR 2023",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2209.08503",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "DNSplatter",
+  "title": "DN-Splatter: Depth and Normal Priors for Gaussian Splatting and Meshing",
+  "authors": "Matias Turkulainen, Xuqian Ren, Iaroslav Melekhov, Otto Seiskari, Esa Rahtu, Juho Kannala",
+  "venue": "WACV 2025",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2403.17822",
+  "code": "https://github.com/maturk/dn-splatter",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b",
+   "A3c"
+  ]
+ },
+ {
+  "key": "MonoSDF",
+  "title": "MonoSDF: Exploring Monocular Geometric Cues for Neural Implicit Surface Reconstruction",
+  "authors": "Zehao Yu, Songyou Peng, Michael Niemeyer, Torsten Sattler, Andreas Geiger",
+  "venue": "NeurIPS 2022",
+  "year": 2022,
+  "url": "https://arxiv.org/abs/2206.00665",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "PlanarSplatting",
+  "title": "PlanarSplatting: Accurate Planar Surface Reconstruction in 3 Minutes",
+  "authors": "Bin Tan, Rui Yu, Yujun Shen, Nan Xue",
+  "venue": "arXiv 2412.03451 (venue [UNVERIFIED])",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2412.03451",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "DAv2",
+  "title": "Depth Anything V2",
+  "authors": "Lihe Yang, Bingyi Kang, Zilong Huang, Zhen Zhao, Xiaogang Xu, Jiashi Feng, Hengshuang Zhao",
+  "venue": "NeurIPS 2024",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.09414",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "MoGe",
+  "title": "MoGe: Unlocking Accurate Monocular Geometry Estimation for Open-Domain Images with Optimal Training Supervision",
+  "authors": "Ruicheng Wang, Sicheng Xu, Cassie Dai, Jianfeng Xiang, Yu Deng, Xin Tong, Jiaolong Yang",
+  "venue": "arXiv 2410.19115",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2410.19115",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "AprilTag",
+  "title": "AprilTag 3 visual fiducial library",
+  "authors": "AprilRobotics (Univ. of Michigan)",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/AprilRobotics/apriltag",
+  "code": "https://github.com/AprilRobotics/apriltag",
+  "license": "BSD-2-Clause",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "Barazzetti2018",
+  "title": "Can we use low-cost 360 degree cameras to create accurate 3D models?",
+  "authors": "L. Barazzetti, M. Previtali, F. Roncoroni",
+  "venue": "Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci., XLII-2, 69-75",
+  "year": 2018,
+  "url": "https://doi.org/10.5194/isprs-archives-XLII-2-69-2018",
+  "code": null,
+  "license": "CC BY 4.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b",
+   "A4"
+  ]
+ },
+ {
+  "key": "Janiszewski2022",
+  "title": "Rapid Photogrammetry with a 360-Degree Camera for Tunnel Mapping",
+  "authors": "M. Janiszewski, M. Torkan, L. Uotinen, M. Rinne",
+  "venue": "Remote Sensing 14(21), 5494",
+  "year": 2022,
+  "url": "https://doi.org/10.3390/rs14215494",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "Rezaei2024",
+  "title": "Quality Analysis of 3D Point Cloud Using Low-Cost Spherical Camera for Underpass Mapping",
+  "authors": "Sina Rezaei, Angelina Maier, Hossein Arefi",
+  "venue": "Sensors 24(11), 3534",
+  "year": 2024,
+  "url": "https://doi.org/10.3390/s24113534",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "Perfetti2024",
+  "title": "Multi-Camera Rig and Spherical Camera Assessment for Indoor Surveys in Complex Spaces",
+  "authors": "Luca Perfetti, Nazarena Bruno, Riccardo Roncella",
+  "venue": "Remote Sensing 16(23), 4505",
+  "year": 2024,
+  "url": "https://doi.org/10.3390/rs16234505",
+  "code": null,
+  "license": "CC BY 4.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b",
+   "A4"
+  ]
+ },
+ {
+  "key": "GomezLopez2025",
+  "title": "Analysis of the Photogrammetry Use of Videos from 360-Degree Multicameras in Heritage-Related Scenes: Case of the Necropolis of Qubbet El-Hawa (Aswan, Egypt)",
+  "authors": "José Miguel Gómez-López, José Luis Pérez-García, Antonio Tomás Mozas-Calvache, Diego Vico-García",
+  "venue": "Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci., XLVIII-M-9-2025, 533",
+  "year": 2025,
+  "url": "https://doi.org/10.5194/isprs-archives-XLVIII-M-9-2025-533-2025",
+  "code": null,
+  "license": "CC BY 4.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b",
+   "A4"
+  ]
+ },
+ {
+  "key": "Pamart2024",
+  "title": "Optimization of 360-based photogrammetric pipeline for narrow and dark indoor surveys",
+  "authors": "Anthony Pamart, Nicolas Maillard, Florent Comte, Laurent Bergerot",
+  "venue": "Int. Arch. Photogramm. Remote Sens. Spatial Inf. Sci., XLVIII-2/W8-2024, 349",
+  "year": 2024,
+  "url": "https://isprs-archives.copernicus.org/articles/XLVIII-2-W8-2024/349/2024/",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "Pertuz2013",
+  "title": "Analysis of focus measure operators for shape-from-focus",
+  "authors": "S. Pertuz, D. Puig, M. A. Garcia",
+  "venue": "Pattern Recognition",
+  "year": 2013,
+  "url": "https://doi.org/10.1016/j.patcog.2012.11.011",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Sieberth2016",
+  "title": "Automatic detection of blurred images in UAV image sets",
+  "authors": "T. Sieberth, R. Wackrow, J. H. Chandler",
+  "venue": "ISPRS Journal of Photogrammetry and Remote Sensing",
+  "year": 2016,
+  "url": "https://doi.org/10.1016/j.isprsjprs.2016.09.010",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Sieberth2015",
+  "title": "UAV image blur - its influence and ways to correct it",
+  "authors": "T. Sieberth, R. Wackrow, J. H. Chandler",
+  "venue": "ISPRS Archives XL-1/W4",
+  "year": 2015,
+  "url": "https://isprs-archives.copernicus.org/articles/XL-1-W4/33/2015/",
+  "code": null,
+  "license": "CC BY 3.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Mittal2012",
+  "title": "No-Reference Image Quality Assessment in the Spatial Domain",
+  "authors": "Anish Mittal, Anush K. Moorthy, Alan C. Bovik",
+  "venue": "IEEE Transactions on Image Processing",
+  "year": 2012,
+  "url": "https://doi.org/10.1109/TIP.2012.2214050",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Mittal2013",
+  "title": "Making a 'Completely Blind' Image Quality Analyzer",
+  "authors": "Anish Mittal, Rajiv Soundararajan, Alan C. Bovik",
+  "venue": "IEEE Signal Processing Letters",
+  "year": 2013,
+  "url": "https://doi.org/10.1109/LSP.2012.2227726",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Ke2021",
+  "title": "MUSIQ: Multi-scale Image Quality Transformer",
+  "authors": "Junjie Ke, Qifei Wang, Yilin Wang, Peyman Milanfar, Feng Yang",
+  "venue": "ICCV",
+  "year": 2021,
+  "url": "https://arxiv.org/abs/2108.05997",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Wang2023CLIPIQA",
+  "title": "Exploring CLIP for Assessing the Look and Feel of Images",
+  "authors": "Jianyi Wang, Kelvin C. K. Chan, Chen Change Loy",
+  "venue": "AAAI",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2207.12396",
+  "code": "https://github.com/IceClear/CLIP-IQA",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "IQAPyTorch",
+  "title": "IQA-PyTorch toolbox (LICENSE)",
+  "authors": "Chaofeng Chen",
+  "venue": "GitHub repository",
+  "year": 2022,
+  "url": "https://github.com/chaofengc/IQA-PyTorch",
+  "code": "https://github.com/chaofengc/IQA-PyTorch",
+  "license": "PolyForm Noncommercial",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Hartmann2014",
+  "title": "Predicting Matchability",
+  "authors": "Wilfried Hartmann, Michal Havlena, Konrad Schindler",
+  "venue": "CVPR",
+  "year": 2014,
+  "url": "https://openaccess.thecvf.com/content_cvpr_2014/html/Hartmann_Predicting_Matchability_2014_CVPR_paper.html",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Guo2026PocketGS",
+  "title": "PocketGS: High-Fidelity On-Device Training for 3D Gaussian Splatting",
+  "authors": "Wenzhi Guo, Guangchi Fang, Shu Yang, Bing Wang",
+  "venue": "arXiv 2601.17354 (frame selection described in v3)",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2601.17354v3",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "LichtFeld360",
+  "title": "lichtfeld-360-plugin: 360 camera plugin for LichtFeld Studio",
+  "authors": "alexmgee",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/alexmgee/lichtfeld-360-plugin",
+  "code": "https://github.com/alexmgee/lichtfeld-360-plugin",
+  "license": "GPL-3.0-or-later",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Sun2024MM3DGS",
+  "title": "MM3DGS SLAM: Multi-modal 3D Gaussian Splatting for SLAM Using Vision, Depth, and Inertial Measurements",
+  "authors": "Lisong C. Sun, Neel P. Bhatt, Jonathan C. Liu, Zhiwen Fan, Zhangyang Wang, Todd E. Humphreys, Ufuk Topcu",
+  "venue": "arXiv 2404.00923",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2404.00923",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "MurArtal2015",
+  "title": "ORB-SLAM: a Versatile and Accurate Monocular SLAM System",
+  "authors": "Raul Mur-Artal, J. M. M. Montiel, Juan D. Tardos",
+  "venue": "IEEE Transactions on Robotics",
+  "year": 2015,
+  "url": "https://arxiv.org/abs/1502.00956",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Matsuki2024",
+  "title": "Gaussian Splatting SLAM",
+  "authors": "Hidenobu Matsuki, Riku Murai, Paul H. J. Kelly, Andrew J. Davison",
+  "venue": "CVPR",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2312.06741",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Hornung2008",
+  "title": "Image selection for improved Multi-View Stereo",
+  "authors": "A. Hornung, B. Zeng, L. Kobbelt",
+  "venue": "CVPR",
+  "year": 2008,
+  "url": "https://doi.org/10.1109/CVPR.2008.4587688",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Snavely2008",
+  "title": "Skeletal graphs for efficient structure from motion",
+  "authors": "Noah Snavely, Steven M. Seitz, Richard Szeliski",
+  "venue": "CVPR",
+  "year": 2008,
+  "url": "https://doi.org/10.1109/CVPR.2008.4587678",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Jiang2023FisherRF",
+  "title": "FisherRF: Active View Selection and Uncertainty Quantification for Radiance Fields using Fisher Information",
+  "authors": "Wen Jiang, Boshu Lei, Kostas Daniilidis",
+  "venue": "arXiv 2311.17874",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2311.17874",
+  "code": "https://github.com/jiangwenpl/FisherRF",
+  "license": "Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "FisherRFRepo",
+  "title": "FisherRF repository LICENSE",
+  "authors": "Wen Jiang et al.",
+  "venue": "GitHub repository",
+  "year": 2024,
+  "url": "https://github.com/jiangwenpl/FisherRF",
+  "code": "https://github.com/jiangwenpl/FisherRF",
+  "license": "Gaussian-Splatting License (non-commercial)",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Chen2024Drone360",
+  "title": "Scalable Indoor Novel-View Synthesis using Drone-Captured 360 Imagery with 3D Gaussian Splatting",
+  "authors": "Yuanbo Chen, Chengyu Zhang, Jason Wang, Xuefan Gao, Avideh Zakhor",
+  "venue": "ECCV 2024 Workshop (S3DSGR)",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2410.11285",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a",
+   "A4"
+  ]
+ },
+ {
+  "key": "Guo2026CubeSplat",
+  "title": "Cube-Splat: High-Fidelity 360° Gaussian Splatting SLAM via Cubemap Factorization and Adjoint-Consistent Optimization",
+  "authors": "Xiangfei Guo, Hao Shi, Yufan Zhang, Zhonghua Yi, Yongqi Mao, Xiaoting Yin, Kaiwei Wang",
+  "venue": "ECCV",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2609.21347",
+  "code": "https://github.com/guoxf304/CubeSplat",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Tu2026GOFish",
+  "title": "GOFish: Full Field-of-View Gaussian Splatting and Mesh Extraction",
+  "authors": "Allen Tu, Meher Gitika Karumuri, Shifan Zhu, Hailing Wang, Yen-Liang Lin, David Held, Matthias Zwicker, Tom Goldstein",
+  "venue": "arXiv 2610.37818",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2610.37818",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "COLMAPFAQ",
+  "title": "COLMAP documentation: FAQ (Mask image regions)",
+  "authors": "COLMAP contributors",
+  "venue": "colmap.github.io",
+  "year": 2026,
+  "url": "https://colmap.github.io/faq.html",
+  "code": "https://github.com/colmap/colmap",
+  "license": null,
+  "type": "docs",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "COLMAPMapperSrc",
+  "title": "COLMAP src/colmap/sfm/incremental_mapper.h (filter_max_reproj_error=4, filter_min_tri_angle=1.5, init_min_tri_angle=16)",
+  "authors": "COLMAP contributors",
+  "venue": "GitHub source",
+  "year": 2026,
+  "url": "https://github.com/colmap/colmap/blob/main/src/colmap/sfm/incremental_mapper.h",
+  "code": "https://github.com/colmap/colmap",
+  "license": null,
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "COLMAPFusionSrc",
+  "title": "COLMAP src/colmap/mvs/fusion.h (StereoFusionOptions.mask_path)",
+  "authors": "COLMAP contributors",
+  "venue": "GitHub source",
+  "year": 2026,
+  "url": "https://github.com/colmap/colmap/blob/main/src/colmap/mvs/fusion.h",
+  "code": "https://github.com/colmap/colmap",
+  "license": null,
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "gsplatTrainer",
+  "title": "gsplat examples/simple_trainer.py (masks, app_opt, bilateral_grid, camera models)",
+  "authors": "nerfstudio-project",
+  "venue": "GitHub source",
+  "year": 2026,
+  "url": "https://github.com/nerfstudio-project/gsplat/blob/main/examples/simple_trainer.py",
+  "code": "https://github.com/nerfstudio-project/gsplat",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Ren2024GroundedSAM",
+  "title": "Grounded SAM: Assembling Open-World Models for Diverse Visual Tasks",
+  "authors": "Tianhe Ren, Shilong Liu, Ailing Zeng, Jing Lin, Kunchang Li, He Cao, Jiayu Chen, Xinyu Huang, Yukang Chen, Feng Yan, Zhaoyang Zeng, Hao Zhang, Feng Li, Jie Yang, Hongyang Li, Qing Jiang, Lei Zhang",
+  "venue": "arXiv 2401.14159",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2401.14159",
+  "code": "https://github.com/IDEA-Research/Grounded-SAM-2",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "GroundedSAM2Repo",
+  "title": "Grounded-SAM-2 repository",
+  "authors": "IDEA-Research",
+  "venue": "GitHub repository",
+  "year": 2024,
+  "url": "https://github.com/IDEA-Research/Grounded-SAM-2",
+  "code": "https://github.com/IDEA-Research/Grounded-SAM-2",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Ravi2024SAM2",
+  "title": "SAM 2: Segment Anything in Images and Videos",
+  "authors": "Nikhila Ravi, Valentin Gabeur, Yuan-Ting Hu, Ronghang Hu, Chaitanya Ryali, Tengyu Ma, Haitham Khedr, Roman Rädle, Chloe Rolland, Laura Gustafson, Eric Mintun, Junting Pan, Kalyan Vasudev Alwala, Nicolas Carion, Chao-Yuan Wu, Ross Girshick, Piotr Dollár, Christoph Feichtenhofer",
+  "venue": "arXiv 2408.00714",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2408.00714",
+  "code": "https://github.com/facebookresearch/sam2",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a",
+   "A4"
+  ]
+ },
+ {
+  "key": "SAM2Repo",
+  "title": "SAM 2 repository",
+  "authors": "Meta AI (facebookresearch)",
+  "venue": "GitHub repository",
+  "year": 2024,
+  "url": "https://github.com/facebookresearch/sam2",
+  "code": "https://github.com/facebookresearch/sam2",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "UltralyticsRepo",
+  "title": "Ultralytics YOLO repository",
+  "authors": "Ultralytics",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/ultralytics/ultralytics",
+  "code": "https://github.com/ultralytics/ultralytics",
+  "license": "AGPL-3.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Bescos2018",
+  "title": "DynaSLAM: Tracking, Mapping and Inpainting in Dynamic Scenes",
+  "authors": "Berta Bescos, José M. Fácil, Javier Civera, José Neira",
+  "venue": "IEEE Robotics and Automation Letters",
+  "year": 2018,
+  "url": "https://arxiv.org/abs/1806.05620",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Mei2020GDNet",
+  "title": "Don't Hit Me! Glass Detection in Real-World Scenes",
+  "authors": "Haiyang Mei, Xin Yang, Yang Wang, Yuanyuan Liu, Shengfeng He, Qiang Zhang, Xiaopeng Wei, Rynson W.H. Lau",
+  "venue": "CVPR",
+  "year": 2020,
+  "url": "https://openaccess.thecvf.com/content_CVPR_2020/html/Mei_Dont_Hit_Me_Glass_Detection_in_Real-World_Scenes_CVPR_2020_paper.html",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Yang2019Mirror",
+  "title": "Where Is My Mirror?",
+  "authors": "Xin Yang, Haiyang Mei, Ke Xu, Xiaopeng Wei, Baocai Yin, Rynson W.H. Lau",
+  "venue": "ICCV",
+  "year": 2019,
+  "url": "https://openaccess.thecvf.com/content_ICCV_2019/html/Yang_Where_Is_My_Mirror_ICCV_2019_paper.html",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Fu2021SHIQ",
+  "title": "A Multi-Task Network for Joint Specular Highlight Detection and Removal",
+  "authors": "Gang Fu, Qing Zhang, Lei Zhu, Ping Li, Chunxia Xiao",
+  "venue": "CVPR",
+  "year": 2021,
+  "url": "https://openaccess.thecvf.com/content/CVPR2021/html/Fu_A_Multi-Task_Network_for_Joint_Specular_Highlight_Detection_and_Removal_CVPR_2021_paper.html",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "DoppelRepo",
+  "title": "Doppelgangers repository",
+  "authors": "Ruojin Cai",
+  "venue": "GitHub repository",
+  "year": 2023,
+  "url": "https://github.com/RuojinCai/doppelgangers",
+  "code": "https://github.com/RuojinCai/doppelgangers",
+  "license": "MIT",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "DoppelPPRepo",
+  "title": "Doppelgangers++ repository LICENSE",
+  "authors": "doppelgangers25",
+  "venue": "GitHub repository",
+  "year": 2025,
+  "url": "https://github.com/doppelgangers25/doppelgangers-plusplus",
+  "code": "https://github.com/doppelgangers25/doppelgangers-plusplus",
+  "license": "CC BY-NC-SA 4.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Zach2010",
+  "title": "Disambiguating visual relations using loop constraints",
+  "authors": "Christopher Zach, Manfred Klopschitz, Marc Pollefeys",
+  "venue": "CVPR",
+  "year": 2010,
+  "url": "https://doi.org/10.1109/CVPR.2010.5539801",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Yan2017",
+  "title": "Distinguishing the Indistinguishable: Exploring Structural Ambiguities via Geodesic Context",
+  "authors": "Qingan Yan, Long Yang, Ling Zhang, Chunxia Xiao",
+  "venue": "CVPR",
+  "year": 2017,
+  "url": "https://openaccess.thecvf.com/content_cvpr_2017/html/Yan_Distinguishing_the_Indistinguishable_CVPR_2017_paper.html",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Heinly2014",
+  "title": "Correcting for Duplicate Scene Structure in Sparse 3D Reconstruction",
+  "authors": "Jared Heinly, Enrique Dunn, Jan-Michael Frahm",
+  "venue": "ECCV",
+  "year": 2014,
+  "url": "https://doi.org/10.1007/978-3-319-10593-2_51",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": false,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "SfMDisambigRepo",
+  "title": "SfM disambiguation with COLMAP",
+  "authors": "Lixin Xue et al. (cvg)",
+  "venue": "GitHub repository",
+  "year": 2023,
+  "url": "https://github.com/cvg/sfm-disambiguation-colmap",
+  "code": "https://github.com/cvg/sfm-disambiguation-colmap",
+  "license": null,
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "MartinBrualla2021",
+  "title": "NeRF in the Wild: Neural Radiance Fields for Unconstrained Photo Collections",
+  "authors": "Ricardo Martin-Brualla, Noha Radwan, Mehdi S. M. Sajjadi, Jonathan T. Barron, Alexey Dosovitskiy, Daniel Duckworth",
+  "venue": "CVPR",
+  "year": 2021,
+  "url": "https://arxiv.org/abs/2008.02268",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Sabour2023RobustNeRF",
+  "title": "RobustNeRF: Ignoring Distractors with Robust Losses",
+  "authors": "Sara Sabour, Suhani Vora, Daniel Duckworth, Ivan Krasin, David J. Fleet, Andrea Tagliasacchi",
+  "venue": "CVPR",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2302.00833",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Ren2024OTG",
+  "title": "NeRF On-the-go: Exploiting Uncertainty for Distractor-free NeRFs in the Wild",
+  "authors": "Weining Ren, Zihan Zhu, Boyang Sun, Jiaqi Chen, Marc Pollefeys, Songyou Peng",
+  "venue": "CVPR",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2405.18715",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "SabourSLS2024",
+  "title": "SpotLessSplats: Ignoring Distractors in 3D Gaussian Splatting",
+  "authors": "Sara Sabour, Lily Goli, George Kopanas, Mark Matthews, Dmitry Lagun, Leonidas Guibas, Alec Jacobson, David J. Fleet, Andrea Tagliasacchi",
+  "venue": "arXiv 2406.20055",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.20055",
+  "code": "https://github.com/lilygoli/SpotLessSplats",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a",
+   "A3c"
+  ]
+ },
+ {
+  "key": "SLSRepo",
+  "title": "SpotLessSplats gsplat implementation",
+  "authors": "Lily Goli et al.",
+  "venue": "GitHub repository",
+  "year": 2024,
+  "url": "https://github.com/lilygoli/SpotLessSplats",
+  "code": "https://github.com/lilygoli/SpotLessSplats",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "WildGaussiansRepo",
+  "title": "wild-gaussians repository",
+  "authors": "Jonas Kulhanek",
+  "venue": "GitHub repository",
+  "year": 2024,
+  "url": "https://github.com/jkulhanek/wild-gaussians",
+  "code": "https://github.com/jkulhanek/wild-gaussians",
+  "license": "MIT",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Wang2024DeSplat",
+  "title": "DeSplat: Decomposed Gaussian Splatting for Distractor-Free Rendering",
+  "authors": "Yihao Wang, Marcus Klasson, Matias Turkulainen, Shuzhe Wang, Juho Kannala, Arno Solin",
+  "venue": "arXiv 2411.19756",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2411.19756",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Ungermann2024",
+  "title": "Robust 3D Gaussian Splatting for Novel View Synthesis in Presence of Distractors",
+  "authors": "Paul Ungermann, Armin Ettenhofer, Matthias Nießner, Barbara Roessle",
+  "venue": "GCPR",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2408.11697",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Zhang2024GSW",
+  "title": "Gaussian in the Wild: 3D Gaussian Splatting for Unconstrained Image Collections",
+  "authors": "Dongbin Zhang, Chuming Wang, Weitao Wang, Peihao Li, Minghan Qin, Haoqian Wang",
+  "venue": "arXiv 2403.15704",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2403.15704",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Seo2026PDFGS",
+  "title": "PDF-GS: Progressive Distractor Filtering for Robust 3D Gaussian Splatting",
+  "authors": "Kangmin Seo, MinKyu Lee, Tae-Young Kim, ByeongCheol Lee, JoonSeoung An, Jae-Pil Heo",
+  "venue": "CVPR Findings",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2604.12580",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Cui2025Luminance",
+  "title": "Luminance-GS: Adapting 3D Gaussian Splatting to Challenging Lighting Conditions with View-Adaptive Curve Adjustment",
+  "authors": "Ziteng Cui, Xuangeng Chu, Tatsuya Harada",
+  "venue": "CVPR",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2504.01503",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a"
+  ]
+ },
+ {
+  "key": "Zhao2024BAD",
+  "title": "BAD-Gaussians: Bundle Adjusted Deblur Gaussian Splatting",
+  "authors": "Lingzhe Zhao, Peng Wang, Peidong Liu",
+  "venue": "arXiv 2403.11831",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2403.11831",
+  "code": "https://github.com/WU-CVGL/BAD-Gaussians",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a",
+   "A3c"
+  ]
+ },
+ {
+  "key": "Lee2024Deblur3DGS",
+  "title": "Deblurring 3D Gaussian Splatting",
+  "authors": "Byeonghyeon Lee, Howoong Lee, Xiangyu Sun, Usman Ali, Eunbyung Park",
+  "venue": "arXiv 2401.00834",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2401.00834",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3a",
+   "A3c"
+  ]
+ },
+ {
+  "key": "gsplatSource",
+  "title": "gsplat main branch source: rendering.py (camera_model ftheta, with_ut, rolling_shutter, global_z_order), cuda/include/Cameras.cuh, examples/simple_trainer.py, examples/datasets/{colmap,ncore}.py, version 1.6.0; releases page (v1.5.3)",
+  "authors": "nerfstudio team and contributors",
+  "venue": "GitHub source",
+  "year": 2026,
+  "url": "https://github.com/nerfstudio-project/gsplat",
+  "code": "https://github.com/nerfstudio-project/gsplat",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "gsplatDocs",
+  "title": "gsplat documentation: evaluation (Mip-NeRF 360 memory/PSNR), large-scale rendering, NCore training with FTheta",
+  "authors": "nerfstudio team",
+  "venue": "docs.gsplat.studio",
+  "year": 2026,
+  "url": "https://docs.gsplat.studio/main/",
+  "code": null,
+  "license": null,
+  "type": "docs",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "NerfstudioDocs",
+  "title": "Nerfstudio docs: Splatfacto FAQ (no fisheye/equirect rendering), data conventions; source: splatfacto.py, full_images_datamanager.py, cameras.py, pyproject (gsplat==1.4.0)",
+  "authors": "nerfstudio team",
+  "venue": "docs.nerf.studio / GitHub",
+  "year": 2026,
+  "url": "https://docs.nerf.studio/nerfology/methods/splat.html",
+  "code": "https://github.com/nerfstudio-project/nerfstudio",
+  "license": "Apache-2.0",
+  "type": "docs",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "NCore",
+  "title": "NVIDIA NCore: multi-sensor data platform (camera models incl. FTheta, start/end frame poses)",
+  "authors": "NVIDIA",
+  "venue": "GitHub",
+  "year": 2026,
+  "url": "https://github.com/NVIDIA/ncore",
+  "code": "https://github.com/NVIDIA/ncore",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Deutsch2026",
+  "title": "PPISP: Physically-Plausible Compensation and Control of Photometric Variations in Radiance Field Reconstruction",
+  "authors": "Isaac Deutsch, Nicolas Moënne-Loccoz, Gavriel State, Zan Gojcic",
+  "venue": "CVPR 2026",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2601.18336",
+  "code": "https://github.com/nv-tlabs/ppisp",
+  "license": "Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "alt_urls": [
+   "https://github.com/nv-tlabs/ppisp"
+  ],
+  "cited_by": [
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "Xu2024SplatfactoW",
+  "title": "Splatfacto-W: A Nerfstudio Implementation of Gaussian Splatting for Unconstrained Photo Collections",
+  "authors": "Congrong Xu, Justin Kerr, Angjoo Kanazawa",
+  "venue": "arXiv",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2407.12306",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Mildenhall2022RawNeRF",
+  "title": "NeRF in the Dark: High Dynamic Range View Synthesis from Noisy Raw Images",
+  "authors": "Ben Mildenhall, Peter Hedman, Ricardo Martin-Brualla, Pratul Srinivasan, Jonathan T. Barron",
+  "venue": "CVPR 2022 [venue UNVERIFIED in session]",
+  "year": 2022,
+  "url": "https://arxiv.org/abs/2111.13679",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Jin2024LE3D",
+  "title": "Lighting Every Darkness with 3DGS: Fast Training and Real-Time Rendering for HDR View Synthesis",
+  "authors": "Xin Jin, Pengyi Jiao, Zheng-Peng Duan, Xingchao Yang, Chun-Le Guo, Bo Ren, Chongyi Li",
+  "venue": "arXiv [venue UNVERIFIED]",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.06216",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Ye2024DR",
+  "title": "3D Gaussian Splatting with Deferred Reflection",
+  "authors": "Keyang Ye, Qiming Hou, Kun Zhou",
+  "venue": "arXiv (SIGGRAPH 2024 [UNVERIFIED])",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2404.18454",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Xie2024EnvGS",
+  "title": "EnvGS: Modeling View-Dependent Appearance with Environment Gaussian",
+  "authors": "Tao Xie, Xi Chen, Zhen Xu, Yiman Xie, Yudong Jin, Yujun Shen, Sida Peng, Hujun Bao, Xiaowei Zhou",
+  "venue": "arXiv (CVPR 2025 [UNVERIFIED])",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2412.15215",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Bai2024_360GS",
+  "title": "360-GS: Layout-guided Panoramic Gaussian Splatting For Indoor Roaming",
+  "authors": "Jiayang Bai, Letian Huang, Jie Guo, Wen Gong, Yuanqi Li, Yanwen Guo",
+  "venue": "arXiv",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2402.00763",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Shin2025Seam360GS",
+  "title": "Seam360GS: Seamless 360° Gaussian Splatting from Real-World Omnidirectional Images",
+  "authors": "Changha Shin, Woong Oh Cho, Seon Joo Kim",
+  "venue": "ICCV 2025",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2508.20080",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "Zhuang2026PFGS360",
+  "title": "Pose-Free Omnidirectional Gaussian Splatting for 360-Degree Videos with Consistent Depth Priors",
+  "authors": "Chuanqing Zhuang, Xin Lu, Zehui Deng, Zhengda Lu, Yiqun Wang, Junqi Diao, Jun Xiao",
+  "venue": "CVPR 2026 (per repository README)",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2603.23324",
+  "code": "https://github.com/zcq15/PFGS360",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Huang2025SCOmniGS",
+  "title": "SC-OmniGS: Self-Calibrating Omnidirectional Gaussian Splatting",
+  "authors": "Huajian Huang, Yingshu Chen, Longwei Li, Hui Cheng, Tristan Braud, Yajie Zhao, Sai-Kit Yeung",
+  "venue": "ICLR 2025",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2502.04734",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Liao2024FisheyeGS",
+  "title": "Fisheye-GS: Lightweight and Extensible Gaussian Splatting Module for Fisheye Cameras",
+  "authors": "Zimu Liao, Siyan Chen, Rong Fu, Yi Wang, Zhongling Su, Hao Luo, Li Ma, Linning Xu, Bo Dai, Hengjie Li, Zhilin Pei, Xingcheng Zhang",
+  "venue": "arXiv [venue UNVERIFIED]",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2409.04751",
+  "code": "https://github.com/zmliao/Fisheye-GS",
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Yang2026DirectFisheye",
+  "title": "DirectFisheye-GS: Enabling Native Fisheye Input in Gaussian Splatting with Cross-View Joint Optimization",
+  "authors": "Zhengxian Yang, Fei Xie, Xutao Xue, Rui Zhang, Taicheng Huang, Yang Liu, Mengqi Ji, Tao Yu",
+  "venue": "CVPR 2026 (Highlight, per arXiv comment)",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2604.00648",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Deng2025SelfCal",
+  "title": "Self-Calibrating Gaussian Splatting for Large Field of View Reconstruction",
+  "authors": "Youming Deng, Wenqi Xian, Guandao Yang, Leonidas Guibas, Gordon Wetzstein, Steve Marschner, Paul Debevec",
+  "venue": "arXiv [venue UNVERIFIED]",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2502.09563",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Ren2025OctreeGS",
+  "title": "Octree-GS: Towards Consistent Real-time Rendering with LOD-Structured 3D Gaussians",
+  "authors": "Kerui Ren, Lihan Jiang, Tao Lu, Mulin Yu, Linning Xu, Zhangkai Ni, Bo Dai",
+  "venue": "TPAMI 2025 (per README)",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2403.17898",
+  "code": "https://github.com/city-super/Octree-GS",
+  "license": "Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Lu2024Scaffold",
+  "title": "Scaffold-GS: Structured 3D Gaussians for View-Adaptive Rendering",
+  "authors": "Tao Lu, Mulin Yu, Linning Xu, Yuanbo Xiangli, Limin Wang, Dahua Lin, Bo Dai",
+  "venue": "CVPR 2024",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2312.00109",
+  "code": "https://github.com/city-super/Scaffold-GS",
+  "license": "Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Liu2024CityGaussian",
+  "title": "CityGaussian: Real-time High-quality Large-Scale Scene Rendering with Gaussians",
+  "authors": "Yang Liu, He Guan, Chuanchen Luo, Lue Fan, Naiyan Wang, Junran Peng, Zhaoxiang Zhang",
+  "venue": "ECCV 2024",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2404.01133",
+  "code": "https://github.com/Linketic/CityGaussian",
+  "license": "CC BY-NC-SA 4.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Kheradmand2024MCMC",
+  "title": "3D Gaussian Splatting as Markov Chain Monte Carlo",
+  "authors": "Shakiba Kheradmand, Daniel Rebain, Gopal Sharma, Weiwei Sun, Jeff Tseng, Hossam Isack, Abhishek Kar, Andrea Tagliasacchi, Kwang Moo Yi",
+  "venue": "NeurIPS 2024",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2404.09591",
+  "code": "https://github.com/ubc-vision/3dgs-mcmc",
+  "license": "Gaussian-Splatting License (non-commercial); gsplat reimplementation Apache-2.0",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Ye2024AbsGS",
+  "title": "AbsGS: Recovering Fine Details for 3D Gaussian Splatting",
+  "authors": "Zongxin Ye, Wenyu Li, Sidun Liu, Peng Qiao, Yong Dou",
+  "venue": "arXiv (ACM MM 2024 [UNVERIFIED])",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2404.10484",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Mallick2024Taming",
+  "title": "Taming 3DGS: High-Quality Radiance Fields with Limited Resources",
+  "authors": "Saswat Subhajyoti Mallick, Rahul Goel, Bernhard Kerbl, Francisco Vicente Carrasco, Markus Steinberger, Fernando De La Torre",
+  "venue": "arXiv (SIGGRAPH Asia 2024 [UNVERIFIED])",
+  "year": 2024,
+  "url": "https://arxiv.org/abs/2406.15643",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Guedon2025MILo",
+  "title": "MILo: Mesh-In-the-Loop Gaussian Splatting for Detailed and Efficient Surface Reconstruction",
+  "authors": "Antoine Guédon, Diego Gomez, Nissim Maruani, Bingchen Gong, George Drettakis, Maks Ovsjanikov",
+  "venue": "ACM TOG (SIGGRAPH Asia 2025, per README)",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2506.24096",
+  "code": "https://github.com/Anttwo/MILo",
+  "license": "Gaussian-Splatting License (non-commercial)",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Morgenstern2024SOG",
+  "title": "Compact 3D Scene Representation via Self-Organizing Gaussian Grids",
+  "authors": "Wieland Morgenstern, Florian Barthel, Anna Hilsmann, Peter Eisert",
+  "venue": "arXiv [venue UNVERIFIED]",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2312.13299",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "SuperSplat",
+  "title": "SuperSplat Editor",
+  "authors": "PlayCanvas Ltd.",
+  "venue": "GitHub",
+  "year": 2026,
+  "url": "https://github.com/playcanvas/supersplat",
+  "code": "https://github.com/playcanvas/supersplat",
+  "license": "MIT",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "SplatTransform",
+  "title": "splat-transform (PLY/SOG/Streamed SOG LOD/SPZ conversion)",
+  "authors": "PlayCanvas Ltd.",
+  "venue": "GitHub",
+  "year": 2026,
+  "url": "https://github.com/playcanvas/splat-transform",
+  "code": "https://github.com/playcanvas/splat-transform",
+  "license": "MIT",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "SPZ",
+  "title": "spz: compressed 3D Gaussian splat format",
+  "authors": "Niantic Labs",
+  "venue": "GitHub",
+  "year": 2024,
+  "url": "https://github.com/nianticlabs/spz",
+  "code": "https://github.com/nianticlabs/spz",
+  "license": "MIT",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "Spark",
+  "title": "Spark: 3D Gaussian Splatting renderer for THREE.js",
+  "authors": "World Labs Technologies",
+  "venue": "GitHub",
+  "year": 2025,
+  "url": "https://github.com/sparkjsdev/spark",
+  "code": "https://github.com/sparkjsdev/spark",
+  "license": "MIT",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A3c"
+  ]
+ },
+ {
+  "key": "pyceres",
+  "title": "pyceres: Python bindings for Ceres Solver (LICENSE)",
+  "authors": "cvg (ETH Zurich)",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/cvg/pyceres",
+  "code": "https://github.com/cvg/pyceres",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "COLMAPLicense",
+  "title": "COLMAP LICENSE (new BSD)",
+  "authors": "COLMAP contributors",
+  "venue": "GitHub repository",
+  "year": 2026,
+  "url": "https://github.com/colmap/colmap",
+  "code": "https://github.com/colmap/colmap",
+  "license": "BSD-3-Clause",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "LightGlueRepo",
+  "title": "LightGlue repository LICENSE",
+  "authors": "Philipp Lindenberger, Paul-Edouard Sarlin, Marc Pollefeys",
+  "venue": "GitHub repository",
+  "year": 2023,
+  "url": "https://github.com/cvg/LightGlue",
+  "code": "https://github.com/cvg/LightGlue",
+  "license": "Apache-2.0",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "ALIKEDRepo",
+  "title": "ALIKED repository LICENSE",
+  "authors": "Xiaoming Zhao",
+  "venue": "GitHub repository",
+  "year": 2023,
+  "url": "https://github.com/Shiaoming/ALIKED",
+  "code": "https://github.com/Shiaoming/ALIKED",
+  "license": "BSD-3-Clause",
+  "type": "repo",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "Gunes2026",
+  "title": "3D Gaussian Splatting with Fisheye Images: Field of View Analysis and Depth-Based Initialization",
+  "authors": "Ulas Gunes, Matias Turkulainen, Mikhail Silaev, Juho Kannala, Esa Rahtu",
+  "venue": "VISAPP 2026 (arXiv 2508.06968)",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2508.06968",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "FIORD",
+  "title": "FIORD: A Fisheye Indoor-Outdoor Dataset with LIDAR Ground Truth for 3D Scene Reconstruction and Benchmarking",
+  "authors": "Ulas Gunes, Matias Turkulainen, Xuqian Ren, Arno Solin, Juho Kannala, Esa Rahtu",
+  "venue": "SCIA 2025 (arXiv 2504.01732)",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2504.01732",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "Gaussian360Pro",
+  "title": "Laskos Releases 360 Gaussian Pro With a Rebuilt COLMAP",
+  "authors": "Radiance Fields (news)",
+  "venue": "radiancefields.com",
+  "year": 2026,
+  "url": "https://radiancefields.com/laskos-releases-360-gaussian-pro-with-a-rebuilt-colmap",
+  "code": null,
+  "license": "commercial",
+  "type": "secondary",
+  "verified": false,
+  "cited_by": [
+   "A4"
+  ]
+ }
+]
