@@ -1,6 +1,6 @@
 # A3c: Photoreal, explorable visualization of the parking lot
 
-*Agent A3c (neural rendering). Written 2026-11-17. Input constraint: A1 Handoff (raw dual-fisheye `.OSV` streams modelled as a 2-camera rig; seam on the horizon; θ > 90° per lens; 25 fps, 1/100 s, D-Log M; heavy H.265 compression).*
+*Neural-rendering chapter. Written 2026-11-17. Input constraint: the device chapter's Handoff (raw dual-fisheye `.OSV` streams modelled as a 2-camera rig; seam on the horizon; θ > 90° per lens; 25 fps, 1/100 s, D-Log M; heavy H.265 compression).*
 
 > **Evidence note.** `WebFetch` could not resolve arXiv or docs.gsplat.studio, but `curl` through the proxy could. I therefore read arXiv abstract and HTML pages, gsplat docs, nerfstudio docs, and the **source code** of gsplat (`main`), nerfstudio (`main`) and nv-tlabs/3dgrut (`main`) directly via `raw.githubusercontent.com`. Claims about what a tool supports come from its source code or docs, and file and line evidence is given where it matters. The GitHub web UI and API were blocked, so I could not see commit dates or issue threads. "Last activity" is therefore inferred from news entries in each README. Venues not visible on a page I opened are marked **[UNVERIFIED]**. Statements tagged *(assessment)* are my own judgement, not reported results.
 
@@ -9,11 +9,12 @@
 ## 0. TL;DR
 
 1. **Representation:** 3D Gaussian Splatting [Kerbl2023] family, trained with **gsplat** [Ye2024gsplat] (Apache-2.0). NeRFs (Zip-NeRF, nerfacto) are not real-time to view. Textured meshes (IM360-style) are the right *measurement* product but are not the most photoreal.
-2. **Training on raw fisheye with θ > 90° is possible today, but only through one specific path.** gsplat's `rasterization()` has `camera_model="ftheta"` with the Unscented Transform (`with_ut=True, with_eval3d=True`), and the code says FTheta needs `global_z_order=False` to render the band beyond 180°. gsplat's **OpenCV `fisheye` model rejects every ray with z ≤ 0**, so it clips exactly the horizon band this drone puts walls in. **nerfstudio's splatfacto cannot** train on fisheye at all: it undistorts to pinhole, its docs say fisheye and equirect rendering is not supported, and it pins `gsplat==1.4.0`.
-3. **Rolling shutter** exists as a rasterizer argument in gsplat (`rolling_shutter`, `viewmats_rs`; start and end poses slerped per row) and in 3DGRUT. However, gsplat's `simple_trainer.py` does **not** pass it through, so wiring it in is a small custom job. With A1's capture discipline (≤10°/s, 0.3–0.5 m/s) RS skew and blur are about 2 px, so this is a second-order fix *(assessment, [CALC] below)*.
-4. **Appearance:** use **PPISP** [Deutsch2026] (CVPR 2026, Apache-2.0, built into gsplat and 3DGRUT). It models per-sensor chromatic **vignetting** (the fisheye rim falls to ~0.76 shading per A1), a per-sensor response curve, and per-frame exposure and white balance. A controller predicts these for novel views. Keep the **bilateral grid** [Wang2024BilaRF] as a fallback for residual row-banding from flicker.
-5. **Metric coupling:** initialise from the A3b dense cloud, **turn off gsplat's default world normalisation** (`--no-normalize-world-space`), freeze or tightly regularise poses, and add a dense depth loss against the A3b mesh. Then the splat lives in the survey frame and can be overlaid on the mesh.
+2. **Training on raw fisheye with θ > 90° is possible today, but only through one specific path.** gsplat's `rasterization()` has `camera_model="ftheta"` with the Unscented Transform (`with_ut=True, with_eval3d=True`), and the code says FTheta needs `global_z_order=False` to render the band beyond 180°. gsplat's **OpenCV `fisheye` model rejects every ray with z ≤ 0**, so it clips exactly the horizon band this drone puts walls in. **nerfstudio's splatfacto cannot** train on fisheye at all: it undistorts to pinhole, its docs say fisheye and equirect rendering is not supported, and it pins `gsplat==1.4.0`. **But the published evidence says the rim is hard.** On real 200° indoor fisheye, 3DGUT reaches only 16.6–22.2 dB (mean ≈ 19.6 dB), and both tested methods do best when cropped to 160° [Gunes2026]. GOFish [Tu2026GOFish] shows why 3DGUT-style rasterizers stop at 160° and fixes it, gaining 4 dB even inside the 160° cone. So the rim angle we train to is a **Phase-0a experiment on FIORD** (§7.5), not a default.
+3. **Rolling shutter** exists as a rasterizer argument in gsplat (`rolling_shutter`, `viewmats_rs`; start and end poses slerped per row) and in 3DGRUT. However, gsplat's `simple_trainer.py` does **not** pass it through, so wiring it in is a small custom job. With the device chapter's capture discipline (≤10°/s, 0.3–0.5 m/s) RS skew and blur are about 2 px, so this is a second-order fix *(assessment, [CALC] below)*.
+4. **Appearance:** use **PPISP** [Deutsch2026] (CVPR 2026, Apache-2.0, built into gsplat and 3DGRUT). It models per-sensor chromatic **vignetting** (the fisheye rim falls to ~0.76 shading per the device chapter), a per-sensor response curve, and per-frame exposure and white balance. A controller predicts these for novel views. Keep the **bilateral grid** [Wang2024BilaRF] as a fallback for residual row-banding from flicker.
+5. **Metric coupling:** initialise from the geometry-chapter dense cloud, **turn off gsplat's default world normalisation** (`--no-normalize-world-space`), freeze or tightly regularise poses, and add a dense depth loss against the geometry-chapter mesh. Then the splat lives in the survey frame and can be overlaid on the mesh.
 6. **Delivery:** `.ply` as master, then PlayCanvas `splat-transform` to **SOG / Streamed SOG (LOD)** for the web. Use SuperSplat for cleanup and annotation, and Spark (three.js) if you need a custom viewer with a mesh overlay. All three are MIT-licensed.
+7. **Expected quality:** plan on **≈17–21 dB PSNR (central value ≈19 dB)** full-FoV on our block hold-out. That is below the published 200° numbers, because those used uncompressed stills and a frame-skip split (§6.1). **GOFish** (CC BY-NC 4.0) is the high-upside experimental pick and the strongest candidate for the rim band (§7.3 S9).
 
 ---
 
@@ -30,20 +31,20 @@
 | | 3DGS (gsplat) | NeRF (Zip-NeRF / nerfacto) | Textured mesh + neural texture |
 |---|---|---|---|
 | Photorealism (near trajectory) | Highest per GPU-hour | Zip-NeRF ≈ 3DGS; nerfacto lower | Lower: textures cannot show view-dependent fuzz, thin wires or grilles |
-| Training on 16 GB | 30–90 min per zone | Zip-NeRF: hours; nerfacto: under 1 h | Depends on A3b mesh, plus texture bake |
+| Training on 16 GB | 30–90 min per zone | Zip-NeRF: hours; nerfacto: under 1 h | Depends on the geometry-chapter mesh, plus texture bake |
 | Real-time viewing | Yes, including browser (SOG/spz) | No (0.2 fps for Zip-NeRF); needs baking | Yes, any engine |
 | Editability | Good: crop, delete, merge in SuperSplat | Poor | Best |
 | File size | Large (≈250 B/Gaussian raw; ~10× less with spz/SOG) | Small weights, but no direct viewer | Small–medium |
 | Measurement | Not a surface; depth is "expected" | Not a surface | **Is** a surface |
 
-**Recommendation:** use 3DGS (gsplat) for the visualization. **Do not** try to make the splat the measurement product: the A3b mesh is the measurement product. The splat is anchored to it (§5) and overlaid on it.
+**Recommendation:** use 3DGS (gsplat) for the visualization. **Do not** try to make the splat the measurement product: the geometry-chapter mesh is the measurement product. The splat is anchored to it (§5) and overlaid on it.
 
 ---
 
 ## 2. 360° input handling
 
 ### 2.1 Three families
-**(a) Re-project to perspective views (cubemap or N tangent views), then use a pinhole splatter.** This is RIGOR's choice for SfM (shared context), and nerfstudio's `equirect2persp` utility does it for equirect. *Pros:* any tool works. *Cons:* a second resampling (A1: another 10–20% of resolution lost), duplicated pixels at overlapping faces, and with stitched input the seam error is still baked in.
+**(a) Re-project to perspective views (cubemap or N tangent views), then use a pinhole splatter.** This is RIGOR's choice for SfM (shared context), and nerfstudio's `equirect2persp` utility does it for equirect. *Pros:* any tool works. *Cons:* a second resampling (device chapter: another 10–20% of resolution lost), duplicated pixels at overlapping faces, and with stitched input the seam error is still baked in.
 
 **(b) Native equirect (ERP) rasterizers** operate on stitched panoramas.
 - **OmniGS** [Li2025OmniGS] (WACV 2025) splats directly into ERP space with derived spherical Jacobians. Code: C++/LibTorch, **GPL-3.0**.
@@ -58,22 +59,33 @@
 - **DirectFisheye-GS** [Yang2026DirectFisheye] (CVPR 2026 Highlight) feeds native fisheye into 3DGS. It argues that undistortion stretches pixels and causes edge floaters, and adds cross-view joint optimisation to stop rim Gaussians becoming elongated.
 - **3DGUT** [Wu2025_3DGUT] (CVPR 2025) replaces EWA linearisation with an **Unscented Transform**: 7 sigma points per Gaussian are projected *exactly* through any camera function, and a 2D Gaussian is re-fit. That makes any distortion model, and rolling shutter (a different pose per sigma point), essentially free. Reported on ScanNet++ fisheye: **PSNR 29.11 / LPIPS 0.252 with 0.38 M Gaussians, vs Fisheye-GS 28.15 / 0.261 with 1.07 M**, and vs 22.76 for 3DGS trained on undistorted crops.
 - **3DGRT** [MoenneLoccoz2024_3DGRT] (SIGGRAPH Asia 2024) ray-traces the same particles, giving any camera plus secondary rays (reflections). It is slower and wants RT cores. The authors' own stated limitation for 3DGUT: under very strong distortion the projected footprint is no longer Gaussian, which degrades tile assignment. That is exactly the 90–105° rim here *(assessment)*.
+- **Gunes et al.** [Gunes2026] (VISAPP 2026 per the arXiv comment; arXiv 2508.06968; [OPENED], Table 1 transcribed) is the first published evaluation of 3DGS on real fisheye wider than 180°. It runs Fisheye-GS and 3DGUT (official code, MCMC mode) on **FIORD** [Gunes2025FIORD]: an Insta360 One RS 1-Inch dual-200° camera, 3264² PNG per lens, 200–400 images per scene, with LiDAR ground truth.
+  - *Reported, 3DGUT at 200°, SfM init, PSNR, all five indoor scenes:* Kitchen 22.16, Hall 20.91, Meeting 20.93, Building 17.54, Upstairs 16.64. That is a **range of 16.6–22.2 dB and a mean of ≈ 19.6 dB**. The two *larger* indoor scenes (Building, Upstairs) are the closest analogues to a garage, and they are the worst. Fisheye-GS at 200°: 20.05 / 19.62 / 17.75 / 18.57 / 19.42 (mean ≈ 19.1).
+  - ***Both* methods do best at 160°** (abstract and Table 1). 3DGUT indoor at 160° scores 23.29 / 22.67 / 22.32 / 19.46 / 20.61 (mean ≈ 21.7), a **gain of +1.1 to +4.0 dB per scene** from cropping. Fisheye-GS's indoor mean rises to ≈ 21.6; only Upstairs dips, by 0.1 dB. At 120° both drop again because too much context is cropped away.
+  - The authors attribute 3DGUT's 200° weakness partly to its perspective-style estimate of the maximum FoV from focal length and image size. That estimate blurs the periphery, and the effect grows with scene size. **Lesson for us:** set `max_angle` explicitly from calibration and test it (§7.5).
+  - *Initialisation:* the paper says SfM initialisation commonly fails, or degrades, at these angles. It does not claim SfM "often fails"; a quotation to that effect elsewhere in the project misstates it. UniK3D monocular depth from two views was a workable substitute for Fisheye-GS, but it hurt 3DGUT at the periphery. We do not depend on this: our initialisation comes from the geometry chapter's dense cloud.
+  - *Protocol differences (assessment):* these are uncompressed 1-inch-sensor stills with a standard 90/10 train/test split of the image set, so near neighbours of every test image are in training. Our protocol (§6.1) holds out 2 s blocks with guard bands, on 0.10 bpp H.265 video, at 1/100 s, in dim light. All of those push our numbers **down** relative to Gunes's.
+- **GOFish** [Tu2026GOFish] (arXiv 2610.37818, Oct 2026; Amazon / UMD / UMass / Northeastern / CMU; [OPENED], Tables 1–3 and appendices B.1–B.3 transcribed) extends the 3DGUT codebase and PPISP. It is the first 3DGS **surface** method that trains directly on fisheye images, rasterizes beyond 180° and extracts a mesh from the same scene.
+  - *Its diagnosis of 3DGUT at wide angles:* a half-angle crop at 80° from the axis (hence 3DGUT "stops at 160°"); a positive-depth test that rejects content beyond 90°; sigma-point tile bounds that miss tiles whose rays do reach the Gaussian; and depth order that reverses beyond 90°.
+  - *Its fixes:* a calibration-defined valid-pixel domain; "complete admission", meaning conservative ray-vs-Gaussian tile tests; per-pixel sorting by ray distance (StopThePop-style); a **Calibrated Mip Filter** (Mip-Splatting's 3D and 2D filters, scaled by the fisheye Jacobian); and **Wide-Angle Appearance Modeling**, a camera-fixed rim-attenuation map on top of PPISP, because PPISP's low-order vignetting misses steep rim falloff.
+  - Full deep dive in §7.3 (S9). This is direct evidence on whether a full-rim splat is feasible, and the paper postdates the original draft of this chapter.
 
 ### 2.2 What the tools support today (verified in source, Nov 2026)
 
 | Stack | Fisheye θ > 90° | Equirect | Rolling shutter | Notes |
 |---|---|---|---|---|
 | **gsplat `main`** (`version.py` = 1.6.0; latest tagged release on the releases page: v1.5.3) | **Yes, via `camera_model="ftheta"`** + `with_ut` + `with_eval3d` + `global_z_order=False`. `Cameras.cuh` comment: FTheta "max_angle > pi/2 model beyond-180-degree FOV". The **`fisheye` (OpenCV KB-4) model returns invalid for `cam_ray.z <= 0`**, so it is capped at 90° | No | `rolling_shutter=RollingShutterType.{TOP_TO_BOTTOM,…}` + `viewmats_rs` (start/end SE(3), slerp per row) | FTheta = pixel-distance↔angle polynomial + `linear_cde` affine term, with **no tangential terms**. `ftheta_coeffs` are "shared for all cameras", so render each lens in its own call. The trainer warns that `with_eval3d` is incompatible with `DefaultStrategy` and needs MCMC. The COLMAP loader in `simple_trainer` **undistorts** fisheye; only the **NCore** loader feeds FTheta natively. The NCore loader reads start/end poses, but `simple_trainer.py` never passes `viewmats_rs` |
+| **GOFish** (`tuallen/GOFish`, CC BY-NC 4.0; extends 3DGRUT) | **Yes, full calibrated FoV** (complete admission, ray-distance sort). Input: COLMAP `OPENCV_FISHEYE` (KB-4) or `PINHOLE` | No | **No** (the paper's limitations section says rolling shutter and non-central cameras are unsupported) | PPISP + rim-attenuation map; Calibrated Mip Filter; GOF-style mesh extraction (needs CGAL + GOF tetra extension); Slang kernels |
 | **nerfstudio splatfacto** (pins `gsplat==1.4.0`) | **No.** `full_images_datamanager` undistorts. Docs FAQ: fisheye/equirect rendering "Currently, no" | No | No | Has MCMC strategy and `use_bilateral_grid` |
 | **nerfstudio nerfacto** | Ray-based `FISHEYE` (equidistant) / `EQUIRECTANGULAR` / `FISHEYE624` types | Yes | No | Not real-time |
 | **3DGRUT** (Apache-2.0; v2.0.0 June 2026) | COLMAP `OPENCV_FISHEYE` ingested natively. `max_angle` is computed from the image radius (≈105° here). Whether the UT kernel accepts z ≤ 0 for this model I did not verify [UNVERIFIED]. NCore FTheta is supported | No | Yes in the paper (Waymo) and via NCore; COLMAP loader sets `ShutterType.GLOBAL` | MCMC, masks, PPISP, USD/PLY export. 3DGRT path wants RT cores |
 
-**Consequence:** the cleanest route for A1's input decision is **gsplat + FTheta + UT**. Fit DJI's per-lens KB-5 + tangential model to an FTheta `ANGLE_TO_PIXELDIST` polynomial plus `linear_cde`, and check the residual. If the tangential terms leave more than ~0.3 px RMS, pre-warp the images by that small residual field (a near-identity remap, not a re-projection) *(assessment)*. Two calls per rig frame, one per lens, each with its own FTheta parameters and pose `T_world_rig · T_rig_lens` from A3b.
+**Consequence:** the cleanest route for the device chapter's input decision is **gsplat + FTheta + UT**. Fit DJI's per-lens KB-5 + tangential model to an FTheta `ANGLE_TO_PIXELDIST` polynomial plus `linear_cde`, and check the residual. If the tangential terms leave more than ~0.3 px RMS, pre-warp the images by that small residual field (a near-identity remap, not a re-projection) *(assessment)*. Two calls per rig frame, one per lens, each with its own FTheta parameters and pose `T_world_rig · T_rig_lens` from the geometry chapter. **Caveat:** gsplat's source claims FTheta renders beyond 180° when `global_z_order=False`, but GOFish's critique of sigma-point tile bounds and depth ordering applies to UT rasterizers in general. Whether gsplat's path avoids those failures is **unverified**, and no published result covers it. That is why §7.5 makes `max_angle` a Phase-0a experiment.
 
 ### 2.3 Seam handling and nadir/airframe masking
 - **Raw fisheye removes the seam by construction.** The 90–105° overlap band, seen by both lenses from optical centres b apart, becomes an ordinary *multi-view constraint* instead of a blending artefact. It also helps densification on walls *(assessment)*.
-- **Per-lens static masks** (A1 §5.7): build them once from a static clip (temporal median, then threshold) and pass them as training masks. gsplat's trainer zeros masked render pixels, and 3DGRUT reads `<image>_mask.png`. **Also mask the outermost ~2–3° of each circle**, where the KB fit is extrapolated and vignetting is strongest *(assessment)*.
-- **Fallback (stitched ERP):** mask the ±8–10° horizon band in the photometric loss, as A1 recommends. Or adopt the Seam360GS idea (a learnable gap plus an angular grid) in an ERP rasterizer. Expect to lose wall detail either way.
+- **Per-lens static masks** (device chapter, masking section): build them once from a static clip (temporal median, then threshold) and pass them as training masks. gsplat's trainer zeros masked render pixels, and 3DGRUT reads `<image>_mask.png`. **Also mask the outermost ~2–3° of each circle**, where the KB fit is extrapolated and vignetting is strongest *(assessment)*.
+- **Fallback (stitched ERP):** mask the ±8–10° horizon band in the photometric loss, as the device chapter recommends. Or adopt the Seam360GS idea (a learnable gap plus an angular grid) in an ERP rasterizer. Expect to lose wall detail either way.
 
 ---
 ## 3. Hard conditions for appearance
@@ -82,13 +94,13 @@
 **Examples.**
 - **Per-image GLO embeddings.** WildGaussians [Kulhanek2024WildGaussians] (NeurIPS 2024, MIT) feeds per-image embeddings plus DINO-feature uncertainty to an appearance MLP. Splatfacto-W [Xu2024SplatfactoW] puts per-Gaussian neural colour features and per-image embeddings into nerfstudio. gsplat has `app_opt` (a 16-D embedding).
 - **Bilateral grids.** BilaRF [Wang2024BilaRF] (SIGGRAPH/TOG 2024, Apache-2.0) learns a per-image 3D bilateral grid of affine colour transforms. It can absorb *spatially varying* ISP effects (local tone mapping), which are what cause floaters. gsplat: `post_processing="bilateral_grid"`, grid `(16,16,8)`, plus an optional fused kernel. splatfacto: `use_bilateral_grid`.
-- **PPISP** [Deutsch2026] (CVPR 2026) is a fixed physical chain: per-frame **exposure offset** (a base-2 scale), per-sensor **chromatic vignetting**, colour correction as a homography on RG chromaticity (normalised so it cannot change brightness), and a per-sensor **CRF**. A small **controller**, trained in a second phase with the scene frozen, predicts exposure and WB for *novel* views. The paper argues that GLO and bilateral grids are high-capacity, so they overfit training views and need GT-based colour correction at test time. It evaluates on Mip-NeRF 360, Tanks & Temples, BilaRF, HDR-NeRF, Waymo and its own 3-camera dataset, and reports state-of-the-art results *without* GT colour alignment (abstract; I did not transcribe the table). gsplat exposes it as `post_processing="ppisp"`, and the trainer can feed an **EXIF exposure prior** (`load_exposure`).
+- **PPISP** [Deutsch2026] (CVPR 2026: the paper is listed in the CVF Open Access CVPR 2026 proceedings, which I opened; the arXiv page and the repository BibTeX give only the arXiv ID) is a fixed physical chain: per-frame **exposure offset** (a base-2 scale), per-sensor **chromatic vignetting**, colour correction as a homography on RG chromaticity (normalised so it cannot change brightness), and a per-sensor **CRF**. A small **controller**, trained in a second phase with the scene frozen, predicts exposure and WB for *novel* views. The paper argues that GLO and bilateral grids are high-capacity, so they overfit training views and need GT-based colour correction at test time. It evaluates on Mip-NeRF 360, Tanks & Temples, BilaRF, HDR-NeRF, Waymo and its own 3-camera dataset, and reports state-of-the-art results *without* GT colour alignment (abstract; I did not transcribe the table). gsplat exposes it as `post_processing="ppisp"`, and the trainer can feed an **EXIF exposure prior** (`load_exposure`).
 
 **Fit to this drone (assessment).**
-- With manual exposure, locked WB and a 1/100 s shutter (A1), the residual variation is (i) lens-rim **vignetting** that differs between the two lenses, (ii) small lamp-to-lamp colour changes, and (iii) residual flicker.
-- PPISP's per-*sensor* split maps exactly onto "two lenses = two sensors". Its exposure prior can take DJI's per-frame shutter and gain metadata (A1 §4.2): write it into EXIF of the extracted frames.
+- With manual exposure, locked WB and a 1/100 s shutter (device chapter), the residual variation is (i) lens-rim **vignetting** that differs between the two lenses, (ii) small lamp-to-lamp colour changes, and (iii) residual flicker.
+- PPISP's per-*sensor* split maps exactly onto "two lenses = two sensors". Its exposure prior can take DJI's per-frame shutter and gain metadata (device chapter, metadata section): write it into EXIF of the extracted frames.
 - **Flicker:** at 1/100 s with 100 Hz flicker each row integrates one full cycle, so banding should mostly cancel. Any residual (lamp duty-cycle, wrong shutter) appears as **horizontal bands** in the sensor rows. That pattern is spatially varying, so PPISP's global exposure cannot model it, but a coarse bilateral grid can. Use PPISP first, and switch on the bilateral grid only if residual maps show row bands.
-- **No HDR video mode exists** (A1, re-verified): there are no bracketed frames to fuse, so HDR-splatting methods that need multi-exposure input do not apply.
+- **No HDR video mode exists** (device chapter, re-verified): there are no bracketed frames to fuse, so HDR-splatting methods that need multi-exposure input do not apply.
 
 ### 3.2 Low light and noise: is RAW-style training applicable?
 **Examples.**
@@ -104,7 +116,7 @@
   2. Convert with a fixed curve (DJI's D-Log M→Rec.709 LUT, which OpenOSV fits, or its inverse to linear [form UNVERIFIED]) and let PPISP's CRF absorb the remainder.
   3. Do **not** denoise frames before splatting. Learned denoisers hallucinate texture inconsistently across frames, which makes floaters *(assessment)*.
   4. Use an L1 + SSIM loss (default λ = 0.2). If RAW-like robustness is wanted, the cheap experiment is a RawNeRF-style weighted L2 in linear space on the 10-bit data.
-- The only true RAW source is the **120 MP DNG stills** (A1), but they are few and on a different camera path. Use them for evaluation crops, not for training.
+- The only true RAW source is the **120 MP DNG stills** (device chapter), but they are few and on a different camera path. Use them for evaluation crops, not for training.
 
 ### 3.3 Motion blur, defocus and rolling shutter
 **Examples.**
@@ -113,16 +125,16 @@
 - **Gaussian Splatting on the Move** [Seiskari2024OnTheMove] (ECCV 2024, Apache-2.0, nerfstudio/gsplat): models **motion blur and rolling shutter together** from linear and angular velocities, initialised from VIO/IMU. It uses a screen-space approximation and pose optimisation, and reports gains on synthetic Deblur-NeRF scenes and smartphone video. Its README says joint RS + blur needs known readout and exposure times, and it needs ≥8 GB VRAM.
 - **3DGUT** adds RS through per-sigma-point poses (§2.2).
 
-**Size of the problem here [CALC from A1 numbers].**
+**Size of the problem here [CALC from device-chapter numbers].**
 - Blur ≈ (ω + v/d)·t_exp. At ω = 10°/s, v = 0.4 m/s, d = 2 m and t = 1/100 s: (10 + 11.5)°/s × 0.01 s ≈ 0.21° ≈ **3.9 px** at 18.3 px/deg. At ω = 5°/s it is about 3 px.
 - RS skew at a ~10 ms readout (unmeasured) is a similar 2–4 px.
-- **Defocus** (fixed focus, rated 1.5 m–∞; A1 re-verified) is about 1–2 binned px at 0.5–1 m and negligible beyond.
+- **Defocus** (fixed focus, rated 1.5 m–∞; device chapter, re-verified) is about 1–2 binned px at 0.5–1 m and negligible beyond.
 
 **Assessment.**
 1. Start with **frame selection**: Laplacian variance plus IMU angular rate, keeping the sharpest frame per 0.15–0.3 m. That costs nothing.
-2. Then add **RS rendering** in gsplat. Compute `viewmats_rs` from the A3b pose and the high-rate IMU quaternions at row 0 and row H, and pick the `RollingShutterType` per lens from the measured readout direction. This is ~100 lines in `simple_trainer.py` and makes the forward model exact.
+2. Then add **RS rendering** in gsplat. Compute `viewmats_rs` from the geometry-chapter pose and the high-rate IMU quaternions at row 0 and row H, and pick the `RollingShutterType` per lens from the measured readout direction. This is ~100 lines in `simple_trainer.py` and makes the forward model exact.
 3. Defer blur modelling. Plug in an On-the-Move-style velocity blur only if residual maps show directional smear. Its code is pinhole-only, so it would need porting to the UT path.
-4. Defocus is not modelled by any of these. Accept it: it only affects surfaces under 1 m, which A1's flight rules avoid.
+4. Defocus is not modelled by any of these. Accept it: it only affects surfaces under 1 m, which the device chapter's flight rules avoid.
 
 ### 3.4 Reflective and specular surfaces
 **Examples.**
@@ -136,13 +148,13 @@
 - Garage reflections are mostly glossy wet floor and car paint, i.e. near-field, so distant environment maps fit poorly.
 - Recommendation: (i) capture an emptier, dry lot; (ii) down-weight the depth loss where a reflection mask is set (car segmentation plus floor-specular detection); (iii) keep SH degree 3. Consider EnvGS or 3DGRT secondary rays only as an experiment, because they cost VRAM and time and the code paths are pinhole-oriented.
 
-### 3.5 Transient objects (coordinate with A3a)
+### 3.5 Transient objects (coordinate with the filtering chapter)
 **Examples.**
 - **SpotLessSplats** [Sabour2025SpotLess] (ACM TOG, Apache-2.0) clusters Stable-Diffusion features to find distractors and applies a robust, trimmed loss.
 - **WildGaussians**: DINO-based uncertainty weighting.
 - **RobustNeRF**-style trimmed losses.
 
-**Assessment.** In a parking lot the transients are large and semantically obvious: people, moving cars, a car that left between sorties. **Semantic masks** (A3a's segmentation, dilated by ~10 px) passed as loss masks are cheaper and more predictable than learned robustness. Add a SpotLess-style trimmed loss only if residual "ghosts" remain.
+**Assessment.** In a parking lot the transients are large and semantically obvious: people, moving cars, a car that left between sorties. **Semantic masks** (the filtering chapter's segmentation, dilated by ~10 px) passed as loss masks are cheaper and more predictable than learned robustness. Add a SpotLess-style trimmed loss only if residual "ghosts" remain.
 
 ---
 
@@ -168,14 +180,14 @@
 - The whole lot at the density of a room-scale scene would be 15–30 M Gaussians, so **partition**.
 
 **Recommendation.**
-- Partition the lot into **zones of ~30–40 m along aisles**, overlapping by 5 m, with a fixed metric frame from A3b.
+- Partition the lot into **zones of ~30–40 m along aisles**, overlapping by 5 m, with a fixed metric frame from the geometry chapter.
 - Train each zone with **gsplat MCMC** (`cap_max` 3 M). AbsGS gradients apply only to the default strategy, which `with_eval3d` cannot use anyway.
-- **Crop each zone to its core** and concatenate. Because all zones share the A3b metric frame and the same PPISP sensor parameters (fixed after zone 1), seams between zones stay small *(assessment)*.
+- **Crop each zone to its core** and concatenate. Because all zones share the geometry-chapter metric frame and the same PPISP sensor parameters (fixed after zone 1), seams between zones stay small *(assessment)*.
 - LOD is handled at delivery (Streamed SOG, §6) rather than with the non-commercial Hierarchical 3DGS code.
-- Use the A3b depth (§5) as the main anti-floater prior. It is stronger than monocular depth.
+- Use the geometry-chapter depth (§5) as the main anti-floater prior. It is stronger than monocular depth.
 
 ---
-## 5. Coupling with metric geometry (A3b)
+## 5. Coupling with metric geometry (geometry chapter)
 
 **Examples.**
 - **SuGaR** [Guedon2024SuGaR] (CVPR 2024) regularises Gaussians to align with the surface, extracts a mesh, then *binds* new Gaussians to the mesh triangles for hybrid rendering.
@@ -183,14 +195,14 @@
 - **MILo** [Guedon2025MILo] extracts a mesh *inside* the training loop from Gaussian-derived Delaunay vertices.
 - **DN-Splatter** regularises toward external depth and normals.
 
-**What "anchored to A3b" should mean here (assessment).**
-1. **Same frame, same units.** Train in A3b's metric frame. gsplat's `simple_trainer` **normalises world space by default** (`normalize_world_space=True`, a PCA and scale transform). Disable it, or store and invert the transform before export. Otherwise exported splats will not overlay the mesh.
-2. **Poses from A3b, rig-aware.** Each lens pose is T_world_rig · T_rig_lens, using A3b's calibrated rig (including baseline b). Keep `pose_opt` off, or use a tiny learning rate (gsplat's default `pose_opt_lr=1e-5`) followed by a check that the drift is under 1 cm. Refined poses must never be fed back to A3b.
-3. **Initialisation** from the A3b dense cloud, voxel-downsampled to 2–3 cm (~1–3 M points per zone), colours included. This beats SfM sparse points on textureless concrete.
-4. **Dense depth prior.** Ray-cast the A3b mesh *through the same FTheta camera* (e.g. Open3D `RaycastingScene` with per-pixel bearing vectors) to obtain per-pixel expected depth. Then add an L1 loss on gsplat's `RGB+ED` depth output (λ ≈ 0.05–0.2), masked by mesh confidence, reflection masks and transients. gsplat's built-in `depth_loss` uses only sparse SfM points, so this is custom code.
+**What "anchored to the geometry chapter" should mean here (assessment).**
+1. **Same frame, same units.** Train in the geometry chapter's metric frame. gsplat's `simple_trainer` **normalises world space by default** (`normalize_world_space=True`, a PCA and scale transform). Disable it, or store and invert the transform before export. Otherwise exported splats will not overlay the mesh.
+2. **Poses from the geometry chapter, rig-aware.** Each lens pose is T_world_rig · T_rig_lens, using the geometry chapter's calibrated rig (including baseline b). Keep `pose_opt` off, or use a tiny learning rate (gsplat's default `pose_opt_lr=1e-5`) followed by a check that the drift is under 1 cm. Refined poses must never be fed back to the geometry chapter.
+3. **Initialisation** from the geometry-chapter dense cloud, voxel-downsampled to 2–3 cm (~1–3 M points per zone), colours included. This beats SfM sparse points on textureless concrete.
+4. **Dense depth prior.** Ray-cast the geometry-chapter mesh *through the same FTheta camera* (e.g. Open3D `RaycastingScene` with per-pixel bearing vectors) to obtain per-pixel expected depth. Then add an L1 loss on gsplat's `RGB+ED` depth output (λ ≈ 0.05–0.2), masked by mesh confidence, reflection masks and transients. gsplat's built-in `depth_loss` uses only sparse SfM points, so this is custom code.
 5. **Optional surface regularisers** (2DGS-style flattening, normal loss toward mesh normals) improve off-trajectory views of floors and walls. They cost some sharpness on cluttered parts such as pipes and signage.
 6. **Export and overlay.** Write `.ply` in metric coordinates and record the frame in a PLY comment (splat-transform carries header comments through). The viewer loads mesh, splat and marker annotations together.
-7. **Do not measure on splats.** Gaussian "expected depth" is biased at edges and through semi-transparent floaters. Measure on the A3b mesh. Quality-control the coupling with a **splat-depth vs mesh-depth residual map** on held-out views: report the median |Δ| and the fraction of pixels more than 10 cm *in front of* the mesh (= floaters).
+7. **Do not measure on splats.** Gaussian "expected depth" is biased at edges and through semi-transparent floaters. Measure on the geometry-chapter mesh. Quality-control the coupling with a **splat-depth vs mesh-depth residual map** on held-out views: report the median |Δ| and the fraction of pixels more than 10 cm *in front of* the mesh (= floaters).
 
 ---
 
@@ -200,13 +212,23 @@
 - **The naive split is wrong.** gsplat's default `test_every=8` holds out every 8th image. At 25 fps and 0.4 m/s, consecutive frames are **1.6 cm apart** [CALC]. Even after keeping one rig frame per 0.25 m, the neighbours of a held-out frame are near-duplicates, so a frame-skip split measures interpolation, not novel views.
 - **Recommended protocol (assessment):**
   1. **Block hold-out.** Hold out 2-second blocks every ~20 s, and drop a ±1 s guard band around each block from training.
-  2. **Separate validation trajectory.** Fly one short sortie on a different lane and at a ~0.5 m different height, MuSHRoom-style [Turkulainen2025DNSplatter]. Never train on it, and register it into the A3b frame with markers.
+  2. **Separate validation trajectory.** Fly one short sortie on a different lane and at a ~0.5 m different height, MuSHRoom-style [Turkulainen2025DNSplatter]. Never train on it, and register it into the geometry-chapter frame with markers.
   3. **Both lenses** of a held-out rig frame stay out of training.
 - **Metrics:**
   - PSNR, SSIM and LPIPS (AlexNet, as gsplat uses), computed **without GT colour alignment**, using the PPISP controller for novel-view exposure.
   - Also gsplat's `cc_*` (colour-corrected) metrics, reported separately, as PPISP recommends.
   - Report them **per region**: floor and ceiling (lens centres), the **rim band θ 85–105°** (walls, overlap), and masked areas excluded.
   - Geometry-consistency proxies from §5.7.
+- **Planning anchor (assessment, re-derived).**
+  - Published 200° numbers come from protocols easier than ours. Gunes's indoor 3DGUT is 16.6–22.2 dB (mean ≈ 19.6) on stills with a 90/10 split. In GOFish's table, 3DGUT+PPISP on FIORD scores 20.18 dB full-FoV, every 8th image held out, at 816² per lens.
+  - Our block hold-out and 0.1 bpp video push numbers down. PPISP and the mesh-depth prior push them up.
+  - **Plan on 17–21 dB full-FoV PSNR (central value ≈ 19 dB) and LPIPS ≈ 0.25–0.40 for the primary.** Expect the θ ≤ 80° region to score 1–3 dB above the full FoV.
+  - GOFish-level gains (+2 to +4 dB on FIORD) would put us at 21–24 dB. Treat that as upside, not plan.
+  - **Suggested gates.** Phase 0a, on FIORD with the papers' own split, for like-for-like comparison:
+    1. S1 at `max_angle` 80° reaches ≥ 21 dB indoor mean (Gunes's 3DGUT at 160°: ≈ 21.7).
+    2. S1 at its chosen `max_angle` reaches ≥ 19.5 dB full-FoV (Gunes's 3DGUT at 200°: ≈ 19.6).
+    3. A GOFish reproduction reaches ≥ 23 dB on FIORD (paper: 24.36).
+  - Phase 1, drone block hold-out: ≥ 17 dB full-FoV and ≥ 19 dB on θ ≤ 80°.
 - **Qualitative fly-through off the trajectory.** Render a path offset +0.5 m in height and 1 m laterally from the flight lanes, and look for floaters, the "mirror world" under wet floors, and zone seams. Off-trajectory quality is what users experience and what PSNR on near-trajectory views hides.
 
 ### 6.2 Viewers, formats, compression
@@ -226,6 +248,7 @@
 ## 7. Method selection
 
 ### 7.1 Long list (25)
+0. *(Evidence, not a method: Gunes et al. 2026's evaluation of Fisheye-GS and 3DGUT at 200°/160°/120° on FIORD [Gunes2026], used for the planning anchor and the scoring of S1, S2 and S9.)*
 1. INRIA 3DGS [Kerbl2023]
 2. gsplat [Ye2024gsplat]
 3. nerfstudio splatfacto
@@ -243,8 +266,8 @@
 15. Seam360GS
 16. PFGS360
 17. SC-OmniGS
-18. Fisheye-GS
-19. DirectFisheye-GS
+18. Fisheye-GS / DirectFisheye-GS
+19. **GOFish** [Tu2026GOFish] (full-FoV fisheye 3DGS plus mesh)
 20. Self-Calibrating GS for large FOV [Deng2025SelfCal]
 21. GS on the Move / BAD-Gaussians / Deblurring 3DGS
 22. Hierarchical 3DGS
@@ -256,17 +279,18 @@
 - **INRIA 3DGS**: non-commercial licence, pinhole only. gsplat matches its quality with less memory.
 - **splatfacto**: no fisheye or θ > 90° (undistorts to pinhole; pins gsplat 1.4.0). Usable only inside the perspective fallback.
 - **Zip-NeRF**: 0.2 fps rendering, hours of training. Not explorable in real time.
-- **IM360 textured mesh**: no code found, and less photoreal than splats. Its idea belongs to A3b's mesh texturing.
-- **OmniGS / ODGS / 360-GS / SC-OmniGS / PFGS360**: all assume a *central* equirect camera, so the horizon seam error (A1) is baked into the targets. PFGS360's pose-free design discards A3b's metric poses. Kept only as the ERP fallback (Seam360GS row below).
+- **IM360 textured mesh**: no code found, and less photoreal than splats. Its idea belongs to the geometry chapter's mesh texturing.
+- **OmniGS / ODGS / 360-GS / SC-OmniGS / PFGS360**: all assume a *central* equirect camera, so the horizon seam error (device chapter) is baked into the targets. PFGS360's pose-free design discards the geometry chapter's metric poses. Kept only as the ERP fallback (Seam360GS row below).
 - **Fisheye-GS**: equidistant-only Jacobian, outperformed by 3DGUT on its own benchmark.
-- **DirectFisheye-GS**: promising (CVPR 2026), but I could not confirm code availability or behaviour beyond 180°. Watch it.
-- **Self-calibrating large-FOV GS**: calibration is A3b's job. Keep as an idea only.
+- **DirectFisheye-GS**: promising (CVPR 2026), but I could not confirm code availability. GOFish's Table 1 runs it at a 180° FoV: 22.08 dB full-FoV on FIORD, the best prior method, but 2.28 dB behind GOFish. Watch it.
+- *(GOFish is **not** screened out: it is short-listed as S9.)*
+- **Self-calibrating large-FOV GS**: calibration is the geometry chapter's job. Keep as an idea only.
 - **CityGaussian**: CC BY-NC-SA, and built for city aerial scale.
-- **SuGaR / MILo / PGSR / 2DGS as the primary**: they target meshing, and A3b already owns geometry. Their regularisers survive inside S6.
+- **SuGaR / MILo / PGSR / 2DGS as the primary**: they target meshing, and the geometry chapter already owns geometry. Their regularisers survive inside S6.
 - **3DGS-DR / EnvGS**: pinhole-oriented, VRAM-heavy, uncertain value for near-field garage reflections. Experimental only.
 
 ### 7.3 Short-list deep dives
-**S1. gsplat (main) + 3DGUT/FTheta on raw dual fisheye + MCMC + PPISP + masks + A3b init and depth.**
+**S1. gsplat (main) + 3DGUT/FTheta on raw dual fisheye + MCMC + PPISP + masks + geometry-chapter init and depth.**
 - *Core idea:* render each lens with its true camera via the Unscented Transform, so nothing is resampled and the 90–105° band is kept.
 - *Assumptions violated:* 3DGUT assumes the projected footprint stays near-Gaussian, which strains at the rim. FTheta has no tangential terms, so they must be refit.
 - *Reported:* 3DGUT +0.96 dB PSNR over Fisheye-GS on ScanNet++ fisheye with about a third of the Gaussians. 3DGUT is comparable to 3DGRT on Waymo rolling-shutter cameras. gsplat matches INRIA quality at 5.7 vs 9.0 GB.
@@ -274,6 +298,7 @@
 - *Code:* Apache-2.0, actively developed (`main` reports 1.6.0 with FTheta, PPISP, NCore, batch rendering).
 - *Gaps:* FTheta and rolling shutter are reachable natively only via the NCore loader, and RS is not wired into `simple_trainer`. Expect to write a custom dataset class (≈300 lines).
 - *Failure modes:* rim floaters (the DirectFisheye-GS observation), FTheta fit error, mirror-world reflections.
+- *Evidence against a full-rim default (new):* 3DGUT on real 200° indoor fisheye scores 16.6–22.2 dB and improves by 1–4 dB per scene when cropped to 160° [Gunes2026]. GOFish documents tile-admission and depth-order failures beyond 80–90° in 3DGUT-style rasterizers [Tu2026GOFish]. gsplat's FTheta path is a different implementation, but it has no published result beyond 160°.
 
 **S2. 3DGRUT (3DGUT, optionally 3DGRT) on raw fisheye.**
 - *Core idea:* the same UT, plus an optional ray-traced hybrid for secondary rays.
@@ -282,9 +307,9 @@
 - *Risks:* I did not verify that its OpenCV-fisheye UT path renders θ > 90°. It is heavier to install, and 3DGRT wants RT cores.
 - *Upside:* a ray-traced reflection path for cars and wet floors on the same particles.
 
-**S3. Perspective re-projection (A3b's RIGOR-style views or a cubemap from each fisheye) + standard gsplat pinhole.**
+**S3. Perspective re-projection (the geometry chapter's RIGOR-style views or a cubemap from each fisheye) + standard gsplat pinhole.**
 - *Core idea:* use the most mature path and accept the resampling.
-- *Assumptions violated:* resampling adds blur (A1: −10–20% resolution), and views must overlap to cover the rim, so pixels are duplicated.
+- *Assumptions violated:* resampling adds blur (device chapter: −10–20% resolution), and views must overlap to cover the rim, so pixels are duplicated.
 - *Evidence:* undistorting fisheye cost 3DGS 5–6 dB PSNR in the 3DGUT/Fisheye-GS comparison. That number comes from cropping, not from multi-face cubemaps, but it signals the loss.
 - *Compute:* lowest. *Maturity:* highest. This is the safe fallback.
 
@@ -297,12 +322,12 @@
 **S5. Blur and RS compensation (GS on the Move / BAD-Gaussians).**
 - *Reported:* gains on synthetic Deblur-NeRF-derived scenes and phone video.
 - *Code:* Apache-2.0, nerfstudio-based, pinhole only.
-- *Fit:* the effects here are only 2–4 px under A1's capture rules. Worth doing only as RS in S1.
+- *Fit:* the effects here are only 2–4 px under the device chapter's capture rules. Worth doing only as RS in S1.
 
-**S6. Depth- and normal-regularised GS coupled to A3b (DN-Splatter-style, with mesh depth instead of monocular).**
+**S6. Depth- and normal-regularised GS coupled to the geometry-chapter mesh (DN-Splatter-style, with mesh depth instead of monocular).**
 - *Reported:* DN-Splatter improves depth and mesh metrics on MuSHRoom and ScanNet++, and the normal priors reduce floaters in textureless rooms.
 - *Code:* Apache-2.0, gsplat-based.
-- *Fit:* high, because textureless concrete is exactly its target. A3b's metric depth is stronger than monocular depth.
+- *Fit:* high, because textureless concrete is exactly its target. The geometry chapter's metric depth is stronger than monocular depth.
 - *Risk:* over-smoothing clutter. Reflections conflict with the depth loss, so they need masks.
 
 **S7. Hierarchical 3DGS / Octree-GS for LOD.**
@@ -314,31 +339,86 @@
 - *Fit:* the only no-custom-code path for raw fisheye rays. Its equidistant fisheye type lacks DJI's distortion terms.
 - *Drawbacks:* not real-time, and exporting to splats or meshes loses quality. A useful sanity baseline only.
 
+**S9. GOFish: full-FoV fisheye 3DGS with mesh extraction [Tu2026GOFish].**
+- *Core idea:* make 3DGUT-style rasterization correct over the whole calibrated fisheye domain. It uses a calibration-defined pixel domain, conservative "complete admission" of Gaussians to tiles, and per-pixel ray-distance sorting. It then keeps view-specific effects out of the shared scene: a Calibrated Mip Filter for pixel footprint, and a camera-fixed rim-attenuation map on top of PPISP for lens falloff. That leaves a clean opacity field, meshed GOF-style. *(Mechanism: §2.1(c).)*
+- *Assumptions:* a static scene; a central camera model per lens; a calibrated COLMAP `OPENCV_FISHEYE` (KB-4) model; accurate poses (the authors flag sensitivity to calibration and pose errors).
+  - *Violated here:* rolling shutter is unsupported; moving cars and people need masks; DJI's KB-5 + tangential model needs a refit to KB-4 (the same issue as FTheta); reflective car paint and wet floors break the opacity-field mesh (see failure modes).
+  - Scale: one FIORD scene has 200–400 images. A 30–40 m zone here has ~2–3 k fisheye images, so we would be 5–10× beyond the evaluated scale.
+- *Reported results* (PSNR / SSIM / LPIPS; every 8th image held out; FIORD images 816² per lens, i.e. 4× downsampled; unrendered pixels scored as black):
+  - **FIORD, full 200° FoV, 7 scenes:**
+    - GOFish **24.36 / 0.827 / 0.210**.
+    - DirectFisheye-GS (180°) 22.08, so **+2.28 dB**. 3DGUT+PPISP (160°) 20.18, 3DGUT 19.86, 3DGRT+PPISP (full) 18.42, Fisheye-GS (145°) 17.78.
+    - Part of the full-FoV gap is coverage. But within 3DGUT's own 160° domain GOFish still gains **4.0 dB** on FIORD, of which only 0.4 dB comes from appearance modelling. The gain peaks at 5.6 dB in the angle bin that straddles 3DGUT's cutoff.
+  - **Hall_In** (Fig. 1): 3DGUT+PPISP **18.93 dB / LPIPS 0.285** full-FoV vs GOFish **25.10 dB / 0.137**. The caption says 3DGUT+PPISP stops at 160°.
+  - **Other benchmarks:** FullCircle (205°): 25.47 vs 23.50 for the best prior (3DGRT+PPISP). ScanNet++ fisheye (127°): 30.17 vs 29.71.
+  - **Mesh F-score:**
+    - FIORD, 10 cm threshold, 6 scenes with LiDAR: GOFish 0.245 (0.249 with the Geometry Objective) vs PGSR 0.239, CoMe 0.227, MiLo 0.210, GOF 0.198. Absolute values are low (precision ≈ 0.20), and the margin over PGSR is small.
+    - ScanNet++, 5 cm threshold: 0.706 vs 0.687 for PGSR and CoMe.
+  - **Ablation (Table 3):**
+    - Full-FoV rasterization alone: 21.21 dB, F-score 0.139.
+    - Adding the calibrated densification and Mip Filter: 21.19 dB, F-score 0.240.
+    - Adding Wide-Angle Appearance: 24.36 dB (+3.17).
+  - **FIORD's own problems** (GOFish App. B.1):
+    - The published intrinsics are extrapolated at the image-circle edge and lose monotonicity on 8 of 14 cameras. Six cameras have a dark rim band.
+    - Three scenes were excluded for broken SfM trajectories, Upstairs_In among them.
+    - So any FIORD dry run should use GOFish's calibrated domains, not the raw intrinsics.
+- *Compute vs 16 GB:*
+  - **Reported, single A10G (24 GB):**
+    - Training takes ~107 min per FIORD scene (3DGUT+PPISP: 29 min); training plus meshing takes 153 min.
+    - The scene averages **0.60 M Gaussians**, vs 1.03 M for 3DGUT+PPISP. The real-time renderer runs at 79 FPS.
+    - Without the Mip Filter the count is 2.2–5.4× higher (1.05–2.94 M). Unfiltered Hall_In training then ran out of memory, and Bridge_Out meshing ran out of GPU memory.
+  - **16 GB (assessment):**
+    - Training at 816²–1632² with ≤ 1 M Gaussians is plausible. Optimiser state is ~1 GB per M Gaussians (§4), but complete admission and per-pixel sorting add buffers we have not measured.
+    - **Mesh extraction is the memory peak.** We do not need it: the geometry chapter supplies the mesh.
+    - 16 GB feasibility at our resolution and zone size is **[UNVERIFIED]** and must be measured in Phase 0a.
+- *Code:*
+  - **Released** at `github.com/tuallen/GOFish`, linked from the project page (I read its source via the page's GitHub repo; 3dgofish.github.io itself was blocked by the proxy). Created 2026-10-23, last push 2026-10-31, ~95 stars (GitHub search API).
+  - The README requires Linux, compute capability ≥ 7.0, Python 3.11 and the Slang compiler, plus CGAL and GOF's tetra-triangulation extension for meshing.
+  - It provides benchmark scripts for FIORD, FullCircle, ScanNet++ and Tanks & Temples, and a "your own data" path for COLMAP fisheye.
+  - **Licence: CC BY-NC 4.0.** Files derived from SOF, StopThePop, CoMe and GOF are under the non-commercial Gaussian-Splatting License. Files derived from 3DGRUT, PPISP and Kaolin stay Apache-2.0.
+  - Issues: not inspected (GitHub web UI blocked). The code is three weeks old.
+- *Failure modes (authors' limitations plus assessment):*
+  - Taking the minimum opacity across views can misplace reflective surfaces and carve thin structures. Sparse views leave holes and mesh overfill.
+  - It cannot recover detail lost to rim attenuation.
+  - No rolling shutter, and no moving content.
+  - Training is slower than rendering-only 3DGUT.
+  - Unproven at garage scale and on compressed video.
+- *Fit:* the closest published match to our camera class (dual ~200° fisheye, indoor, LiDAR-verified). It attacks exactly the rim band that S1 might have to drop.
+
 ### 7.4 Score table (weights: fit ×3, evidence ×2, implementability ×2, quality ×3, maturity ×1; max 55)
 
 | | Fit | Evid. | Impl. | Quality | Mat. | **Total** |
 |---|---|---|---|---|---|---|
-| **S1 gsplat UT/FTheta raw fisheye** | 5 | 3 | 4 | 5 | 3 | **47** |
-| S2 3DGRUT raw fisheye | 4 | 4 | 3 | 5 | 3 | 44 |
+| S9 GOFish (full-FoV fisheye GS + mesh) | 5 | 4 | 2 | 5 | 2 | **44** |
+| **S1 gsplat UT/FTheta raw fisheye** | 5 | 2 | 4 | 4 | 3 | **42** |
+| S2 3DGRUT raw fisheye | 4 | 4 | 3 | 4 | 3 | 41 |
 | S3 perspective + gsplat pinhole | 3 | 4 | 5 | 3 | 5 | 41 |
-| S6 A3b-depth-regularised GS (module) | 4 | 3 | 4 | 4 | 3 | 41 |
+| S6 mesh-depth-regularised GS (module) | 4 | 3 | 4 | 4 | 3 | 41 |
 | S8 nerfacto fisheye rays | 3 | 4 | 4 | 3 | 4 | 38 |
 | S7 Hierarchical / Octree LOD | 3 | 4 | 2 | 3 | 3 | 33 |
 | S5 blur/RS (On-the-Move, BAD) | 3 | 4 | 3 | 2 | 3 | 32 |
 | S4 Seam360GS / OmniGS on ERP | 2 | 3 | 2 | 3 | 2 | 27 |
 
+*Score changes in this revision:* S1 evidence 3→2 and quality 5→4; S2 quality 5→4. Both follow from the Gunes and GOFish evidence that 3DGUT-style rendering degrades at the 200° rim. S9 is new.
+
 **Justifications (one line per score).**
+- **S9 GOFish:**
+  - fit 5: trains natively on dual ~200° fisheye, indoor-tested, models rim falloff. (Missing rolling shutter is offset by its 2–4 px size here.)
+  - evidence 4: the only method with published results across the full 200° FoV, on the same camera class with LiDAR, against 3DGUT+PPISP. Not 5: one unreviewed preprint, at 816², with a frame-skip split.
+  - impl 2: code exists, but it is **CC BY-NC 4.0** plus Gaussian-Splatting-licensed parts, was trained on 24 GB, and has a Slang/CGAL build; 16 GB is unverified.
+  - quality 5: +4.0 dB over 3DGUT+PPISP even inside the 160° cone, and it keeps the rim.
+  - maturity 2: the repository is three weeks old; untested at large scale or on video.
 - **S1:**
   - fit 5: native rig, θ > 90°, RS-capable, masks.
-  - evidence 3: 3DGUT fisheye results exist, but nothing on more-than-180° dual-fisheye rigs.
+  - evidence 2: no published result for gsplat's FTheta path beyond 160°. The closest evidence (3DGUT at 200°) is weak [Gunes2026; Tu2026GOFish].
   - impl 4: Apache, fits 16 GB, but needs a custom loader.
-  - quality 5: no resampling, full rim.
+  - quality 4: no resampling, but rim quality beyond 80° is unproven.
   - maturity 3: FTheta, PPISP and UT are recent additions.
 - **S2:**
   - fit 4: same UT, but θ > 90° unverified in the COLMAP path.
-  - evidence 4: CVPR paper plus README benchmarks.
+  - evidence 4: CVPR paper plus README benchmarks, and Gunes evaluated exactly this code at 200° and 160°.
   - impl 3: heavier build, RT cores for 3DGRT.
-  - quality 5: same as S1.
+  - quality 4: the 3DGRUT implementation is what Gunes and GOFish found weak beyond 160°.
   - maturity 3: v2.0 is recent.
 - **S3:**
   - fit 3: works, but resamples and duplicates the rim.
@@ -378,42 +458,64 @@
   - maturity 2.
 
 ### 7.5 Pick
-- **Primary:** **S1 + S6.** gsplat (pin a `main` commit) with FTheta/UT on the two raw fisheye streams, MCMC, PPISP, static plus semantic masks, A3b initialisation, A3b mesh-depth loss, and no world normalisation.
-- **Runner-up:** **S3.** A3b's perspective views (or a 6-face cubemap per lens, 2100² each at native ~18 px/deg) with gsplat pinhole, the same PPISP, masks and depth. Use it if the FTheta fit or rim floaters fail.
-- **High-upside experimental:** S1 extended with **IMU-driven rolling shutter** (`viewmats_rs` from the high-rate quaternions) and a **learnable rig residual**: a Seam360GS-style per-lens translation and rotation offset, regularised toward A3b's calibration and reported back to A3b as a consistency check, not fed into it. A second experimental branch is 3DGRUT hybrid tracing for reflections.
+- **Primary:** **S1 + S6.** gsplat (pin a `main` commit) with FTheta/UT on the two raw fisheye streams, MCMC, PPISP, static plus semantic masks, initialisation from the geometry-chapter cloud, mesh-depth loss, and no world normalisation. **`max_angle` is set by the Phase-0a sweep below**: default 80° (160° FOV) until the sweep says otherwise, not ≈103–105°.
+  - *Why S1 and not S9, the top scorer:* S9 wins on the published evidence. But its non-commercial licence (CC BY-NC 4.0 plus GS-licensed files), its 24 GB reference hardware, missing rolling-shutter support and three-week-old code make it a poor foundation to build the whole pipeline on before it has run on our data. S1 is Apache, fits 16 GB by construction and extends to rolling shutter. The decision is reversible (promotion rule below).
+- **Runner-up:** **S3.** Perspective views from the geometry chapter (or a 6-face cubemap per lens, 2100² each at native ~18 px/deg) with gsplat pinhole, the same PPISP, masks and depth. Use it if the FTheta fit fails or rim floaters cannot be contained. A partial variant also serves as the **rim-band fallback**: S1 trained to 80°, plus virtual perspective views aimed at the 80–105° horizon band.
+- **High-upside experimental:** **S9 GOFish**, run in parallel from Phase 0a.
+  - **Promotion rule:** GOFish becomes the *visualization* primary if all three hold:
+    1. On the drone block hold-out it beats S1 by ≥ 1.5 dB full-FoV, or by ≥ 1 dB on the 80–105° band, at equal or better LPIPS.
+    2. It trains within 16 GB at `downsample_factor` ≤ 2 (≥ 1920² circles) per zone.
+    3. The project's use stays non-commercial (CC BY-NC 4.0).
+  - If only condition 3 fails, re-implement its two portable ideas in gsplat: the rim-attenuation term on top of PPISP, and the Jacobian-scaled Mip filter. Ideas are not covered by the licence; the code is.
+  - Secondary experiments: IMU-driven rolling shutter in S1 (`viewmats_rs`), a learnable per-lens rig residual (Seam360GS-style, regularised toward the geometry chapter's calibration and reported back only as a consistency check), and 3DGRUT hybrid tracing for reflections.
+- **Phase-0a experiment: how far into the rim to train (on FIORD, before any full-rim commitment).**
+  1. **Setup.** Train S1 on three FIORD indoor scenes (Kitchen, Hall, Building) at **`max_angle` ∈ {80°, 90°, 97°, 103°}**, i.e. a total FOV of 160° / 180° / 194° / 206°. Clamp each camera to its calibrated edge, because FIORD's intrinsics are extrapolated at the rim (GOFish App. B.1). Run GOFish and the S3 rim-band fallback on the same scenes.
+  2. **Scoring.** Score every run on the papers' split, on four measures:
+     - (i) the common cone θ ≤ 80°;
+     - (ii) the bands 80–90°, 90–97° and 97–103°;
+     - (iii) full FoV with unrendered pixels counted black (GOFish's convention);
+     - (iv) splat-depth vs LiDAR residual and floater fraction.
+  3. **Decision rule.** Choose the largest `max_angle` that meets both conditions:
+     - its θ ≤ 80° PSNR is within 0.3 dB of the 80° run (the rim must not poison the centre, which Gunes's 160° result warns about);
+     - its rim-band PSNR beats both the virtual-view fallback and, if licence-acceptable, GOFish on that band.
+  4. **Otherwise.** If no setting above 80° qualifies, train S1 to 80° and leave the rim band to the virtual-view fallback or to GOFish. Losing the rim costs wall detail near the horizon. The geometry chapter's mesh still covers it for measurement.
+  5. **Repeat** the winning setting once on the first drone zone (block hold-out), because compression and dim light may shift the optimum.
 - **What would change my mind:**
   - If the FTheta fit to DJI's KB-5 + tangential model leaves more than 0.5 px RMS, or rim Gaussians explode, switch to S3.
   - If S3's held-out LPIPS on the rim band is within 0.01 of S1's, the simpler S3 wins.
+  - If GOFish meets the promotion rule, it replaces S1 for visualization.
   - If 3DGRUT is shown to render θ > 90° from COLMAP fisheye and installs cleanly, S2 becomes equal and adds reflections.
   - If DirectFisheye-GS releases code supporting more than 180°, re-evaluate it.
 
 ---
 ## 8. Recommended visualization pipeline (16 GB)
 
+0. **Phase-0a dry run on FIORD (no drone).** Run the `max_angle` sweep {80°, 90°, 97°, 103°} for S1, plus GOFish and the virtual-view rim fallback (§7.5). Measure 16 GB memory for both S1 and GOFish. The outputs are the chosen `max_angle` and the rim-band strategy.
 1. **Decode.** Extract both 3840² HEVC Main10 streams from `.OSV` (OpenOSV/ffmpeg) into **16-bit PNG**. Apply a fixed D-Log M→Rec.709 (or linear) LUT. Keep per-frame shutter, gain and timestamps from the metadata.
 2. **Select frames.** Keep one rig frame per 0.2–0.3 m: the sharpest frame (Laplacian variance) among those with IMU angular rate below 10°/s. Drop frames with ego-motion spikes.
 3. **Masks.**
    - Static airframe mask per lens.
    - Outer 2–3° of each image circle.
-   - Semantic transients (people, moving cars) from A3a, dilated.
+   - Semantic transients (people, moving cars) from the filtering chapter, dilated.
    - Reflection mask, used only for the depth loss.
-4. **Cameras and poses from A3b.** Per-lens intrinsics refit from DJI KB-5 + tangential to **FTheta** (`ANGLE_TO_PIXELDIST`, `max_angle` ≈ 105° from calibration, not wider). Pose T_world_rig · T_rig_lens, in metric units.
+4. **Cameras and poses from the geometry chapter.** Per-lens intrinsics refit from DJI KB-5 + tangential to **FTheta** (`ANGLE_TO_PIXELDIST`, with `max_angle` = **the Phase-0a winner**: default 80°, and never wider than the calibrated edge of ≈ 105°). Pose T_world_rig · T_rig_lens, in metric units.
 5. **Zones.** 30–40 m along aisles with 5 m overlap.
 6. **Train each zone with gsplat** (custom dataset class modelled on `examples/datasets/ncore.py`):
    - Rasterizer: `camera_model="ftheta"`, `with_ut=True`, `with_eval3d=True`, `global_z_order=False`, `packed=True`.
-   - Strategy: `mcmc` with `cap_max=3_000_000`, `init_type` = A3b cloud (2–3 cm voxel). SH degree 3.
+   - Strategy: `mcmc` with `cap_max=3_000_000`, `init_type` = geometry-chapter cloud (2–3 cm voxel). SH degree 3.
    - Steps: `data_factor=2` (1920² circles), `steps_scaler` so each image is seen about 10×. Roughly 60–100 k steps for 4–6 k images; about 1–2 h per zone *(estimate)*.
    - Appearance: `post_processing="ppisp"` with one sensor per lens and EXIF exposure prior. Freeze the sensor parameters after zone 1.
    - Depth: custom mesh-depth L1 on `RGB+ED`, λ = 0.1, decayed to 0.05 after densification.
    - Poses: `pose_opt=False`. `normalize_world_space=False`. Images streamed, not cached.
    - Optional final 5–10 k steps at `data_factor=1` with `cap_max` unchanged, to recover native 18 px/deg detail. Watch VRAM.
-7. **Optional rolling shutter:** pass `rolling_shutter`/`viewmats_rs` computed from the IMU at the first and last row, once A1's readout measurement exists.
+7. **Optional rolling shutter:** pass `rolling_shutter`/`viewmats_rs` computed from the IMU at the first and last row, once the device chapter's readout measurement exists.
 8. **Evaluate** with the block and validation-sortie protocol (§6.1): metrics per region, PPISP-controller views, mesh-depth residual and floater fraction, off-trajectory fly-through.
 9. **Merge and clean.** Crop each zone to its core, concatenate, and clean floaters in SuperSplat. Export a metric `.ply` master.
-10. **Deliver.** `splat-transform` → **Streamed SOG** (LOD) for the web; SPZ for Spark-based custom viewers. Load the A3b mesh, markers and measured distances as overlays.
+10. **Deliver.** `splat-transform` → **Streamed SOG** (LOD) for the web; SPZ for Spark-based custom viewers. Load the geometry-chapter mesh, markers and measured distances as overlays.
 
 - **Runner-up (S3):** replace steps 4–6 with perspective views (2100² at 90° FOV per face, matching native resolution). Use `camera_model="pinhole"` and the default or MCMC strategy, and keep everything else.
-- **Experimental:** on top of the primary, add step 7, plus learnable per-lens SE(3) residuals (regularised, lr ≈ 1e-5) and a 3DGRUT hybrid-tracing run on one reflective zone for comparison.
+- **Rim-band fallback (if Phase 0a picks 80°):** add virtual perspective views (90° FOV, centred on the horizon band, generated from the raw fisheye with the calibrated model) as extra pinhole training cameras in the same gsplat scene.
+- **Experimental (GOFish, S9):** refit the per-lens model to COLMAP `OPENCV_FISHEYE`, export poses, masks and images as a COLMAP model in the metric frame, and train with `--config-name apps/fiord ... dataset.downsample_factor=2`. Skip GOFish's meshing, because the geometry chapter supplies the mesh. Evaluate with the same block hold-out and per-band metrics. Promote it per §7.5. Further experiments: step 7, learnable per-lens SE(3) residuals (regularised, lr ≈ 1e-5), and a 3DGRUT hybrid-tracing run on one reflective zone.
 
 ---
 
@@ -432,15 +534,18 @@
 ## Handoff
 
 - **Use gsplat (`main`, Apache-2.0) with `camera_model="ftheta"`, `with_ut=True`, `with_eval3d=True`, `global_z_order=False`** to train on the raw fisheye streams. gsplat's OpenCV `fisheye` model clips at θ = 90°. nerfstudio splatfacto cannot train on fisheye at all (it undistorts; pinned to gsplat 1.4.0).
-- **A3b must deliver:** per-lens poses (rig-composed, metric), DJI KB-5 + tangential intrinsics plus a refit to an FTheta polynomial (report RMS), the inter-lens baseline, the dense cloud and mesh in the same frame. Splats are trained with **`normalize_world_space=False`** so they overlay that frame.
-- **Rolling shutter** is supported by the rasterizer (`rolling_shutter`, `viewmats_rs`) but not wired into gsplat's trainer. It needs A1's readout time and direction per lens, plus IMU quaternions at frame row 0 and row H.
+- **The geometry chapter must deliver:** per-lens poses (rig-composed, metric), DJI KB-5 + tangential intrinsics plus a refit to an FTheta polynomial (report RMS), the inter-lens baseline, the dense cloud and mesh in the same frame. Splats are trained with **`normalize_world_space=False`** so they overlay that frame.
+- **Rolling shutter** is supported by the rasterizer (`rolling_shutter`, `viewmats_rs`) but not wired into gsplat's trainer. It needs the device chapter's readout time and direction per lens, plus IMU quaternions at frame row 0 and row H.
 - **Appearance:** PPISP with one "sensor" per lens and per-frame exposure priors from DJI metadata (shutter and gain written to EXIF). Bilateral grid only if flicker row-banding remains. There is no HDR video mode, and RAW-style training does not apply to H.265.
-- **Masks needed (A1/A3a):** static airframe per lens, the outer 2–3° of each circle, dilated semantic transients, and reflection masks (depth loss only).
+- **Masks needed (device and filtering chapters):** static airframe per lens, the outer 2–3° of each circle, dilated semantic transients, and reflection masks (depth loss only).
 - **16 GB budget:** about 3 M Gaussians per job at 1920² circles; stream images (8–12 k images will not fit in a RAM cache); train in 30–40 m zones with 5 m overlap.
 - **Evaluation:** block hold-out with ±1 s guard bands plus a separate validation sortie. Report metrics without GT colour correction (PPISP controller) and with `cc_*` separately, per region (rim band vs poles), plus a splat-vs-mesh depth residual and floater fraction.
 - **Delivery:** metric `.ply` master; `splat-transform` → Streamed SOG (LOD) for the web; SuperSplat for cleanup and annotation; Spark for a custom mesh + splat + marker viewer (all MIT).
-- **Licences:** avoid INRIA-derived code (3DGS, Hierarchical 3DGS, Scaffold/Octree-GS, 2DGS, MILo, SuGaR, 3DGS-MCMC original) and PGSR or CityGaussian (non-commercial / NC-SA) in anything shipped. gsplat, 3DGRUT, PPISP, NCore, DN-Splatter, BAD-Gaussians, 3dgs-deblur and SpotLessSplats are Apache-2.0. OmniGS is GPL-3.0.
-- **Open items:** whether 3DGRUT's COLMAP fisheye path renders θ > 90°; whether Seam360GS and DirectFisheye-GS code exists; the FTheta fit residual on the actual DJI calibration.
+- **Licences:** avoid INRIA-derived code (3DGS, Hierarchical 3DGS, Scaffold/Octree-GS, 2DGS, MILo, SuGaR, 3DGS-MCMC original) and PGSR, CityGaussian or GOFish (non-commercial / NC-SA / CC BY-NC) in anything shipped. gsplat, 3DGRUT, PPISP, NCore, DN-Splatter, BAD-Gaussians, 3dgs-deblur and SpotLessSplats are Apache-2.0. OmniGS is GPL-3.0.
+- **Rim angle is a Phase-0a experiment, not a default.** Before committing to a full-rim splat, sweep `max_angle` ∈ {80°, 90°, 97°, 103°} on FIORD. Default to 80° (160° FOV). On real 200° indoor fisheye, 3DGUT scored 16.6–22.2 dB (mean ≈ 19.6), and both tested methods were best at 160°, with 3DGUT gaining 1–4 dB per scene [Gunes2026]. The rim band may be better served by the virtual-view fallback or by GOFish.
+- **Planning anchor:** 17–21 dB full-FoV PSNR (central value ≈ 19 dB), LPIPS ≈ 0.25–0.40, on our block hold-out with 0.1 bpp video. The published numbers use stills and frame-skip splits, so they are optimistic. Suggested gates: Phase 0a on FIORD, S1 at 80° ≥ 21 dB indoor mean and ≥ 19.5 dB at the chosen angle; Phase 1, drone ≥ 17 dB full-FoV and ≥ 19 dB on θ ≤ 80°.
+- **GOFish** [Tu2026GOFish] is the high-upside experimental pick and the top scorer (44 vs 42 for S1). It trains 3DGS over the full 200° fisheye FoV and meshes it; on FIORD it reaches 24.36 dB vs 20.18 for 3DGUT+PPISP (Hall_In: 25.10 vs 18.93). Code is released, but under **CC BY-NC 4.0** and only tested on 24 GB. It is promoted to the visualization primary if it beats S1 by ≥ 1.5 dB full-FoV (or by ≥ 1 dB on the rim band), fits 16 GB, and use stays non-commercial. It belongs in Option B/C comparisons as a fisheye-native visual (and mesh) path that keeps the rim.
+- **Open items:** whether 3DGRUT's COLMAP fisheye path renders θ > 90°; whether gsplat's FTheta path avoids the tile-admission and depth-order failures GOFish documents; GOFish's memory use on 16 GB at 1920²; whether Seam360GS and DirectFisheye-GS code exists; the FTheta fit residual on the actual DJI calibration.
 
 ```json
 [
@@ -454,7 +559,11 @@
   {"key": "MoenneLoccoz2024_3DGRT", "title": "3D Gaussian Ray Tracing: Fast Tracing of Particle Scenes", "authors": "Nicolas Moenne-Loccoz, Ashkan Mirzaei, Or Perel, Riccardo de Lutio, Janick Martinez Esturo, Gavriel State, Sanja Fidler, Nicholas Sharp, Zan Gojcic", "venue": "SIGGRAPH Asia 2024 (TOG)", "year": 2024, "url": "https://arxiv.org/abs/2407.07090", "code": "https://github.com/nv-tlabs/3dgrut", "license": "Apache-2.0", "type": "paper", "verified": true},
   {"key": "3DGRUTRepo", "title": "3DGRUT repository README and threedgrut/datasets/dataset_colmap.py (OPENCV_FISHEYE support, PPISP, MCMC, masks, NCore v4, v2.0.0)", "authors": "NVIDIA (nv-tlabs)", "venue": "GitHub", "year": 2026, "url": "https://github.com/nv-tlabs/3dgrut", "code": "https://github.com/nv-tlabs/3dgrut", "license": "Apache-2.0", "type": "repo", "verified": true},
   {"key": "NCore", "title": "NVIDIA NCore: multi-sensor data platform (camera models incl. FTheta, start/end frame poses)", "authors": "NVIDIA", "venue": "GitHub", "year": 2026, "url": "https://github.com/NVIDIA/ncore", "code": "https://github.com/NVIDIA/ncore", "license": "Apache-2.0", "type": "repo", "verified": true},
-  {"key": "Deutsch2026", "title": "PPISP: Physically-Plausible Compensation and Control of Photometric Variations in Radiance Field Reconstruction", "authors": "Isaac Deutsch, Nicolas Moënne-Loccoz, Gavriel State, Zan Gojcic", "venue": "CVPR 2026", "year": 2026, "url": "https://arxiv.org/abs/2601.18336", "code": "https://github.com/nv-tlabs/ppisp", "license": "Apache-2.0", "type": "paper", "verified": true},
+  {"key": "Deutsch2026", "title": "PPISP: Physically-Plausible Compensation and Control of Photometric Variations in Radiance Field Reconstruction", "authors": "Isaac Deutsch, Nicolas Moënne-Loccoz, Gavriel State, Zan Gojcic", "venue": "CVPR 2026 (listed in CVF Open Access: https://openaccess.thecvf.com/content/CVPR2026/html/Deutsch_PPISP_Physically-Plausible_Compensation_and_Control_of_Photometric_Variations_in_Radiance_CVPR_2026_paper.html)", "year": 2026, "url": "https://arxiv.org/abs/2601.18336", "code": "https://github.com/nv-tlabs/ppisp", "license": "Apache-2.0", "type": "paper", "verified": true},
+  {"key": "Gunes2026", "title": "3D Gaussian Splatting with Fisheye Images: Field of View Analysis and Depth-Based Initialization", "authors": "Ulas Gunes, Matias Turkulainen, Mikhail Silaev, Juho Kannala, Esa Rahtu", "venue": "VISAPP 2026 (per arXiv comment)", "year": 2026, "url": "https://arxiv.org/abs/2508.06968", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "Gunes2025FIORD", "title": "FIORD: A Fisheye Indoor-Outdoor Dataset with LIDAR Ground Truth for 3D Scene Reconstruction and Benchmarking", "authors": "Ulas Gunes, Matias Turkulainen, Xuqian Ren, Arno Solin, Juho Kannala, Esa Rahtu", "venue": "SCIA 2025 (as cited in Gunes2026)", "year": 2025, "url": "https://arxiv.org/abs/2504.01732", "code": null, "license": null, "type": "paper", "verified": true},
+  {"key": "Tu2026GOFish", "title": "GOFish: Full Field-of-View Gaussian Splatting and Mesh Extraction", "authors": "Allen Tu, Meher Gitika Karumuri, Shifan Zhu, Hailing Wang, Yen-Liang Lin, David Held, Matthias Zwicker, Tom Goldstein", "venue": "arXiv 2610.37818", "year": 2026, "url": "https://arxiv.org/abs/2610.37818", "code": "https://github.com/tuallen/GOFish", "license": "CC BY-NC 4.0 (with Gaussian-Splatting-License and Apache-2.0 third-party files)", "type": "paper", "verified": true},
+  {"key": "GOFishRepo", "title": "GOFish repository README and LICENSE; project page source (3dgofish/3dgofish.github.io)", "authors": "Allen Tu et al.", "venue": "GitHub", "year": 2026, "url": "https://3dgofish.github.io", "code": "https://github.com/tuallen/GOFish", "license": "CC BY-NC 4.0", "type": "repo", "verified": true},
   {"key": "Wang2024BilaRF", "title": "Bilateral Guided Radiance Field Processing", "authors": "Yuehao Wang, Chaoyi Wang, Bingchen Gong, Tianfan Xue", "venue": "ACM TOG (SIGGRAPH 2024)", "year": 2024, "url": "https://arxiv.org/abs/2406.00448", "code": "https://github.com/yuehaowang/bilarf", "license": "Apache-2.0", "type": "paper", "verified": true},
   {"key": "Kulhanek2024WildGaussians", "title": "WildGaussians: 3D Gaussian Splatting in the Wild", "authors": "Jonas Kulhanek, Songyou Peng, Zuzana Kukelova, Marc Pollefeys, Torsten Sattler", "venue": "NeurIPS 2024", "year": 2024, "url": "https://arxiv.org/abs/2407.08447", "code": "https://github.com/jkulhanek/wild-gaussians", "license": "MIT", "type": "paper", "verified": true},
   {"key": "Xu2024SplatfactoW", "title": "Splatfacto-W: A Nerfstudio Implementation of Gaussian Splatting for Unconstrained Photo Collections", "authors": "Congrong Xu, Justin Kerr, Angjoo Kanazawa", "venue": "arXiv", "year": 2024, "url": "https://arxiv.org/abs/2407.12306", "code": null, "license": null, "type": "paper", "verified": true},
