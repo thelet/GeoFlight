@@ -1946,13 +1946,16 @@
   "key": "DoppelgangersPP",
   "title": "Doppelgangers++: Improved Visual Disambiguation with Geometric 3D Features",
   "authors": "Yuanbo Xiangli, Ruojin Cai, Hanyu Chen, Jeffrey Byrne, Noah Snavely",
-  "venue": "arXiv 2412.05826 (venue [UNVERIFIED])",
-  "year": 2024,
-  "url": "https://arxiv.org/abs/2412.05826",
+  "venue": "CVPR 2025 (arXiv 2412.05826)",
+  "year": 2025,
+  "url": "https://openaccess.thecvf.com/content/CVPR2025/html/Xiangli_Doppelgangers_Improved_Visual_Disambiguation_with_Geometric_3D_Features_CVPR_2025_paper.html",
   "code": "https://github.com/doppelgangers25/doppelgangers-plusplus",
   "license": "CC BY-NC-SA 4.0",
   "type": "paper",
   "verified": true,
+  "alt_urls": [
+   "https://arxiv.org/abs/2412.05826"
+  ],
   "cited_by": [
    "A3b",
    "A3a"
@@ -2185,6 +2188,99 @@
   "verified": true,
   "cited_by": [
    "A3b"
+  ]
+ },
+ {
+  "key": "ETH3D",
+  "title": "A Multi-View Stereo Benchmark with High-Resolution Images and Multi-Camera Videos",
+  "authors": "Thomas Schöps, Johannes L. Schönberger, Silvano Galliani, Torsten Sattler, Konrad Schindler, Marc Pollefeys, Andreas Geiger",
+  "venue": "CVPR 2017",
+  "year": 2017,
+  "url": "https://openaccess.thecvf.com/content_cvpr_2017/papers/Schops_A_Multi-View_Stereo_CVPR_2017_paper.pdf",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "ETH3DLeaderboard",
+  "title": "ETH3D high-res multi-view benchmark leaderboard (OpenMVS entry, indoor F1 at 2 cm ~78.3, seen only via a search snippet of a third-party mirror)",
+  "authors": "ETH3D benchmark",
+  "venue": "eth3d.net (unreachable from sandbox)",
+  "year": 2026,
+  "url": "https://www.eth3d.net/high_res_multi_view",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": false,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "ACMM",
+  "title": "Multi-Scale Geometric Consistency Guided Multi-View Stereo",
+  "authors": "Qingshan Xu, Wenbing Tao",
+  "venue": "CVPR 2019",
+  "year": 2019,
+  "url": "https://openaccess.thecvf.com/content_CVPR_2019/papers/Xu_Multi-Scale_Geometric_Consistency_Guided_Multi-View_Stereo_CVPR_2019_paper.pdf",
+  "code": "https://github.com/GhiXu/ACMM",
+  "license": "MIT",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "ACMMP",
+  "title": "Multi-Scale Geometric Consistency Guided and Planar Prior Assisted Multi-View Stereo",
+  "authors": "Qingshan Xu, Weihang Kong, Wenbing Tao, Marc Pollefeys",
+  "venue": "IEEE TPAMI 2022 (DOI 10.1109/TPAMI.2022.3200074)",
+  "year": 2022,
+  "url": "https://doi.org/10.1109/TPAMI.2022.3200074",
+  "code": "https://github.com/GhiXu/ACMMP",
+  "license": "MIT",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "MPMVS",
+  "title": "MP-MVS: Multi-Scale Windows PatchMatch and Planar Prior Multi-View Stereo (Table II: ETH3D indoor/outdoor F1 at 2 cm and 5 cm for COLMAP, ACMM, ACMMP)",
+  "authors": "Rongxuan Tan, Qing Wang, Xueyan Wang, Chao Yan, Yang Sun, Youyang Feng",
+  "venue": "arXiv 2309.13294",
+  "year": 2023,
+  "url": "https://arxiv.org/abs/2309.13294",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b"
+  ]
+ },
+ {
+  "key": "GOFish",
+  "title": "GOFish: Full Field-of-View Gaussian Splatting and Mesh Extraction",
+  "authors": "Allen Tu, Meher Gitika Karumuri, Shifan Zhu, Hailing Wang, Yen-Liang Lin, David Held, Matthias Zwicker, Tom Goldstein",
+  "venue": "arXiv 2610.37818",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2610.37818",
+  "code": "https://3dgofish.github.io",
+  "license": "CC BY-NC 4.0 (with Gaussian-Splatting-License and Apache-2.0 third-party files)",
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3b",
+   "A3a",
+   "A3c",
+   "A4"
   ]
  },
  {
@@ -2481,21 +2577,6 @@
   "year": 2026,
   "url": "https://arxiv.org/abs/2609.21347",
   "code": "https://github.com/guoxf304/CubeSplat",
-  "license": null,
-  "type": "paper",
-  "verified": true,
-  "cited_by": [
-   "A3a"
-  ]
- },
- {
-  "key": "Tu2026GOFish",
-  "title": "GOFish: Full Field-of-View Gaussian Splatting and Mesh Extraction",
-  "authors": "Allen Tu, Meher Gitika Karumuri, Shifan Zhu, Hailing Wang, Yen-Liang Lin, David Held, Matthias Zwicker, Tom Goldstein",
-  "venue": "arXiv 2610.37818",
-  "year": 2026,
-  "url": "https://arxiv.org/abs/2610.37818",
-  "code": null,
   "license": null,
   "type": "paper",
   "verified": true,
@@ -3052,7 +3133,7 @@
   "key": "Deutsch2026",
   "title": "PPISP: Physically-Plausible Compensation and Control of Photometric Variations in Radiance Field Reconstruction",
   "authors": "Isaac Deutsch, Nicolas Moënne-Loccoz, Gavriel State, Zan Gojcic",
-  "venue": "CVPR 2026",
+  "venue": "CVPR 2026 (listed in CVF Open Access: https://openaccess.thecvf.com/content/CVPR2026/html/Deutsch_PPISP_Physically-Plausible_Compensation_and_Control_of_Photometric_Variations_in_Radiance_CVPR_2026_paper.html)",
   "year": 2026,
   "url": "https://arxiv.org/abs/2601.18336",
   "code": "https://github.com/nv-tlabs/ppisp",
@@ -3061,6 +3142,57 @@
   "verified": true,
   "alt_urls": [
    "https://github.com/nv-tlabs/ppisp"
+  ],
+  "cited_by": [
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "Gunes2026",
+  "title": "3D Gaussian Splatting with Fisheye Images: Field of View Analysis and Depth-Based Initialization",
+  "authors": "Ulas Gunes, Matias Turkulainen, Mikhail Silaev, Juho Kannala, Esa Rahtu",
+  "venue": "VISAPP 2026 (per arXiv comment)",
+  "year": 2026,
+  "url": "https://arxiv.org/abs/2508.06968",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "Gunes2025FIORD",
+  "title": "FIORD: A Fisheye Indoor-Outdoor Dataset with LIDAR Ground Truth for 3D Scene Reconstruction and Benchmarking",
+  "authors": "Ulas Gunes, Matias Turkulainen, Xuqian Ren, Arno Solin, Juho Kannala, Esa Rahtu",
+  "venue": "SCIA 2025 (as cited in Gunes2026)",
+  "year": 2025,
+  "url": "https://arxiv.org/abs/2504.01732",
+  "code": null,
+  "license": null,
+  "type": "paper",
+  "verified": true,
+  "cited_by": [
+   "A3c",
+   "A4"
+  ]
+ },
+ {
+  "key": "GOFishRepo",
+  "title": "GOFish repository README and LICENSE; project page source (3dgofish/3dgofish.github.io)",
+  "authors": "Allen Tu et al.",
+  "venue": "GitHub",
+  "year": 2026,
+  "url": "https://3dgofish.github.io",
+  "code": "https://github.com/tuallen/GOFish",
+  "license": "CC BY-NC 4.0",
+  "type": "repo",
+  "verified": true,
+  "alt_urls": [
+   "https://github.com/tuallen/GOFish"
   ],
   "cited_by": [
    "A3c",
@@ -3489,36 +3621,6 @@
   ]
  },
  {
-  "key": "Gunes2026",
-  "title": "3D Gaussian Splatting with Fisheye Images: Field of View Analysis and Depth-Based Initialization",
-  "authors": "Ulas Gunes, Matias Turkulainen, Mikhail Silaev, Juho Kannala, Esa Rahtu",
-  "venue": "VISAPP 2026 (arXiv 2508.06968)",
-  "year": 2026,
-  "url": "https://arxiv.org/abs/2508.06968",
-  "code": null,
-  "license": null,
-  "type": "paper",
-  "verified": true,
-  "cited_by": [
-   "A4"
-  ]
- },
- {
-  "key": "FIORD",
-  "title": "FIORD: A Fisheye Indoor-Outdoor Dataset with LIDAR Ground Truth for 3D Scene Reconstruction and Benchmarking",
-  "authors": "Ulas Gunes, Matias Turkulainen, Xuqian Ren, Arno Solin, Juho Kannala, Esa Rahtu",
-  "venue": "SCIA 2025 (arXiv 2504.01732)",
-  "year": 2025,
-  "url": "https://arxiv.org/abs/2504.01732",
-  "code": null,
-  "license": null,
-  "type": "paper",
-  "verified": true,
-  "cited_by": [
-   "A4"
-  ]
- },
- {
   "key": "Gaussian360Pro",
   "title": "Laskos Releases 360 Gaussian Pro With a Rebuilt COLMAP",
   "authors": "Radiance Fields (news)",
@@ -3529,6 +3631,66 @@
   "license": "commercial",
   "type": "secondary",
   "verified": false,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "FoundationsChapter",
+  "title": "Foundations chapter (Handoff section)",
+  "authors": "GeoFlight research",
+  "venue": "internal research file",
+  "year": 2026,
+  "url": "research/A2_foundations.md",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "FilteringChapter",
+  "title": "Filtering chapter: Data filtering and quality-aware selection",
+  "authors": "GeoFlight research",
+  "venue": "internal research file",
+  "year": 2026,
+  "url": "research/A3a_filtering.md",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "GeometryChapter",
+  "title": "Geometry chapter: Geometric accuracy, from camera model to verified metric mesh",
+  "authors": "GeoFlight research",
+  "venue": "internal research file",
+  "year": 2026,
+  "url": "research/A3b_geometry.md",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": true,
+  "cited_by": [
+   "A4"
+  ]
+ },
+ {
+  "key": "VisualizationChapter",
+  "title": "Visualization chapter: Photoreal, explorable visualization of the parking lot",
+  "authors": "GeoFlight research",
+  "venue": "internal research file",
+  "year": 2026,
+  "url": "research/A3c_visualization.md",
+  "code": null,
+  "license": null,
+  "type": "secondary",
+  "verified": true,
   "cited_by": [
    "A4"
   ]
