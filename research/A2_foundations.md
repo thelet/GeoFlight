@@ -38,7 +38,7 @@ Real lenses bend rays. **Radial distortion** (barrel/pincushion) is modelled as 
 $$u = \tfrac{W}{2\pi}(\phi + \pi), \quad v = \tfrac{H}{\pi}(\tfrac{\pi}{2} - \theta), \qquad \mathbf{b} = (\cos\theta\sin\phi,\; -\sin\theta,\; \cos\theta\cos\phi)$$
 (axis conventions vary by tool; always check). There is no focal length or principal point in the usual sense, and no single image plane, so plane-based tricks (homographies, rectification) must be redone on the sphere.
 
-*Why it matters here.* DJI's standard 360° export is an equirectangular image **stitched** from two fisheyes (the `.OSV` file also holds the raw fisheyes, see Ch. 1). Stitching assumes all scene points are far away (or at one chosen depth). In a parking garage, pillars and cars are 1–5 m away, so the two lenses' small, unpublished baseline (Ch. 1 estimates ~2–4 cm [UNVERIFIED]) produces **parallax at the stitch seam**: the equirectangular image is *not* a perfect central projection there. §2.5 returns to this.
+*Why it matters here.* DJI's standard 360° export is an equirectangular image **stitched** from two fisheyes (the `.OSV` file also holds the raw fisheyes, see Ch. 1). Stitching assumes all scene points are far away (or at one chosen depth). In a parking garage, pillars and cars are 1–5 m away, so the two lenses' small, unpublished baseline (Ch. 1 estimates ~2–4 cm [UNVERIFIED]) produces **parallax at the stitch seam**: the equirectangular image is *not* a perfect central projection there. §5 returns to this.
 
 ### 1.3 Epipolar geometry: essential and fundamental matrices
 
