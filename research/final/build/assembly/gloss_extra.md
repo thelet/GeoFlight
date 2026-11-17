@@ -1,0 +1,20 @@
+- **2DGS (2D Gaussian Splatting):** A splatting variant that uses flat, disk-like Gaussians aligned to surfaces, giving better-defined geometry than 3D ellipsoids; gsplat ships its own Apache-licensed rasterizer for it (§4.4, §6.6).
+- **AprilTag:** A family of square fiducial markers with binary IDs (e.g. tag36h11), detectable with sub-pixel corners; used here as control points and checkpoints (§4.3).
+- **ATTI mode:** DJI's attitude-only flight mode, entered when neither GNSS nor vision positioning is available; the drone holds attitude but not position and drifts with air movement (§1.5.8).
+- **D-Log M:** DJI's flat, 10-bit log colour profile, which preserves dynamic range for later grading; recommended for capture here (§1.1, §1.6).
+- **Doppelganger (visual aliasing):** A pair of images of *different* places that look alike (identical pillars or bays) and so produce consistent but wrong matches; the cause of false loop closures (§3.4, §4.2).
+- **Double Sphere model:** A fisheye camera model with two unit spheres and a closed-form inverse, able to represent fields of view beyond 180° [Usenko2018] (§1.2.1).
+- **EUCM (Enhanced Unified Camera Model):** A wide-angle camera model that projects through a sphere/ellipsoid; mathematically supports θ > 90°, but COLMAP's implementation requires positive depth (Editorial notes; §4.1).
+- **FTheta model:** A fisheye model mapping the off-axis angle θ to image radius by a polynomial; gsplat's `ftheta` camera with the unscented transform can render θ > 90° (§5.2, §6.1.3).
+- **Horizon band / rim band:** On this up/down dual-fisheye camera, the outer ring of each fisheye (≈ 80–105° off-axis), which images the horizon: walls, pillars, cars, and the stitch seam (§1.2, §3.2).
+- **Kannala–Brandt (KB) model:** A generic fisheye model expressing the distorted angle as an odd polynomial in θ; DJI's per-unit calibration is a KB-type model with five radial and two tangential terms (§1.2.1).
+- **MCMC densification:** A 3DGS training strategy that treats Gaussians as samples of a Markov chain Monte Carlo process, relocating low-opacity Gaussians instead of the clone/split heuristic, with a fixed budget (§5.4).
+- **OpenMVS:** An open-source dense-reconstruction library (densify, mesh, refine, texture), AGPL-3.0 licensed; the metric dense baseline here (§4.4).
+- **OSV:** DJI's 360° video container; on the Avata 360 an MP4 holding two unstitched fisheye HEVC streams plus protobuf metadata (calibration and attitude) (§1.4.1).
+- **Partial rig frame:** A rig frame in which only a subset of the virtual views is used (others masked or dropped); COLMAP's rig model allows this (§3.2).
+- **PPISP:** An appearance-compensation module (per-sensor vignetting and response, per-frame exposure and white balance, with a controller for novel views) built into gsplat and 3DGRUT [Deutsch2026] (§5.3).
+- **Scale bar:** A measured distance between two targets, used as a soft distance constraint in bundle adjustment to fix scale (§4.3).
+- **Seam parallax:** The misalignment at a stitch seam caused by the two lenses not sharing an optical centre; roughly baseline divided by distance, so it grows at close range (§1.2.2).
+- **Survey frame (S):** The single metric coordinate frame defined by the markers after control bundle adjustment; mesh, splat and checkpoints all live in it (§6.1.4).
+- **Trilateration network:** A set of measured distances between markers, adjusted together to give marker coordinates without a total station (§4.3, §6.3).
+- **Virtual view:** A pinhole image resampled from a raw fisheye along a chosen viewing direction; the 10 virtual views of one frame form a rig frame (§4.1).

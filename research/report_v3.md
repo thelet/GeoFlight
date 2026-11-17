@@ -44,7 +44,7 @@ DJI's manual warns that vision positioning can fail over repeating patterns and 
 
 **Expected outcome.**
 - **Geometry:** with a marker cluster every 10–15 m, plan on **1–2 cm RMSE on held-out marker distances under 10 m and 0.05–0.3% of distance globally**, which meets the ≤1% target with margin. Sub-centimetre is a stretch: the closest stills anchor matches our px/deg but used a total station in one room, and the only 360°-video anchor gives checkpoint maxima of 5–10 cm with control at one end (§6.3).
-- **Splat:** plan on **17–21 dB PSNR** on held-out blocks. On real 200° indoor fisheye, 3DGUT scores 16.6–22.2 dB, and both tested methods do best cropped to 160° [Gunes2026]. GOFish reports higher scores at full FOV [Tu2026GOFish] (§5.7, §6.3).
+- **Splat:** plan on **17–21 dB PSNR** on held-out blocks. On real 200° indoor fisheye, 3DGUT scores 16.6–22.2 dB, and both tested methods do best cropped to 160° [Gunes2026]. GOFish reports higher scores at full FOV [GOFish] (§5.7, §6.3).
 - **Effort:** ~35–45 engineer-days.
 - **Compute:** ~2.5–4 days on one 16 GB GPU, with **1–2 TB of NVMe** as the bottleneck (§6.5.3).
 
