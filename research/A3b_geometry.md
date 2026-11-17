@@ -25,7 +25,7 @@
 |---|---|---|---|---|
 | Raw fisheye as `OPENCV_FISHEYE` (KB-4) or `RAD_TAN_THIN_PRISM_FISHEYE` (Aria "Fisheye624": 6 radial θ terms + 2 tangential + 4 thin prism) | Yes; both in COLMAP 4.2.1 [SRC `fisheye_radial.h`, `thin_prism.h`] | **No.** `ImgFromCam` requires w ≥ ε, and the base fisheye maps through θ = atan(r) on the normalized plane [SRC `base.h`]. The image must be cropped to θ ≲ 85° to stay numerically sane | None (central per lens) | After undistortion to pinhole only |
 | Raw fisheye as `EUCM` (new in 4.1) | Yes [SRC `eucm.h`; changelog 4.1] | **No** in COLMAP's implementation: the same depth check, and `CamFromImg` returns normalized (u,v) [SRC] | None | Same |
-| Stitched equirect as native `EQUIRECTANGULAR` (4.1+) | Yes; full-sphere `CamRayFromImg` [SRC `spherical.h`]. Release notes call it "generally faster but less accurate than rendering perspective views" [COLMAPChangelog] | Yes | **Yes, baked in** (A1: 7–40 px at 1–5 m) | **No.** The PatchMatch model reads a pinhole K [SRC `mvs/model.cc`], and the undistorter only resizes spherical cameras [SRC `undistortion.cc`] |
+| Stitched equirect as native `EQUIRECTANGULAR` (4.1+) | Yes; full-sphere `CamRayFromImg` [SRC `spherical.h`]. Release notes describe it as faster but less accurate than rendering perspective views [COLMAPChangelog] | Yes | **Yes, baked in** (A1: 7–40 px at 1–5 m) | **No.** The PatchMatch model reads a pinhole K [SRC `mvs/model.cc`], and the undistorter only resizes spherical cameras [SRC `undistortion.cc`] |
 | Stitched equirect → rig of perspective views (`pycolmap.panorama`) | Yes. Default: 4 yaws × pitches (−35°, 0°, +35°), 90°×90° [SRC `panorama.py`] | Yes | **Yes, baked in** | Yes |
 | **Raw fisheye → rig of pinhole virtual views (recommended)** | Rig support is generic [SRC `doc/rigs.rst`]. The renderer must be written (DJI model + `cv2.remap`) | **Yes**: an oblique pinhole view is not limited by the lens's 90° | **None** (two true centres, offset b) | Yes |
 
@@ -83,11 +83,11 @@ Pixel stretch in a pinhole view grows as 1/cos²α off-axis (×2 at 45°, ×3 at
 
 ### 2.1 Incremental vs. global, rigs, sequential matching
 
-- **COLMAP incremental mapper** remains the accuracy reference. It is now accelerated by the Caspar GPU BA backend, which supports rigs and is "often 1-2 orders of magnitude faster than the Ceres CUDA backend" (4.1) [COLMAPChangelog].
+- **COLMAP incremental mapper** remains the accuracy reference. It is now accelerated by the Caspar GPU BA backend, which supports rigs and is described as typically one to two orders of magnitude faster than the Ceres CUDA backend (4.1) [COLMAPChangelog].
 - **Global mapper (GLOMAP inside COLMAP since 4.0).** [GLOMAP] (Pan, Baráth, Pollefeys, Schönberger, ECCV 2024) evaluates on ETH3D SLAM (sequential, sparse features, illumination changes). Its Table 1 averages give GLOMAP vs. COLMAP: recall@0.1 m **66.4 vs 57.9**, AUC@0.1 m **57.0 vs 47.6**, AUC@0.5 m **65.7 vs 57.9**, and mean time **133.5 s vs 1115.4 s**. This matches the text's "~8% higher recall, +9/+8 AUC, an order of magnitude faster" [OPENED, Table 1]. The much smaller margins (80.8 vs 79.2, 16.5 vs 27.5 s) are the paper's **ETH3D MVS (DSLR)** table, not the SLAM table. On ETH3D SLAM's *repetitive* sequences, both methods do poorly: recall 32.7 (GLOMAP) vs 28.5 (COLMAP) [OPENED]. Its own limitation section names **rotation-averaging failure on symmetric structures** (ETH3D *exhibition_hall*) [OPENED]. A grid of identical pillars is such a structure.
 - **COLMAP 4.2** adds:
   - multi-component global mapping: disconnected components come back as separate models instead of being forced together;
-  - "improved sequential pairing for camera rigs";
+  - better sequential pair selection for camera rigs;
   - `SequentialMatching.loop_detection_min_index_distance`, which keeps temporally nearby frames out of loop retrieval;
   - 4.2.1 restores legacy BA behaviour in the global mapper after a 4.2.0 regression.
 
@@ -419,7 +419,7 @@ Weights: Fit ×3, Evidence ×2, Implementability ×2, Accuracy impact ×3, Matur
 |---|---|---|---|---|---|---|---|
 | A. Raw-fisheye rig + COLMAP incr. | 5 | 4 | 4 | 5 | 4 | **50** | Keeps the horizon without seam error / rig processing best in Perfetti, used by ORBIT / needs our own OSV+remap code / removes the dominant systematic error / COLMAP mature, renderer new |
 | B. Global mapper + gravity (same rig) | 4 | 4 | 5 | 4 | 4 | **46** | Gravity priors fit, symmetric pillars risky / ECCV; ETH3D SLAM Table 1 AUC@0.1 m 57.0 vs 47.6 / built in / slightly below incremental in BA quality / integrated since 4.0, regression fixed in 4.2.1 |
-| D. Per-lens half-equirect spherical rig | 4 | 2 | 4 | 4 | 2 | **38** | Seam-free and full-band / no published use / supported model, simple / spherical "less accurate" per COLMAP / untested combination |
+| D. Per-lens half-equirect spherical rig | 4 | 2 | 4 | 4 | 2 | **38** | Seam-free and full-band / no published use / supported model, simple / spherical less accurate per COLMAP / untested combination |
 | C. Stitched equirect → persp. rig, masked | 2 | 4 | 5 | 2 | 4 | **34** | Seam on horizon forces masking / official example, ORBIT / zero new code / loses long-range walls / mature |
 | H. stella_vslam | 3 | 2 | 4 | 2 | 4 | **31** | Equirect, real time, but seam and BoW aliasing / no survey-grade evaluation found / BSD-2, active / SLAM-grade / mature |
 | E. IM360 | 3 | 3 | 2 | 3 | 2 | **30** | Indoor textureless 360° but stills + ERP / ICCV, registration only / code status unverified / no metric eval / research code |
